@@ -1,0 +1,62 @@
+settings = {
+    plugins  =  {
+        ["plugin.zip"] =
+        {
+            publisherId = "com.coronalabs",
+        },
+--        ["plugin.KwikShelf"] = {
+--            publisherId = "com.kwiksher",
+--        },
+    --Google in app billing v3
+        ["plugin.google.iap.v3"] = {
+            -- required
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { android = true },
+        },
+        --Amazon IAP
+        ["plugin.amazon.iap"] = {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { ["android-kindle"]=true }
+        },
+    },
+    android  = {
+      usesPermissions  = {
+          "android.permission.INTERNET",
+          "android.permission.WRITE_EXTERNAL_STORAGE",
+          "com.android.vending.BILLING",
+          },
+    },
+    orientation =  {
+      {{#portrait}}
+      default = "portrait",
+      supported = { "portrait", "portraitUpsideDown" },
+      {{/portrait}
+      {{^portrait}}
+      default = "landscapeRight",
+      supported = { "landscapeLeft", "landscapeRight"}
+      {{/portrait}}
+    },
+    iphone =
+    {
+        xcassets = "Images.xcassets",
+        plist=
+        {
+                NSAppTransportSecurity = {
+            NSExceptionDomains = {
+                            [""] = {
+                    NSIncludesSubdomains = true,
+                    NSThirdPartyExceptionAllowsInsecureHTTPLoads = true
+                },
+                }
+        },
+        UIStatusBarHidden = true,
+        UILaunchStoryboardName = "LaunchScreen",
+        },
+    },
+    excludeFiles =
+    {
+        -- Exclude all files at all paths which end with "secret.txt"
+        all = {  "Icon*.png", "Images.xcassets", "Icon*.ico", "Icon*.icns", "*.vbs", "*.bat", "*.command", "copy_projects" },
+        android = { "LaunchScreen.storyboardc" },
+    },
+}

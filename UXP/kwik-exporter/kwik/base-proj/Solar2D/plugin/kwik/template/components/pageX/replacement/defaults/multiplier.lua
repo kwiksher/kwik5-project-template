@@ -1,0 +1,37 @@
+local M = {
+  name = "multiplier0",
+  class="multiplier",
+  -- actionName = "",
+  properties = {
+    target = NIL,
+    alphaMax       = 1,
+    alphaMin       = 0.1,
+    autoPlay       = true,
+    enabledWind    = true,
+    enablePhysics  = true,
+    enableSeonsor  = true,
+    fixedDistance  = false,
+    fixedScaleMax   = false,
+    fixedScaleMin   = false,
+    gravityY       = 4,
+    interval       = 5,
+    numOfCopies    = 4,
+    playForever    = true,
+    rotationMax    = 360,
+    rotationMin    = 0,
+    shape          = "circle",
+    weightMax      = 30,
+    weightMin      = 1,
+    windSpeed      = 10,
+    xEnd           = display.actualContentWidth,
+    xSaleMax       = 2,
+    xScaleMin      = 0.1,
+    xStart         = 0,
+    yEnd           = display.actualContentHeight,
+    ySaleMax       = 2,
+    yScaleMin      = 0.1,
+    yStart         = 0,
+  }
+}
+
+return M
