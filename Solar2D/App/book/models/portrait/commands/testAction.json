@@ -1,0 +1,1 @@
+{"name":"testAction","actions":[{"command":"animation.play","params":{"target":"GroupA/SubA/Triangle_linear"}}]}

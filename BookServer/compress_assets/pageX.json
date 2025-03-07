@@ -1,0 +1,11 @@
+{
+  "page":{{page}},"alias":"{{alias}}",
+  "audios":[{{#audios}}"{{.}}",{{/audios}} null],
+  "sprites":[{{#sprites}}"{{.}}",{{/sprites}} null],
+  "videos":[{{#videos}}"{{.}}",{{/videos}} null],
+  "thumbnails":[{{#thumbnails}}"{{.}}",{{/thumbnails}} null] ,
+  "particles":[{{#particles}}"{{.}}",{{/particles}} null],
+  "PNGs":[{{#PNGs}}"{{.}}",{{/PNGs}} null],
+  "WWW":[{{#WWW}}"{{.}}",{{/WWW}} null],
+  "images":[{{#images}}"{{.}}",{{/images}}null]
+}

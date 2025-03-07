@@ -1,0 +1,21 @@
+settings =
+{
+    plugins  =
+    {
+    },
+  excludeFiles =
+    {
+        -- Exclude all files at all paths which end with "secret.txt"
+        all = {  "Icon*.png", "Images.xcassets", "Icon*.ico", "Icon*.icns", "*.vbs", "*.psd" },
+        android = { "LaunchScreen.storyboardc" },
+    },
+    window =
+    {
+        defaultViewWidth = 1280,
+        defaultViewHeight =720,
+        resizable = true,
+        minViewWidth = 640,
+        minViewHeight = 360,
+        enableMaximizeButton = true,
+    },
+}
