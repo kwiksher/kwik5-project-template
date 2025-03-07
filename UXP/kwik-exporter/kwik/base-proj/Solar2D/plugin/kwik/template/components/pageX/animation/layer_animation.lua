@@ -15,6 +15,8 @@ local M = {
   --
 }
 
+M.obj = require(parent.."{{layer}}").obj
+
 {{#layerOptions}}
 M.layerOptions = {
   --
@@ -68,23 +70,10 @@ M.properties = {
   -- flip
   xSwipe   = {{xSwipe}},
   ySwipe   = {{ySwipe}},
-  useLang  = {{useLang}}
 {{/properties}}
 }
---
-{{#from}}
-M.from = {
-  x     = {{x}},
-  y     = {{y}},
   --
-  alpha = {{alpha}},
 
-  yScale   = {{yScale}},
-  xScale   = {{xScale}},
-  rotation = {{rotation}},
-}
-{{/from}}
---
 {{#to}}
 M.to = {
   x     = {{x}},
@@ -107,9 +96,7 @@ M.actions = { onComplete = "{{actionName}}" }
 M.breadcrumbs = {
     dispose  = {{dispose}},
     shape    = {{shape}},
-    {{#color}}
-    color    =  { {{r}}, {{g}}, {{b}}, {{a}} },
-    {{/color}}
+    Color    = {{color}},
     interval = {{bInterval}},
     time     = {{time}},
     width  = {{width}},
@@ -135,7 +122,7 @@ local function onEndHandler (UI)
 end
 --
 function M:create(UI)
-  if UI.langClassDelegate and useLang then
+  if UI.langClassDelegate then
     local t = self.name:split("/")
     self.name = t[1].."/".. UI.lang
   end
@@ -147,8 +134,6 @@ function M:create(UI)
   end
   self:initAnimation(UI, self.obj, onEndHandler)
   self.animation = self:buildAnim(UI)
-  UI.animations[self.name.."_"..self.class] = self.animation
-
 end
 --
 function M:didShow(UI)
