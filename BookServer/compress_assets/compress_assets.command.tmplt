@@ -1,0 +1,18 @@
+fol={{sandboxPath}}../{{folder}}
+mkdir -p $fol
+{{#assets}}
+mkdir -p $fol/{{.asset}}
+{{/assets}}
+#
+cd  {{assetFolder}}
+
+
+{{#assets}}
+  cd {{.asset}}
+  {{#.pages}}
+  zip -r $fol/{{.asset}}/{{.}}.zip {{.}}
+  {{/.pages}}
+  cd ..
+{{/assets}}
+
+exit

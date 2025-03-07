@@ -1,0 +1,54 @@
+name: Create Release
+on:
+  push:
+    branches:
+    - main
+  workflow_dispatch:
+
+env:
+  CCX_Dir: kwik-exporter
+  CCX_NAME: com.kwiksher.kwik5
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+
+    - name: checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set Time
+      env:
+        TZ: 'Asia/Tokyo'
+      run: |
+          echo "CURRENT_DATETIME=$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
+
+    - name: Rename for ccx
+      run: |
+        cd UXP
+        mv ${{env.CCX_Dir}} ${{env.CCX_NAME}}
+
+    - name: Archive Release exporter ccx
+      uses: TheDoctor0/zip-release@0.7.6
+      with:
+        type: 'zip'
+        directory: UXP
+        path:  ${{env.CCX_NAME}}
+        filename: ${{ env.CCX_NAME}}.exporter_PS.ccx
+        exclusions: '*.git*'
+
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.CURRENT_DATETIME }}
+        name: ${{ env.CURRENT_DATETIME }}
+        draft: false
+        prerelease: false
+        files: |
+          UXP/*.ccx
+
