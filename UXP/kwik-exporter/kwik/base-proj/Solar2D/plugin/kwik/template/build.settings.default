@@ -1,0 +1,81 @@
+local M ={
+  orientation = {
+    default = "landscapeRight",
+    supported = {
+      "portrait", "portraitUpsideDown",
+      "landscapeLeft", "landscapeRight"
+    }
+  },
+  splashScreen = {
+    enable = true,
+    image = "mySplashScreen.png"
+  },
+  plugins = {
+    zip = true,
+    google = {
+      iap = true,
+      play = false -- for admob
+    },
+    amazon = {
+      iap = false
+    }
+  },
+  android = {
+    expansion = true,
+    usePermissions = {
+      "android.permission.INTERNET",
+      "android.permission.WRITE_EXTERNAL_STORAGE",
+      "com.android.vending.BILLING",
+      -- "android.permission.RECORD_AUDIO",
+      -- "android.permission.ACCESS_NETWORK_STATE",
+      -- "android.permission.READ_PHONE_STATE",
+      -- "com.android.vending.CHECK_LICENSE",
+      -- "android.permission.CAMERA",
+      -- "android.permission.ACCESS_FINE_LOCATION",
+      -- "android.permission.ACCESS_COARSE_LOCATION",
+    },
+    useFeatures = {
+      --   { name="android.hardware.camera", required=false },
+      --   { name="android.hardware.microphone", required=false },
+      --   { name = "android.hardware.location", required = false },
+      --   { name = "android.hardware.location.gps", required = false },
+      --   { name = "android.hardware.location.network", required = false }
+    }
+  },
+  window = {
+      defaultMode = "fullscreen",
+      defaultViewWidth = 1280,
+      defaultViewHeight =720,
+      resizable = true,
+      minViewWidth = 640,
+      minViewHeight = 360,
+      enableMaximizeButton = true,
+  },
+  iphone = {
+    UIStatusBarHidden = true,
+    NSExceptionDomains = false,  -- { "kwiksher.com "}
+    CFBundleLocalizations = false, -- {"en", "jp"},
+    CFBundleDisplayName = "MyApp",
+    CFBundleName = "MyApp",
+    descriptions = {
+      motion = false,
+      location = false,
+      microphone = false,
+      camera = false,
+    }
+  },
+  macos = {
+    CFBundleURLName = "My URL Scheme",
+    CFBundleURLSchemes = "myscheme",
+    NSHumanReadableCopyright = "Copyright © 2017 XYZ Company""
+
+  },
+  win32 = {
+    preferenceStorage = "sqlite", -- "registry",
+    singleInstance = false,
+  },
+  excludeFiles = {}
+
+}
+
+return M

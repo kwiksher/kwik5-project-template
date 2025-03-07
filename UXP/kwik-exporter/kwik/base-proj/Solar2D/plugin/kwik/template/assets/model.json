@@ -1,0 +1,26 @@
+{
+    "page":{{page}},"alias":"{{alias}}","isTmplt":{{isTmplt}},
+    {{#layers}}
+    "{{layer}}":{ "x":{{x}}, "y":{{y}}, "width":{{width}}, "height":{{height}}, "alpha":{{alpha}}, "ext":"{{ext}}" },
+    {{/layers}}
+    "audios":[{{#audios}}"{{filename}}",{{/audios}} null],
+    "read2me":[{{#read2me}}{"foldername":"{{foldername}}", "filenames":[{{#filenames}}"{{.}}",{{/filenames}} null] },{{/read2me}} null],
+    "videos":[{{#videos}}"{{filename}}",{{/videos}} null],
+    "PNGs":[{{#PNGs}}"{{foldername}}",{{/PNGs}} null],
+    "sprites":[{{#sprites}}"{{filename}}",{{/sprites}} null],
+    "particles":[{{#particles}}{"filename":"{{filename}}","PNG":"{{PNG}}"},{{/particles}} null],
+    "WWW":[{{#WWW}}{"filename":"{{filename}}","foldername":"{{foldername}}"},{{/WWW}} null],
+    "thumbnails":[{{#thumbnails}}{{#filenames}}"{{.}}",{{/filenames}} {{/thumbnails}}null],
+    "images":[
+        {{#images}}
+         "{{filename}}@4x.{{filetype}}", "{{filename}}@2x.{{filetype}}", "{{filename}}.{{filetype}}",
+        {{/images}}
+        null
+    ],
+    "shared":[
+        {{#shared}}
+         "{{filename}}@4x.{{filetype}}", "{{filename}}@2x.{{filetype}}", "{{filename}}.{{filetype}}",
+        {{/shared}}
+        null
+    ]
+}
