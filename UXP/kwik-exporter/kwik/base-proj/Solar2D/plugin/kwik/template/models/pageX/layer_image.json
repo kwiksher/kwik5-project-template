@@ -1,0 +1,10 @@
+{
+  "blendMode" : "{{blendMode}}",
+  "height"    : {{height}},
+  "width"     : {{width}},
+  "kind"      : "{{kind}}",
+  "name"      : "{{name}}",
+  "x"         : {{x}},
+  "y"         : {{y}},
+  "alpha"     : {{alpha}}
+}

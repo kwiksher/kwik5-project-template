@@ -1,0 +1,1 @@
+{"isNew":true,"properties":{"type":"pivot","bodyB":"rect_1","maxMotorTorque":"NIL","anchor_x":"rect_0.x","isMotorEnabled":"false","motorSpeed":"NIL","rotationY":"0","bodyA":"rect_0","rotationX":"0","motorForce":"NIL","anchor_y":"rect_0.y","pivot":true,"isLimitEnabled":"true"},"name":"rect_0_rect_1_pivot","class":"joint"}

@@ -1,0 +1,16 @@
+NSPhotoLibraryUsageDescription      = "This app would like to access the photo library.";
+NSPhotoLibraryAddUsageDescription   = "This app would like to add the photo library.";
+
+NSMotionUsageDescription            = "This app would like to access the accelerometer.";
+
+NSLocationAlwaysUsageDescription    = "This app would like to use location services.";
+NSLocationWhenInUseUsageDescription = "This app would like to use location services.";
+
+NSMicrophoneUsageDescription        = "This app would like to access the microphone.";
+
+NSCameraUsageDescription            = "This app would like to access the camera.";
+NSPhotoLibraryUsageDescription      = "This app would like to access the photo library.";
+
+NSCameraUsageDescription            = "This app would like to access the camera.";
+NSPhotoLibraryUsageDescription      = "This app would like to access the photo library.";
+NSPhotoLibraryAddUsageDescription   = "This app would like to add the photo library.";

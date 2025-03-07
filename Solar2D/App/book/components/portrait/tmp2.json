@@ -1,0 +1,420 @@
+{
+  "type": "Chunk",
+  "body": [
+    {
+      "type": "LocalStatement",
+      "variables": [
+        {
+          "type": "Identifier",
+          "name": "sceneName"
+        }
+      ],
+      "init": [
+        {
+          "type": "VarargLiteral",
+          "value": "...",
+          "raw": "..."
+        }
+      ]
+    },
+    {
+      "type": "LocalStatement",
+      "variables": [
+        {
+          "type": "Identifier",
+          "name": "model"
+        }
+      ],
+      "init": [
+        {
+          "type": "TableConstructorExpression",
+          "fields": [
+            {
+              "type": "TableKeyString",
+              "key": {
+                "type": "Identifier",
+                "name": "components"
+              },
+              "value": {
+                "type": "TableConstructorExpression",
+                "fields": [
+                  {
+                    "type": "TableKeyString",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "layers"
+                    },
+                    "value": {
+                      "type": "TableConstructorExpression",
+                      "fields": [
+                        {
+                          "type": "TableValue",
+                          "value": {
+                            "type": "TableConstructorExpression",
+                            "fields": [
+                              {
+                                "type": "TableKeyString",
+                                "key": {
+                                  "type": "Identifier",
+                                  "name": "bg"
+                                },
+                                "value": {
+                                  "type": "TableConstructorExpression",
+                                  "fields": []
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "TableValue",
+                          "value": {
+                            "type": "TableConstructorExpression",
+                            "fields": [
+                              {
+                                "type": "TableKeyString",
+                                "key": {
+                                  "type": "Identifier",
+                                  "name": "copyright"
+                                },
+                                "value": {
+                                  "type": "TableConstructorExpression",
+                                  "fields": []
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "TableValue",
+                          "value": {
+                            "type": "TableConstructorExpression",
+                            "fields": [
+                              {
+                                "type": "TableKeyString",
+                                "key": {
+                                  "type": "Identifier",
+                                  "name": "GroupA"
+                                },
+                                "value": {
+                                  "type": "TableConstructorExpression",
+                                  "fields": []
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "TableValue",
+                          "value": {
+                            "type": "TableConstructorExpression",
+                            "fields": [
+                              {
+                                "type": "TableKeyString",
+                                "key": {
+                                  "type": "Identifier",
+                                  "name": "star"
+                                },
+                                "value": {
+                                  "type": "TableConstructorExpression",
+                                  "fields": [
+                                    {
+                                      "type": "TableKeyString",
+                                      "key": {
+                                        "type": "Identifier",
+                                        "name": "class"
+                                      },
+                                      "value": {
+                                        "type": "TableConstructorExpression",
+                                        "fields": [
+                                          {
+                                            "type": "TableValue",
+                                            "value": {
+                                              "type": "StringLiteral",
+                                              "value": null,
+                                              "raw": "\"button\""
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "TableValue",
+                          "value": {
+                            "type": "TableConstructorExpression",
+                            "fields": [
+                              {
+                                "type": "TableKeyString",
+                                "key": {
+                                  "type": "Identifier",
+                                  "name": "hello"
+                                },
+                                "value": {
+                                  "type": "TableConstructorExpression",
+                                  "fields": [
+                                    {
+                                      "type": "TableKeyString",
+                                      "key": {
+                                        "type": "Identifier",
+                                        "name": "class"
+                                      },
+                                      "value": {
+                                        "type": "TableConstructorExpression",
+                                        "fields": [
+                                          {
+                                            "type": "TableValue",
+                                            "value": {
+                                              "type": "StringLiteral",
+                                              "value": null,
+                                              "raw": "\"sprite\""
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "TableKeyString",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "audios"
+                    },
+                    "value": {
+                      "type": "TableConstructorExpression",
+                      "fields": [
+                        {
+                          "type": "TableKeyString",
+                          "key": {
+                            "type": "Identifier",
+                            "name": "long"
+                          },
+                          "value": {
+                            "type": "TableConstructorExpression",
+                            "fields": []
+                          }
+                        },
+                        {
+                          "type": "TableKeyString",
+                          "key": {
+                            "type": "Identifier",
+                            "name": "short"
+                          },
+                          "value": {
+                            "type": "TableConstructorExpression",
+                            "fields": [
+                              {
+                                "type": "TableValue",
+                                "value": {
+                                  "type": "StringLiteral",
+                                  "value": null,
+                                  "raw": "\"Thunder\""
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "TableKeyString",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "groups"
+                    },
+                    "value": {
+                      "type": "TableConstructorExpression",
+                      "fields": []
+                    }
+                  },
+                  {
+                    "type": "TableKeyString",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "timers"
+                    },
+                    "value": {
+                      "type": "TableConstructorExpression",
+                      "fields": []
+                    }
+                  },
+                  {
+                    "type": "TableKeyString",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "variables"
+                    },
+                    "value": {
+                      "type": "TableConstructorExpression",
+                      "fields": []
+                    }
+                  },
+                  {
+                    "type": "TableKeyString",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "joints"
+                    },
+                    "value": {
+                      "type": "TableConstructorExpression",
+                      "fields": []
+                    }
+                  },
+                  {
+                    "type": "TableKeyString",
+                    "key": {
+                      "type": "Identifier",
+                      "name": "page"
+                    },
+                    "value": {
+                      "type": "TableConstructorExpression",
+                      "fields": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "TableKeyString",
+              "key": {
+                "type": "Identifier",
+                "name": "commands"
+              },
+              "value": {
+                "type": "TableConstructorExpression",
+                "fields": [
+                  {
+                    "type": "TableValue",
+                    "value": {
+                      "type": "StringLiteral",
+                      "value": null,
+                      "raw": "\"audioAction\""
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "TableKeyString",
+              "key": {
+                "type": "Identifier",
+                "name": "onInit"
+              },
+              "value": {
+                "type": "FunctionDeclaration",
+                "identifier": null,
+                "isLocal": false,
+                "parameters": [
+                  {
+                    "type": "Identifier",
+                    "name": "scene"
+                  }
+                ],
+                "body": [
+                  {
+                    "type": "CallStatement",
+                    "expression": {
+                      "type": "CallExpression",
+                      "base": {
+                        "type": "Identifier",
+                        "name": "print"
+                      },
+                      "arguments": [
+                        {
+                          "type": "StringLiteral",
+                          "value": null,
+                          "raw": "\"onInit\""
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "LocalStatement",
+      "variables": [
+        {
+          "type": "Identifier",
+          "name": "scene"
+        }
+      ],
+      "init": [
+        {
+          "type": "CallExpression",
+          "base": {
+            "type": "MemberExpression",
+            "indexer": ".",
+            "identifier": {
+              "type": "Identifier",
+              "name": "new"
+            },
+            "base": {
+              "type": "CallExpression",
+              "base": {
+                "type": "Identifier",
+                "name": "require"
+              },
+              "arguments": [
+                {
+                  "type": "StringLiteral",
+                  "value": null,
+                  "raw": "\"controller.scene\""
+                }
+              ]
+            }
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "name": "sceneName"
+            },
+            {
+              "type": "Identifier",
+              "name": "model"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ReturnStatement",
+      "arguments": [
+        {
+          "type": "Identifier",
+          "name": "scene"
+        }
+      ]
+    }
+  ],
+  "comments": [
+    {
+      "type": "Comment",
+      "value": "",
+      "raw": "--"
+    },
+    {
+      "type": "Comment",
+      "value": "",
+      "raw": "--"
+    }
+  ]
+}

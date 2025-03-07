@@ -1,0 +1,412 @@
+{
+  "numValues": [
+    null
+  ],
+  "strValues": {
+    "components": {
+      "numValues": [
+        null
+      ],
+      "strValues": {
+        "layers": {
+          "numValues": [
+            null,
+            {
+              "numValues": [
+                null
+              ],
+              "strValues": {
+                "bg": {
+                  "numValues": [
+                    null
+                  ],
+                  "strValues": {
+                    "class": {
+                      "numValues": [
+                        null
+                      ],
+                      "strValues": {},
+                      "keys": [],
+                      "values": [],
+                      "metatable": null
+                    }
+                  },
+                  "keys": [],
+                  "values": [],
+                  "metatable": null
+                }
+              },
+              "keys": [],
+              "values": [],
+              "metatable": null
+            },
+            {
+              "numValues": [
+                null
+              ],
+              "strValues": {
+                "copyright": {
+                  "numValues": [
+                    null
+                  ],
+                  "strValues": {
+                    "class": {
+                      "numValues": [
+                        null
+                      ],
+                      "strValues": {},
+                      "keys": [],
+                      "values": [],
+                      "metatable": null
+                    }
+                  },
+                  "keys": [],
+                  "values": [],
+                  "metatable": null
+                }
+              },
+              "keys": [],
+              "values": [],
+              "metatable": null
+            },
+            {
+              "numValues": [
+                null
+              ],
+              "strValues": {
+                "star": {
+                  "numValues": [
+                    null
+                  ],
+                  "strValues": {
+                    "class": {
+                      "numValues": [
+                        null
+                      ],
+                      "strValues": {},
+                      "keys": [],
+                      "values": [],
+                      "metatable": null
+                    }
+                  },
+                  "keys": [],
+                  "values": [],
+                  "metatable": null
+                }
+              },
+              "keys": [],
+              "values": [],
+              "metatable": null
+            },
+            {
+              "numValues": [
+                null
+              ],
+              "strValues": {
+                "GroupA": {
+                  "numValues": [
+                    null,
+                    {
+                      "numValues": [
+                        null
+                      ],
+                      "strValues": {
+                        "Ellipse": {
+                          "numValues": [
+                            null
+                          ],
+                          "strValues": {
+                            "class": {
+                              "numValues": [
+                                null
+                              ],
+                              "strValues": {},
+                              "keys": [],
+                              "values": [],
+                              "metatable": null
+                            }
+                          },
+                          "keys": [],
+                          "values": [],
+                          "metatable": null
+                        }
+                      },
+                      "keys": [],
+                      "values": [],
+                      "metatable": null
+                    },
+                    {
+                      "numValues": [
+                        null
+                      ],
+                      "strValues": {
+                        "SubA": {
+                          "numValues": [
+                            null,
+                            {
+                              "numValues": [
+                                null
+                              ],
+                              "strValues": {
+                                "Triangle": {
+                                  "numValues": [
+                                    null
+                                  ],
+                                  "strValues": {
+                                    "class": {
+                                      "numValues": [
+                                        null
+                                      ],
+                                      "strValues": {},
+                                      "keys": [],
+                                      "values": [],
+                                      "metatable": null
+                                    }
+                                  },
+                                  "keys": [],
+                                  "values": [],
+                                  "metatable": null
+                                }
+                              },
+                              "keys": [],
+                              "values": [],
+                              "metatable": null
+                            }
+                          ],
+                          "strValues": {
+                            "class": {
+                              "numValues": [
+                                null
+                              ],
+                              "strValues": {},
+                              "keys": [],
+                              "values": [],
+                              "metatable": null
+                            }
+                          },
+                          "keys": [],
+                          "values": [],
+                          "metatable": null
+                        }
+                      },
+                      "keys": [],
+                      "values": [],
+                      "metatable": null
+                    }
+                  ],
+                  "strValues": {
+                    "class": {
+                      "numValues": [
+                        null
+                      ],
+                      "strValues": {},
+                      "keys": [],
+                      "values": [],
+                      "metatable": null
+                    }
+                  },
+                  "keys": [],
+                  "values": [],
+                  "metatable": null
+                }
+              },
+              "keys": [],
+              "values": [],
+              "metatable": null
+            },
+            {
+              "numValues": [
+                null
+              ],
+              "strValues": {
+                "star_particles": {
+                  "numValues": [
+                    null
+                  ],
+                  "strValues": {
+                    "class": {
+                      "numValues": [
+                        null
+                      ],
+                      "strValues": {},
+                      "keys": [],
+                      "values": [],
+                      "metatable": null
+                    }
+                  },
+                  "keys": [],
+                  "values": [],
+                  "metatable": null
+                }
+              },
+              "keys": [],
+              "values": [],
+              "metatable": null
+            },
+            {
+              "numValues": [
+                null
+              ],
+              "strValues": {
+                "star_button": {
+                  "numValues": [
+                    null
+                  ],
+                  "strValues": {
+                    "class": {
+                      "numValues": [
+                        null
+                      ],
+                      "strValues": {},
+                      "keys": [],
+                      "values": [],
+                      "metatable": null
+                    }
+                  },
+                  "keys": [],
+                  "values": [],
+                  "metatable": null
+                }
+              },
+              "keys": [],
+              "values": [],
+              "metatable": null
+            },
+            {
+              "numValues": [
+                null
+              ],
+              "strValues": {
+                "hello_sprite": {
+                  "numValues": [
+                    null
+                  ],
+                  "strValues": {
+                    "class": {
+                      "numValues": [
+                        null
+                      ],
+                      "strValues": {},
+                      "keys": [],
+                      "values": [],
+                      "metatable": null
+                    }
+                  },
+                  "keys": [],
+                  "values": [],
+                  "metatable": null
+                }
+              },
+              "keys": [],
+              "values": [],
+              "metatable": null
+            },
+            {
+              "numValues": [
+                null
+              ],
+              "strValues": {
+                "hello": {
+                  "numValues": [
+                    null
+                  ],
+                  "strValues": {
+                    "class": {
+                      "numValues": [
+                        null
+                      ],
+                      "strValues": {},
+                      "keys": [],
+                      "values": [],
+                      "metatable": null
+                    }
+                  },
+                  "keys": [],
+                  "values": [],
+                  "metatable": null
+                }
+              },
+              "keys": [],
+              "values": [],
+              "metatable": null
+            }
+          ],
+          "strValues": {},
+          "keys": [],
+          "values": [],
+          "metatable": null
+        },
+        "audios": {
+          "numValues": [
+            null
+          ],
+          "strValues": {},
+          "keys": [],
+          "values": [],
+          "metatable": null
+        },
+        "groups": {
+          "numValues": [
+            null
+          ],
+          "strValues": {},
+          "keys": [],
+          "values": [],
+          "metatable": null
+        },
+        "timers": {
+          "numValues": [
+            null
+          ],
+          "strValues": {},
+          "keys": [],
+          "values": [],
+          "metatable": null
+        },
+        "variables": {
+          "numValues": [
+            null
+          ],
+          "strValues": {},
+          "keys": [],
+          "values": [],
+          "metatable": null
+        },
+        "joints": {
+          "numValues": [
+            null
+          ],
+          "strValues": {},
+          "keys": [],
+          "values": [],
+          "metatable": null
+        },
+        "page": {
+          "numValues": [
+            null
+          ],
+          "strValues": {},
+          "keys": [],
+          "values": [],
+          "metatable": null
+        }
+      },
+      "keys": [],
+      "values": [],
+      "metatable": null
+    },
+    "commands": {
+      "numValues": [
+        null,
+        "audioAction"
+      ],
+      "strValues": {},
+      "keys": [],
+      "values": [],
+      "metatable": null
+    }
+  },
+  "keys": [],
+  "values": [],
+  "metatable": null
+}
