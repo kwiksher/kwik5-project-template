@@ -1,11 +1,11 @@
 local M = {
-  name       = "group0",
+  name       = "group-new",
   members   = {},
   properties = {
-    alpha = 1,
-    xScale = 1,
-    yScale = 1,
-    rotation =0,
+    alpha = NIL,
+    xScale = NIL,
+    yScale = NIL,
+    rotation = NIL,
     isLuaTable = false,
     x=nil,
     y=nil

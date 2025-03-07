@@ -4,9 +4,10 @@ local M = {
   properties = {
     isRemoveOther = true,
     isRemoveSelf = true,
-    others = ""
+    othersGroup = NIL
   },
   actions = { onCollision= "" },
+  others = {}
 }
 
 return M

@@ -1,12 +1,12 @@
 local M = {
-  name = "swipe0",
+  name = "swipe",
   class="swipe",
   properties = {
     target = NIL,
     type   = NIL,
     isActive = true,
-    swipeLength = 120/4,
-    limitAngle = 30,
+    swipeLength = 120,
+    limitAngle = NIL,
     useStrictBounds = false
   },
   actions={

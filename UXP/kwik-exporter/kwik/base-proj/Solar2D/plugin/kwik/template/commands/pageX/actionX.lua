@@ -1,3 +1,7 @@
+-- Code created by Kwik - Copyright: kwiksher.com {{year}}
+-- Version: {{vers}}
+-- Project: {{ProjName}}
+--
 local ActionCommand = {}
 local AC           = require("commands.kwik.actionCommand")
 --
@@ -12,9 +16,8 @@ function ActionCommand:new()
 		local layers      = UI.layers
     local event      = params.event
     local obj        = event.target
-    --
-    -- local alert = native.showAlert("Alert", "Hello", { "OK" } )
-    -- printKeys(event.target)
+    --printKeys(event.target)
+
     -- local conditions = require("App." .. UI.book..".common.conditions")
     -- local expressions = require("App." .. UI.book.."common.expressions")
 
@@ -85,16 +88,14 @@ function ActionCommand:new()
     -- target layer :sceneGroup[layerName]
     -- target animation : layer.animations[index]
     --
+    obj = UI.sceneGroup["{{target}}"]
     {{#pause}}
-      obj = UI.animations["{{target}}"]
       AC.Animation:pause(obj)
     {{/pause}}
     {{#resume}}
-      obj = UI.animations["{{target}}"]
       AC.Animation:resume(obj)
     {{/resume}}
     {{#play}}
-      obj = UI.animations["{{target}}"]
       AC.Animation:play(obj) --  {{index}}
     {{/play}}
   {{/animation}}

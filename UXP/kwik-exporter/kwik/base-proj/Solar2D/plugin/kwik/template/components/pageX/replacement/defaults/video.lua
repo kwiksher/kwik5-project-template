@@ -1,8 +1,7 @@
 local M = {
-  name = "video0",
+  name = "video",
   class="video",
   properties = {
-    target = NIL,
     loop = true,
     rewind = true,
     isLocal = true,

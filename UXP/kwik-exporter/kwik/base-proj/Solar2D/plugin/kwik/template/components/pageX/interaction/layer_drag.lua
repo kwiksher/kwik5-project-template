@@ -1,7 +1,29 @@
-local parent,root, M = newModule(...)
-local layerProps = require(M.layerMod).layerProps or {}
+local name = ...
+local parent,root = newModule(name)
 
+local layerProps = require(parent.."{{layer}}").properties
 local MultiTouch = require("extlib.dmc_multitouch")
+
+function M:dbounds()
+  local dbounds = {}
+  if {{gconstrain) and {{gboundsX) and {{gboundsY)  then
+      dbounds = { constrainAngle = {{gangle}} }
+  else if {{gconstrain) and {{gboundsX}}  and {{gboundsY}} then
+      dbounds = { constrainAngle = {{gangle}}, xBounds = { {{gboundsXS}}, {{gboundsXE}}} }
+  else if {{gconstrain)  and{{gboundsX) and {{gboundsY}} then
+      dbounds = { constrainAngle = {{gangle}}, yBounds = { {{gboundsYS}}, {{gboundsYE}}} }
+  else if {{gconstrain}}  and {{gboundsX}} and {{gboundsY}} then
+      dbounds = { constrainAngle = {{gangle}}, xBounds = { {{gboundsXS}}, {{gboundsXE}}}, yBounds = { {{gboundsYS}}, {{gboundsYE}}} }
+  else if {{gconstrain}} and {{gboundsX}} and {{gboundsY}} then
+      dbounds = { xBounds = { {{gboundsXS}}, {{gboundsXE}}} }
+  else if {{gconstrain}}  and {{gboundsX) and {{gboundsY) then
+      dbounds = { yBounds = { {{gboundsYS}}, {{gboundsYE}}} }
+  else if {{gconstrain}}  and {{gboundsX}}  and {{gboundsY}} then
+      dbounds = { xBounds = { {{gboundsXS}}, {{gboundsXE}}}, yBounds = { {{gboundsYS}}, {{gboundsYE}}} }
+  end
+  return dbounds
+end
+
 
 local M = {
   name ="{{layer}}",
@@ -14,10 +36,8 @@ local M = {
     target = "{{layer}}",
     type  = "{{type}}",
     constrainAngle = {{constrainAngle}},
-    {{#boundaries}}
-    boundaries = {xMin={{xMin}}, xMax={{xMax}}, yMin={{yMin}}, yMax={{yMax}}},
-    {{/boundaries}}
-    isActive = {{isActive}},
+    bounds = {xMin={{xMin}}, xMax={{xMax}}, yMin={{yMin}}, yMax={{yMax}}},
+    isActive = "{{isActive}}",
     isFocus = true,
     isPage = false,
     --
@@ -37,6 +57,7 @@ local M = {
     backToOrigin = true,
    {{/properties}}
   }
+  --
 }
 
 M.layerProps = layerProps
@@ -44,17 +65,12 @@ M.actions={
   {{#actions}}
   onDropped = "{{onDropped}}",
   onReleased ="{{onReleased}}",
-  onMoved="{{onMoved}}"
+  onMoved="{{onMoved}}" },
   {{/actions}}
-}
+
 
 function M:create(UI)
   self.UI = UI
-end
-
-function M:didShow(UI)
-  self.UI = UI
-  -- self:addEventListener(self.obj)
   local sceneGroup = UI.sceneGroup
   local layerName  = self.properties.target
   self.obj        = sceneGroup[layerName]
@@ -62,14 +78,17 @@ function M:didShow(UI)
     self.obj = sceneGroup
   end
   --
-  self.obj.dropArea = sceneGroup[self.properties.dropArea]
-  -- printKeys(self.obj)
-  self.obj.oriX, self.obj.oriY = self.obj.x, self.obj.y
+  self.obj.dropArea = sceneGroup[self.dropArea]
   self:activate(self.obj)
 end
+
+function M:didShow(UI)
+  self.UI = UI
+  self:addEventListener(self.obj)
+end
+
 function M:didHide(UI)
-  -- self:removeEventListener(self.obj)
-  self:deactivate(self.obj)
+  self:removeEventListener(self.obj)
 end
 
 return require("components.kwik.layer_drag").set(M)

@@ -1,8 +1,7 @@
 local M = {
-  name = "sprite0",
+  name = "sprite",
   class = "sprite",
   properties = {
-    target = NIL,
     sheetType  = "uniform-sized", -- TexturePacker, Animate
     filename = "imagesheet.png",
     sheetInfo = NIL,

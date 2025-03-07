@@ -1,11 +1,11 @@
 local M = {
-  name       = "timer0",
+  name       = "timer-new",
   properties = {
     delay      = 0,
     iterations = 1,
-  },
+  }
   actions = {
-    onComplete = "",
+    actionName = "",
   }
 }
 

@@ -1,5 +1,7 @@
-local parent,root, M = newModule(...)
-local layerProps = require(M.layerMod).layerProps or {}
+local name = ...
+local parent,root = newModule(name)
+
+local layerProps = require(parent.."{{layer}}").properties
 
 local M = {
   name="{{name}}",
@@ -7,20 +9,16 @@ local M = {
   properties = {
     {{#properties}}
     target = "{{layer}}",
+    type  = "{{type}}",
     isActive = "{{isActive}}",
-    dampX = {{dampX}},
-    dampY = {{dampY}},
     dpx = {{dpx}},
     dpy = {{dpy}},
     {{/properties}}
   },
   --
   actions={
-  {{#actions}}
     onBack = "{{onBack}}",
     onForward ="{{onForward}}",
-   {{/actions}}
-
   },
   --
   layerProps = layerProps

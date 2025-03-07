@@ -1,10 +1,10 @@
 local M = {
-  name = "linear0",
+  name = "linear",
   class="Linear",
   from = {
     x = 0,
     y = 0,
-    alpha = 1,
+    alpha = 0,
     xScale = 1,
     yScale = 1,
     rotation = 0
@@ -27,9 +27,8 @@ local M = {
     reverse=false,
     resetAtEnd=false,
     easing="inCircular",
-    xSwipe=false,
-    ySwipe=false,
-    useLang = false
+    xSwipe=nil,
+    ySwipe=nil
   },
   audio = {
     name = "",
