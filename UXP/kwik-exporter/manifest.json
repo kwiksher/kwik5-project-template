@@ -1,0 +1,71 @@
+{
+  "id": "com.kwiksher.kwik5.exporter",
+  "name": "Kwik Exporter",
+  "version": "0.1.0",
+  "main": "main.js",
+  "manifestVersion": 5,
+  "host": { "app": "PS", "minVersion": "23.0.0", "data" : {
+    "apiVersion": 2,
+    "loadEvent": "use"
+  } },
+  "entrypoints": [
+    {
+      "type": "panel",
+      "id": "uxpstyles",
+      "label": { "default": "Kwik Exporter" },
+      "minimumSize": { "width": 100, "height": 100 },
+      "maximumSize": { "width": 1640, "height": 816 },
+      "preferredDockedSize": { "width": 340, "height": 516 },
+      "preferredFloatingSize": { "width": 340, "height": 315 },
+      "icons": [
+        { "width": 23, "height": 23,
+          "path": "icons/DarkTheme.png",
+          "scale": [ 1, 2 ],
+          "theme": [ "dark", "darkest" ],
+          "species": [ "chrome" ]
+        },
+        { "width": 23, "height": 23,
+          "path": "icons/LightTheme.png",
+          "scale": [ 1, 2 ],
+          "theme": [ "lightest", "light" ],
+          "species": [ "chrome" ]
+        }
+      ]
+    }
+  ],
+  "icons": [
+    { "width": 48, "height": 48,
+      "path": "icons/DarkTheme_plugins.png",
+      "scale": [ 1, 2 ],
+      "theme": [ "dark", "darkest" ],
+      "species": [ "pluginList" ]
+    },
+    {
+      "width": 48, "height": 48,
+      "path": "icons/LightTheme_plugins.png",
+      "scale": [ 1, 2 ],
+      "theme": [ "lightest", "light" ],
+      "species": [ "pluginList" ]
+    }
+  ],
+  "requiredPermissions": {
+    "localFileSystem": "fullAccess",
+    "allowCodeGenerationFromStrings":true,
+    "network": {
+        "domains": [
+            "https://kwiksher.com"
+        ]
+    },
+    "clipboard": "readAndWrite",
+    "webview": {
+        "allow": "yes",
+        "domains": [ "https://*.adobe.com", "https://*.google.com", "https://*.kwiksher.com"]
+    },
+    "launchProcess": {
+        "schemes":
+            [ "https", "corona"],
+        "extensions":
+            [ "",".xd", ".psd", "*.lua" ]
+    }
+  }
+}
