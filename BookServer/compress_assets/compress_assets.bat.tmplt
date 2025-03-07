@@ -1,0 +1,8 @@
+set fol=../../../{{BookServer}}/{{folder}}
+cd  {{assetFolder}}
+
+{{#assets}}
+zip -r %fol%/p{{page}}/{{type}}.zip {{#files}}{{.}} {{/files}}
+{{/assets}}
+
+exit

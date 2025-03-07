@@ -1,0 +1,2 @@
+[6/26/2024, 5:23:56 PM] layer "16 x 16 icon_16x16.png, 32 x 32 icon_32x32.png, 64 x 64 icon_64x64.png, 128 x 128 icon_128x128.png, 256 x 256 icon_256x256.png, 512 x 512 icon_512x512.png, 1024 x 1024 icon_1024x1024.png": Duplicate path: icon_16x16.png
+[6/26/2024, 5:23:56 PM] layer "16 x 16 icon_16x16.png, 32 x 32 icon_32x32.png, 64 x 64 icon_64x64.png, 128 x 128 icon_128x128.png, 256 x 256 icon_256x256.png, 512 x 512 icon_512x512.png, 1024 x 1024 icon_1024x1024.png": Duplicate path: icon_32x32.png

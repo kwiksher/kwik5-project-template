@@ -1,0 +1,139 @@
+settings = {
+    plugins = {
+        ["plugin.zip"] = {
+            publisherId = "com.coronalabs",
+        },
+        ["plugin.kwik"] = {
+             publisherId = "com.kwiksher",
+        },
+        --Google in app billing v2
+        ["plugin.google.iap.billing.v2"] = {
+            -- required
+            publisherId = "com.solar2d",
+            supportedPlatforms = { android = true },
+        },
+        --Amazon IAP
+        ["plugin.amazon.iap"] = {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { ["android-kindle"]=true }
+        },
+       -- ["plugin.mouseHover"] = {
+       --     publisherId = "sg.btn",
+            --publisherId = "com.coronalabs",
+            --supportedPlatforms = { ["android-kindle"]=true }
+       --},
+       ["plugin.tinyfiledialogs"]={
+            publisherId = "com.xibalbastudios"
+       },
+       ["plugin.nanosvg"] =
+        {
+            publisherId = "com.coronalabs"
+        },
+    },
+    orientation = {
+   --  default = "portrait",
+   default = "landscapeRight",
+      supported = {
+        "portrait", "portraitUpsideDown",
+        "landscapeLeft", "landscapeRight"
+       },
+    },
+    splashScreen = {
+        enable = true,
+        image =  "mySplashScreen.png",
+    --     ios = {
+    --         enable = true,
+    --         image = "mySplashScreen_iOS.png"
+    --     },
+    --     android = {
+    --         enable = true,
+    --         image = "mySplashScreen_Android.png"
+    --     }
+    },
+    android  = {
+      usesPermissions  = {
+          "android.permission.INTERNET",
+          "android.permission.WRITE_EXTERNAL_STORAGE",
+          "com.android.vending.BILLING",
+          -- for recordAudio
+          -- "android.permission.RECORD_AUDIO",
+          --
+          -- for iap
+          --   "com.android.vending.BILLING",
+          --
+          -- for hasWeb
+          --   "android.permission.INTERNET",
+          --
+          -- for adMob
+          --   "android.permission.ACCESS_NETWORK_STATE",
+          --   "android.permission.READ_PHONE_STATE",
+          --
+          -- for expansion
+          --   "com.android.vending.CHECK_LICENSE",
+          --
+          -- for camera
+          -- "android.permission.CAMERA",
+          --
+          -- for location
+          -- "android.permission.ACCESS_FINE_LOCATION",
+          -- "android.permission.ACCESS_COARSE_LOCATION",
+          --
+          },
+      useFeatures = {
+        -- for camera
+        --   { name="android.hardware.camera", required=false },
+        --
+        -- for recordAudio
+        --   { name="android.hardware.microphone", required=false },
+        --
+        -- for location
+        --   { name = "android.hardware.location", required = false },
+        --   { name = "android.hardware.location.gps", required = false },
+        --   { name = "android.hardware.location.network", required = false }
+        }
+        --
+    },
+    iphone = {
+        xcassets = "Images.xcassets",
+        plist= {
+          NSAppTransportSecurity = {
+            NSExceptionDomains = {
+              -- ["kwiksher.com"] = {
+              --     NSIncludesSubdomains = true,
+              --     NSThirdPartyExceptionAllowsInsecureHTTPLoads = true
+              -- },
+            }
+          },
+          UIStatusBarHidden = true,
+          UILaunchStoryboardName = "LaunchScreen",
+          -- UIAppFonts obsolete https://forums.solar2d.com/t/new-depreciated-keys-in-build-2016-2989/341934/4
+          CFBundleLocalizations = {},
+          CFBundleDisplayName = "MyApp",
+          CFBundleName = "NyApp",
+        },
+    },
+    window = {
+        defaultMode = "fullscreen",
+        defaultViewWidth = 1280,
+        defaultViewHeight =720,
+        resizable = true,
+        minViewWidth = 640,
+        minViewHeight = 360,
+        enableMaximizeButton = true,
+    },
+    win32 = {
+      preferenceStorage = "sqlite",
+      singleInstance = false
+    },
+    osx = {
+        entitlements = {
+            ["com.apple.security.assets.pictures.read-write"] = true,
+        },
+    },
+    excludeFiles = {
+        -- Exclude all files at all paths which end with "secret.txt"
+        all = {  "Icon*.png", "Images.xcassets", "Icon*.ico", "Icon*.icns", "*.vbs", "*.bat", "*.command", "copy_projects" },
+        android = { "LaunchScreen.storyboardc" },
+        win32 = { "LaunchScreen.storyboardc" },
+    },
+}
