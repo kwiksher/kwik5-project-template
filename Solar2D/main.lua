@@ -27,9 +27,9 @@ kwik.setCustomModule(
 )
 
 kwik.bootstrap {
-  name = "replacement",
+  name = "book",
   editor = true,
-  goPage = "counter",
+  goPage = "landscape",
   language = "", -- empty string "" is for a single language project
   position = {x = 0, y = 0},
   gotoLastBook = false,

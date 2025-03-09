@@ -3,7 +3,7 @@ local parent,root, M = newModule(...)
 -- TODO extlib table in kwik editor and template/uiHandler.lua
 --
 M.libs = {
-  {name="mycode", value = "keyboard.mycode"}
+  -- {name="mycode", value = "keyboard.mycode"}
 }
 
 function M:init(UI)
