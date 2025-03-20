@@ -1,5 +1,5 @@
 local M = {
-  name = "pulse",
+  name = "pulse0",
   class="Pulse",
   from = {
     x = nil,
@@ -27,8 +27,9 @@ local M = {
     reverse=false,
     resetAtEnd=false,
     easing="outCirc",
-    xSwipe=nil,
-    ySwipe=nil
+    xSwipe=false,
+    ySwipe=false,
+    useLang = false
   },
   breadcrumbs = nil,
   layerOptions = {

@@ -1,5 +1,5 @@
 local M = {
-  name     = "newVar",
+  name     = "var0",
   properties = {
     isAfter  = false,
     isLocal  = true, -- or local

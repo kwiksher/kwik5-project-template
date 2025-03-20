@@ -1,7 +1,5 @@
-local name = ...
-local parent,root = newModule(name)
-
-local layerProps = require(parent.."{{layer}}")
+local parent,root, M = newModule(...)
+local layerProps = require(M.layerMod).layerProps or {}
 
 -- layerProps
 -- local layerProps = {
@@ -27,11 +25,11 @@ local M = {
     autoSave   = true,
     brushSize  = {{brushSize}},
     {{#brushColor}}
-    brushColor = {{{r}}, {{g}}, {{b}}, {{a}}},
+    brushColor = { {{{r}}, {{g}}, {{b}}, {{a}} },
     {{/brushColor}}
-    {{#color}}
-    color    = { {{r}}, {{g}}, {{b}}, {{a}} },
-    {{/color}}
+    {{#canvasColor}}
+    canvasColor    = { {{r}}, {{g}}, {{b}}, {{a}} },
+    {{/canvasColor}}
     outline    = true,
     {{/properties}}
   },

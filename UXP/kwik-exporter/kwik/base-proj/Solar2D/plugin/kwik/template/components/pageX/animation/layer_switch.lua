@@ -26,7 +26,7 @@ M.layerOptions = {
     -- "CenterLeft"
     -- "CenterRight"
     -- "BottomLeft"
-    -- "BottomLeft"
+    -- "BottomCenter"
     -- "BottomRight"
   -- for text
   deltaX         = {{deltaX}},

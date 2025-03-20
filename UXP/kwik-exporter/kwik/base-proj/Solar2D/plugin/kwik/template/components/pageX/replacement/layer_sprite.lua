@@ -1,7 +1,7 @@
-local name = ...
-local parent,root = newModule(name)
+local parent,root, M = newModule(...)
+local layerProps = require(M.layerMod).layerProps or {}
+
 local json = require("json")
-local layerProps = require(parent.."{{layer}}")
 
 local M = {
   name ="{{name}}",
@@ -9,17 +9,19 @@ local M = {
   -- sheet = {{name}}_sheet,
   properties = {
     {{#properties}}
+    target = "{{target}}",
     filename = "{{filename}}",
     sheetInfo = "{{sheetInfo}}",
-    sheetContentWidth  = {{sheetContentWidth}}/4,
-    sheetContentHeight = {{sheetContentHeight}}/4,
+    sheetContentWidth  = {{sheetContentWidth}},
+    sheetContentHeight = {{sheetContentHeight}},
     numFrames          = {{numFrames}},
-    width              = {{width}}/4,
-    height             = {{height}}/4,
+    width              = {{width}},
+    height             = {{height}},
     sheetType  = "{{sheetType}}", -- uniform-sized TexturePacker, Animate
     {{/properties}}
   },
-  book = "{{book}}"
+  book = "{{book}}",
+  layerProps = layerProps
 
 }
 
@@ -44,11 +46,12 @@ M.sequenceData = {
 local options = nil
 if M.properties.sheetType == "TexturePacker" then
   --
-  local path = "App."..M.book..".assets."..props.properties.sheetInfo
+  local path = "App."..M.book..".assets."..M.properties.sheetInfo
   path = path:gsub("/", ".")
   path = path:gsub(".lua", "")
-  M.newSheetInfo = require(path)
-  options = M.newSheetInfo.sheet
+  --
+  local sheetInfo = require(path)
+  options = {frames = sheetInfo.frames}
   --
 elseif M.properties.sheetType == "Animate" then
   --

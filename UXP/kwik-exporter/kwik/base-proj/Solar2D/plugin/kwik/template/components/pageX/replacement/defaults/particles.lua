@@ -1,8 +1,11 @@
 local M = {
-  name = "particles",
+  name = "particles0",
   class="particles",
   -- actionName = "",
   properties = {
+    target = NIL,
+    filename = NIL,
+    autoPlay = true
   }
 }
 
