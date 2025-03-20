@@ -1,5 +1,7 @@
-local parent,root, M = newModule(...)
-local layerProps = require(M.layerMod).layerProps or {}
+local name = ...
+local parent,root = newModule(name)
+
+local layerProps = require(parent.."{{layer}}").properties
 
 local M = {
   name="{{name}}",
@@ -15,11 +17,9 @@ local M = {
   },
   --
   actions={
-  {{#actions}}
     onClokwise = "{{onClokwise}}",
     onCounterClockwise ="{{onCounterClockwise}}",
     onEnded ="{{onEnded}}",
-  {{/actions}}
   },
   --
   layerProps = layerProps
@@ -37,4 +37,4 @@ function M:didHide(UI)
   self:deactivate(UI)
 end
 
-return require("components.kwik.layer_spin").set(M)
+return require("components.kwik.layer_pinch").set(M)

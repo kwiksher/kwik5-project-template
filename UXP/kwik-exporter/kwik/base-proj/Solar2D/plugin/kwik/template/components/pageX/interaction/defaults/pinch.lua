@@ -1,5 +1,5 @@
 local M = {
-  name = "pinch0",
+  name = "pinch",
   class="pinch",
   properties = {
     target = NIL,

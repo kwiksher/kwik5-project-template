@@ -10,6 +10,7 @@ end
 -- kwik.restore()
 -- kwik.autoUpdate()
 
+--display.setDefault( "background", 0.2, 0.2, 0.2, 0.1 )
 kwik.useGradientBackground()
 
 kwik.setCustomModule(
@@ -26,17 +27,31 @@ kwik.setCustomModule(
   }
 )
 
-kwik.bootstrap {
-  name = "book",
-  editor = true,
-  goPage = "landscape",
-  language = "", -- empty string "" is for a single language project
-  position = {x = 0, y = 0},
-  gotoLastBook = false,
-  unitTest = false,
-  httpServer = false,
-  showPageName = true
-} -- scenes.index
-
--- for product release
--- require("controller.index").bootstrap({name="interaction", edting = false, goPage = "button", position = {x=0, y=0}, common = common}) -- scenes.index
+local mode = "editing"
+--
+if mode == "editing" then
+  kwik.bootstrap {
+    name = "book",
+    editor = true,
+    goPage = "landscape",
+    language = "", -- empty string "" is for a single language project
+    position = {x = 0, y = 0},
+    gotoLastBook = false,
+    unitTest = false,
+    httpServer = false,
+    showPageName = true
+  }
+elseif mode == "production" then
+  -- for product release
+  kwik.bootstrap{
+    name = "book",
+    edting = false,
+    goPage = "landscape",
+    language = "", -- empty string "" is for a single language project
+    position = {x = 0, y = 0},
+    gotoLastBook = false,
+    unitTest = false,
+    httpServer = false,
+    showPageName = false
+  }
+end
