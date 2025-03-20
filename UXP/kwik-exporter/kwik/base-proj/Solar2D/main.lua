@@ -28,25 +28,27 @@ kwik.setCustomModule(
 )
 
 local mode = "editing"
+-- local mode = "production"
+
 --
 if mode == "editing" then
-  kwik.bootstrap {
-    name = "book",
-    editor = true,
-    goPage = "landscape",
-    language = "", -- empty string "" is for a single language project
-    position = {x = 0, y = 0},
-    gotoLastBook = false,
-    unitTest = false,
-    httpServer = false,
-    showPageName = true
+  kwik.bootstrap{
+      name = "book",
+      editor = true,
+      gotoPage = "landscape",
+      language = "", -- empty string "" is for a single language project
+      position = {x = 0, y = 0},
+      gotoLastBook = true,
+      unitTest = false,
+      httpServer = false,
+      showPageName = true
   }
 elseif mode == "production" then
   -- for product release
   kwik.bootstrap{
     name = "book",
-    edting = false,
-    goPage = "landscape",
+    editor = false,
+    gotoPage = "landscape",
     language = "", -- empty string "" is for a single language project
     position = {x = 0, y = 0},
     gotoLastBook = false,
