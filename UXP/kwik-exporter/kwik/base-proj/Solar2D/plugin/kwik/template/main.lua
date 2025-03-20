@@ -1,46 +1,43 @@
-system.setTapDelay( 0.5 )
+local kwik = require "plugin.kwik"
 
-local restore = false
---restore = true
-if restore then
-  os.execute("cd " .. system.pathForFile("../", system.ResourceDirectory) .. "; source undo_lua.command")
-  return
-end
-
-NIL = setmetatable({},{__tostring=function() return "nil" end})
-NilCheck = function(v)
-  if v == NIL then
-    return nil
-  else
-    return v
-  end
-end
-
+system.setTapDelay(0.2)
+--
 if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
   local lldebugger = loadfile(os.getenv("LOCAL_LUA_DEBUGGER_FILEPATH"))()
   lldebugger.start()
 end
 
-inspect = require("extlib.inspect")
+-- kwik.restore()
+-- kwik.autoUpdate()
 
-local common = {
-  commands = {"myEvent"},
-  components = {
-    -- "align",
-    "myComponent",
-    "thumbnailNavigation",
-    "keyboardNavigation",
-    "index" -- this loads editor!
+kwik.useGradientBackground()
+
+kwik.setCustomModule(
+  "custom",
+  {
+    commands = {"myEvent"},
+    components = {
+      -- "align",
+      "myComponent",
+      "thumbnailNavigation",
+      "index"
+      -- "keyboardNavigation",
+    }
   }
-}
+)
 
-require("controller.index").bootstrap{
-  name="{{book}}",
-  edting = true,
-  goPage = "{{page}}",
-  language = "{{lang}}",
-  position = {x=0, y=0},
-  common = common} -- scenes.index
+kwik.bootstrap {
+  name = "{{book}}",
+  editor = true,
+  gotoPage = "{{page}}",
+  language = "{{lang}}", -- empty string "" is for a single language project
+  position = {x = 0, y = 0},
+  gotoLastBook = false,
+  unitTest = false,
+  httpServer = false,
+  showPageName = true
+} -- scenes.index
+
 
 -- for product release
--- require("controller.index").bootstrap({name="{{book}}", edting = false, goPage = "{{page}}", position = {x=0, y=0}, common = common}) -- scenes.index
+-- require("controller.index").bootstrap({name="{{book}}", edting = false, gotoPage = "{{page}}", position = {x=0, y=0}, common = common}) -- scenes.index

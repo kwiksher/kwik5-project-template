@@ -1,17 +1,18 @@
 local M = {
-  name = "filter",
+  name = "filter0",
   class = "Filter",
   properties ={
     target     = NIL,
     type    = NIL, -- group, page, sprite
-    animation  = false,
+    animation  = true,
     delay      = 0,
     duration   = 1000,
     autoPlay   = true,
     loop       = 1,        -- 0 to play once
     easing     = "inQuad",
-    reverse    = nil,
-    resetAtEnd = nil,
+    -- reverse    = nil,
+    -- resetAtEnd = nil,
+    -- useLang = false
   },
   -- composite = {
   --   effect   = "composite.normalMapWith1PointLight",
