@@ -1,10 +1,8 @@
 local M = {
-  name = "mask0",
+  name = "mask",
   class="mask",
   -- actionName = "",
   properties = {
-    target = NIL,
-    mask = ""
   }
 }
 

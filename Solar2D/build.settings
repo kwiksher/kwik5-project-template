@@ -3,27 +3,27 @@ settings = {
         ["plugin.zip"] = {
             publisherId = "com.coronalabs",
         },
-        ["plugin.kwik"] = {
-             publisherId = "com.kwiksher",
-        },
-        --Google in app billing v2
-        ["plugin.google.iap.billing.v2"] = {
-            -- required
-            publisherId = "com.solar2d",
-            supportedPlatforms = { android = true },
-        },
-        --Amazon IAP
-        ["plugin.amazon.iap"] = {
-            publisherId = "com.coronalabs",
-            supportedPlatforms = { ["android-kindle"]=true }
-        },
+       ["plugin.kwik"] = {
+            publisherId = "com.kwiksher",
+       },
+       -- Google in app billing v2
+       -- ["plugin.google.iap.billing.v2"] = {
+       --     -- required
+       --     publisherId = "com.solar2d",
+       --     supportedPlatforms = { android = true },
+       -- },
+       -- Amazon IAP
+       -- ["plugin.amazon.iap"] = {
+       --     publisherId = "com.coronalabs",
+       --     supportedPlatforms = { ["android-kindle"]=true }
+       -- },
        -- ["plugin.mouseHover"] = {
        --     publisherId = "sg.btn",
             --publisherId = "com.coronalabs",
             --supportedPlatforms = { ["android-kindle"]=true }
        --},
        ["plugin.tinyfiledialogs"]={
-            publisherId = "com.xibalbastudios"
+             publisherId = "com.xibalbastudios"
        },
        ["plugin.nanosvg"] =
         {
@@ -34,7 +34,7 @@ settings = {
    --  default = "portrait",
    default = "landscapeRight",
       supported = {
-        "portrait", "portraitUpsideDown",
+        -- "portrait", "portraitUpsideDown",
         "landscapeLeft", "landscapeRight"
        },
     },
@@ -51,10 +51,15 @@ settings = {
     --     }
     },
     android  = {
+       minSdkVersion = "21",
+      -- https://docs.coronalabs.com/guide/distribution/buildSettings/index.html
+      -- usesExpansionFile = true,
+      --
       usesPermissions  = {
-          "android.permission.INTERNET",
+          "android.permission.READ_EXTERNAL_STORAGE",
           "android.permission.WRITE_EXTERNAL_STORAGE",
-          "com.android.vending.BILLING",
+          "android.permission.READ_MEDIA_IMAGES",
+          -- "com.android.vending.BILLING",
           -- for recordAudio
           -- "android.permission.RECORD_AUDIO",
           --
@@ -69,7 +74,8 @@ settings = {
           --   "android.permission.READ_PHONE_STATE",
           --
           -- for expansion
-          --   "com.android.vending.CHECK_LICENSE",
+          -- "android.permission.INTERNET",
+          -- "com.android.vending.CHECK_LICENSE",
           --
           -- for camera
           -- "android.permission.CAMERA",
@@ -132,7 +138,8 @@ settings = {
     },
     excludeFiles = {
         -- Exclude all files at all paths which end with "secret.txt"
-        all = {  "Icon*.png", "Images.xcassets", "Icon*.ico", "Icon*.icns", "*.vbs", "*.bat", "*.command", "copy_projects" },
+        all = {  "Icon*.png", "Images.xcassets", "Icon*.ico", "Icon*.icns", "*.vbs", "*.bat", "*.command", "copy_projects",
+                "template" },
         android = { "LaunchScreen.storyboardc" },
         win32 = { "LaunchScreen.storyboardc" },
     },

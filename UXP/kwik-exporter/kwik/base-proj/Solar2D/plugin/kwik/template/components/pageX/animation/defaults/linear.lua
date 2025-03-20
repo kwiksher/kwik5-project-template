@@ -1,35 +1,34 @@
 local M = {
-  name = "linear0",
+  name = "linear",
   class="Linear",
   from = {
     x = 0,
     y = 0,
-    alpha = 1,
+    alpha = 0,
     xScale = 1,
     yScale = 1,
     rotation = 0
   },
   to = {
-    x = 0,
+    x = 200,
     y = 0,
     alpha = 1,
-    xScale = 1,
-    yScale = 1,
+    xScale = 1.5,
+    yScale = 1.5,
     rotation = 90
   },
   properties = {
     target = NIL,
     type    = NIL, -- group, page, sprite
     autoPlay=true,
-    delay=1000,
+    delay=0,
     duration=2000,
     loop=1,
     reverse=false,
     resetAtEnd=false,
     easing="inCircular",
-    xSwipe=false,
-    ySwipe=false,
-    useLang = false
+    xSwipe=nil,
+    ySwipe=nil
   },
   audio = {
     name = "",
