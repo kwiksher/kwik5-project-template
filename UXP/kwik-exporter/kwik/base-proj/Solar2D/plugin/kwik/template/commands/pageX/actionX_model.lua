@@ -114,7 +114,7 @@ model = {
             autoPlay = {autoPlaySec = "", goNext = true},
             showHideNavigation = {target = ""},
             reloadPage         = {cavas = ""},
-            gotoPage  = {pageName = "", effect = "", delay="", duration = ""},
+            gotoPage  = {pnum = "", ptrans = "", delay="", duration = ""},
 
         }
     },
