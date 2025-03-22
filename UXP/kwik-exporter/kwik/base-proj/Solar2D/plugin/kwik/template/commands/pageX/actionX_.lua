@@ -190,7 +190,7 @@ function ActionCommand:new()
 		{{/page.reloadPage}}
 
 		{{#page.gotoPage}}
-			_AC.Page:gotoPage({{pnum}}, "{{ptrans}}", {{delay}}, {{duration}});
+			_AC.Page:gotoPage({{pageName}}, "{{effect}}", {{delay}}, {{duration}});
 		{{/page.gotoPage}}
 
 		{{#particle.playParticle}}

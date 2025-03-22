@@ -1,11 +1,15 @@
 local props = {
   name     = "{{name}}",
   properties = {
+    {{#properties}}
     delay     = {{delay}},
     iterations = {{iterations}},
+    {{/properties}}
   },
   actions = {
-    actionName    = "{{actionName}}",
+    {{#actions}}
+    onComplete    = "{{onComplete}}",
+    {{/actions}}
   }
 }
 

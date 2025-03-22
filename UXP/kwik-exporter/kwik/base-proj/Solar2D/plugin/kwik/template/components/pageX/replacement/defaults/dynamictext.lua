@@ -1,11 +1,12 @@
 local M = {
-  name = "",
+  name = "dynamic0",
   class="dynamictext",
   properties = {
+    target = NIL,
     variable = "",
     type     = "local",
-    offsetX = 0,
-    offsetY = 4,
+    paddingX = 0,
+    paddingY = 4,
     color    = { 0, 0, 0, 1},
     fontSize = 24,
     font = "",

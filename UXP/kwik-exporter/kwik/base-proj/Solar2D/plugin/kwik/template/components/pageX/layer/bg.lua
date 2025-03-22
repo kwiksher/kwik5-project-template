@@ -1,12 +1,14 @@
 local M = {}
 --
+local app = require "controller.Application"
+--
 M.properties = {
   blendMode = "normal",
   height    =  1280/4 ,
   width     = 1920/4 ,
   name      = "bg",
-  x         = 0,
-  y         = 0,
+  x         =  0, -- display.contentCenterX,
+  y         =  0, display.contentCenterY,
   alpha     = 1,
   color     = {1,1,1,1},
   textColor = {0,0,0,1}
@@ -18,7 +20,12 @@ end
 function M:create(UI)
   local sceneGroup = UI.sceneGroup
   local properties = self.properties
-  local obj = display.newRect(properties.x, properties.y, properties.width, properties.height)
+
+  local scale = app.getImageSuffix()
+
+  local x, y = app.getCenter(properties.x, properties.y)
+  print(x, y)
+  local obj = display.newRect(x, y, properties.width*scale, properties.height*scale)
   obj:setFillColor(unpack(properties.color))
   sceneGroup:insert(obj)
   sceneGroup[properties.name] = obj
@@ -29,7 +36,7 @@ function M:create(UI)
       font = native.systemFont,
       fontSize = 10,
       align = "center",
-      x = properties.x,
+      x = x,
       y = properties.y,
   }
   local pageText = display.newText(options)

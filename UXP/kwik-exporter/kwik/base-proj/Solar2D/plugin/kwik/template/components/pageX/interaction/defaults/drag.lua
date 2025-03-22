@@ -1,5 +1,5 @@
 local M = {
-  name = "drag",
+  name = "drag0",
   class="drag",
   actions = {
     onDropped = "",

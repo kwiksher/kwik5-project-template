@@ -1,6 +1,6 @@
 local M = {
   name = "properties",
-  class="properties",
+  class="page",
   -- actionName = "",
   properties = {
       orientation = "landscapeLeft",
@@ -9,9 +9,9 @@ local M = {
       scale = 1,
       gravityX = 0,
       gravityY = 9.8,
-      drawMode = "Hybrid"
+      drawMode = "Hybrid",
+      walls = {top=false, bottom=true, left=false, right=false}
   },
-  walls = {top=false, bottom=false, left=false, right=false}
 }
 
 return M

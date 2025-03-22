@@ -1,21 +1,13 @@
 local parent,root = newModule(...)
-
-local M = {
-  name = "{{layer}}",
-  --
-  class = "{{class}}",
-    -- "Dissolve"
-    -- "Path"
-    -- "Linear"
-    -- "Pulse"
-    -- "Rotation"
-    -- "Tremble"
-    -- "Bounce"
-    -- "Blink"
-  --
-}
-
-M.obj = require(parent.."{{layer}}").obj
+M.class = "{{class}}"
+-- "dissolve"
+-- "path"
+-- "linear"
+-- "pulse"
+-- "rotation"
+-- "tremble"
+-- "bounce"
+-- "blink"
 
 {{#layerOptions}}
 M.layerOptions = {
@@ -28,7 +20,7 @@ M.layerOptions = {
     -- "CenterLeft"
     -- "CenterRight"
     -- "BottomLeft"
-    -- "BottomLeft"
+    -- "BottomCenter"
     -- "BottomRight"
   -- for text
   deltaX         = {{deltaX}},
@@ -70,10 +62,23 @@ M.properties = {
   -- flip
   xSwipe   = {{xSwipe}},
   ySwipe   = {{ySwipe}},
+  useLang  = {{useLang}}
 {{/properties}}
 }
+--
+{{#from}}
+M.from = {
+  x     = {{x}},
+  y     = {{y}},
   --
+  alpha = {{alpha}},
 
+  yScale   = {{yScale}},
+  xScale   = {{xScale}},
+  rotation = {{rotation}},
+}
+{{/from}}
+--
 {{#to}}
 M.to = {
   x     = {{x}},
@@ -96,7 +101,9 @@ M.actions = { onComplete = "{{actionName}}" }
 M.breadcrumbs = {
     dispose  = {{dispose}},
     shape    = {{shape}},
-    Color    = {{color}},
+    {{#color}}
+    color    =  { {{r}}, {{g}}, {{b}}, {{a}} },
+    {{/color}}
     interval = {{bInterval}},
     time     = {{time}},
     width  = {{width}},
@@ -122,32 +129,26 @@ local function onEndHandler (UI)
 end
 --
 function M:create(UI)
-  if UI.langClassDelegate then
-    local t = self.name:split("/")
-    self.name = t[1].."/".. UI.lang
+  local target = self.properties.target
+  if UI.langClassDelegate and useLang then
+    local t = target:split("/")
+    target = t[1].."/".. UI.lang
   end
   --
   if self.properties.type == "group" then
     self.obj = require(parent..self.properties.target).group
   else
-    self.obj = UI.sceneGroup[self.name]
+    self.obj = UI.sceneGroup[target]
   end
   self:initAnimation(UI, self.obj, onEndHandler)
   self.animation = self:buildAnim(UI)
+  UI.animations[target.."_"..self.class..self.suffix] = self.animation
 end
 --
 function M:didShow(UI)
   local sceneGroup = UI.sceneGroup
   if self.properties.autoPlay then
-    if self.animation.from then
-      --self.animation.from:toBeginning()
-      -- transition.to(obj, {x = obj.x + 100})
-      -- local obj = sceneGroup["cat_face1"]
-
-      self.animation.from:play()
-      -- self.animation.from:pause()
-
-    else
+    if self.animation.to then
       --self.animation.to:toBeginning()
       self.animation.to:play()
     end
@@ -155,10 +156,6 @@ function M:didShow(UI)
 end
 --
 function M:didHide(UI)
-  if self.animation.from then
-    self.animation.from:pause()
-    -- self.animation.from:toBeginning()
-   end
   if self.animation.to then
     self.animation.to:pause()
     -- self.animation.to:toBeginning()
