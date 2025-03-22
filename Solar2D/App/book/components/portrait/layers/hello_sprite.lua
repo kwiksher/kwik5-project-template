@@ -2,13 +2,13 @@ local name = ...
 local parent,root = newModule(name)
 local json = require("json")
 local layerProps = require(parent.."star")
--- layerProps.scaleW = 0.5
--- layerProps.scaleH = 0.5
+
 local M = {
   name ="hello",
   class = "sprite", -- spritesheet
   -- sheet = hello_sheet,
   properties = {
+    target   = "star",
     filename = "sprites/uma.png",
     sheetInfo = "sprites/uma.lua",
     sheetContentWidth  = 376/4,
@@ -31,7 +31,7 @@ M.sequenceData = {
     loopDirection = "forward",
   },
 }
---
+
 local options = nil
 if M.properties.sheetType == "TexturePacker" then
   --
@@ -83,9 +83,7 @@ else
   M.imageWidth = options.width
   M.imageHeight = options.height
 end
----
--- print(json.prettify(options))
 
 M.sheet = graphics.newImageSheet( "App/"..M.book.."/assets/"..M.properties.filename, system.ResourceDirectory, options )
---
-return require("components.kwik.layer_spritesheet").new(M)
+
+return require("components.kwik.layer_spritesheet").set(M)

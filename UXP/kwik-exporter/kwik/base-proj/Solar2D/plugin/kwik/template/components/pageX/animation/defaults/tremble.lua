@@ -1,7 +1,15 @@
 local M = {
-  name = "tremble0",
+  name = "tremble",
   class="Tremble",
-  from = nil,
+  from = {
+    x = nil,
+    y = nil,
+    alpha = 1,
+    duration = 1000,
+    xScale = 1,
+    yScale = 1,
+    rotation = 0
+  },
   to = {
     x = nil,
     y = nil,
@@ -17,13 +25,12 @@ local M = {
     autoPlay=true,
     delay=0,
     duration=100,
-    loop=10,
-    reverse=true,
+    loop=3,
+    reverse=false,
     resetAtEnd=false,
     easing=NIL,
-    xSwipe=false,
-    ySwipe=false,
-    useLang = false
+    xSwipe=nil,
+    ySwipe=nil
   },
   breadcrumbs = nil,
   layerOptions = {
