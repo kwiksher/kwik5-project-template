@@ -1,5 +1,5 @@
 local M = {
-  name = "shake",
+  name = "shake0",
   class="shake",
   properties = {
     target = NIL,

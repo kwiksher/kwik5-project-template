@@ -82,15 +82,17 @@ M.menu = {
 
 M.commands = {
   action = {
-    play = {_trigger = ""},
-    playAll = {actions = {}, random = true},
-
+    play = {name = "", params = ""},
+    playRandom = {filter = "", playOnce = true},
+    playSequential = {filter = "", playOnce = true}
   },
+
   animation = {
     pause = {_target = ""},
     resume = {_target = ""},
     play = {_target = ""},
-    playAll = { animations = {}}
+    playRandom = {filter = "", playOnce = true},
+    playSequential = {filter = "", playOnce = true}
   },
   audio = {
     record = {
@@ -99,84 +101,51 @@ M.commands = {
       malfa = "",
       audiotype = ""
     },
-    muteUnmute = {
-      _target = {}
-    },
+    muteUnmute = {},
     play = {
       _target = "",
-      type = "",
       channel = "",
-      repeatable = "",
       delay = "",
-      loop = "",
-      fade = "",
+      loops = "",
+      fadein = "",
       volume = "",
-      tm = "", -- timer id
-      _trigger = "",
+      listener = ""
+      -- timerName = "", -- timer id
     },
     rewind = {
       _target = "",
-      type = "",
-      channel = "",
-      repeatable = "",
     },
     pause = {
       _target = "",
-      type = "",
-      channel = "",
-      repeatable = "",
     },
     stop = {
       _target = "",
-      type = "",
-      channel = "",
-      repeatable = "",
     },
     resume = {
       _target = "",
-      type = "",
-      channel = "",
-      repeatable = "",
     },
     setVolume = {
+      _target = "",
       volume = "",
-      channel = "",
+    },
+    setMasterVolume = {
+      volume = "",
+    },
+    fade = {
+      _target = "",
+      duration = "",
+      volume = ""
+    },
+    fadeOut = {
+      _target = "",
+      duration = "",
     },
   },
+
   button = {
     onOff = {_target = "", toggle = true, enable = true},
   },
-  condition = {
-      __if = {
-        A1_ = "",
-        A2_Operand = "==",
-        A3_ = "",
-        AB_Condition = "",
-        B1_ = "",
-        B2_Operand = "",
-        B3_ = ""
-      },
-      _elseif = {
-        A1_ = "",
-        A2_Operand = "==",
-        A3_ = "",
-        AB_Condition = "",
-        B1_ = "",
-        B2_Operand = "",
-        B3_ = ""
-      },
-    __if_ = {expression=""},
-    _elseif_={expression=""},
-    _else = {},
-    _end = {}
-  },
-  loop ={
-    _while = {condition=""},
-    _for_next = {condition=""},
-    _for_pairs = {condition=""},
-    _repeat = {},
-    _until = {condition=""}
-  },
+
   canvas = {
     brush = {
       size = NIL,
@@ -186,51 +155,95 @@ M.commands = {
     undo  = {},
     redo = {}
   },
+
+  condition = {
+    __if = {
+      A1_ = "",
+      A2_Operand = "==",
+      A3_ = "",
+      AB_Condition = "",
+      B1_ = "",
+      B2_Operand = "",
+      B3_ = ""
+    },
+    _elseif = {
+      A1_ = "",
+      A2_Operand = "==",
+      A3_ = "",
+      AB_Condition = "",
+      B1_ = "",
+      B2_Operand = "",
+      B3_ = ""
+    },
+    __if_ = {expression=""},
+    _elseif_={expression=""},
+    _else = {},
+    _end = {}
+  },
+
   countdown = {
-    play = {_target = "", time = 5, uptime=""}
+    play = {_target =""},
+    stop = { _target = ""},
+    reset = { _target = ""}
   },
+
   externalcode = {
-    code = {_trigger = ""}
+    code = {line = ""}
   },
+
   filter = {
     pause = {_target = ""},
     resume = {_target = ""},
     play = {_target = ""},
     cancel = {_target = ""},
   },
+
   image = {
-		edit = {
+    edit = {
       _target = "",
-       x = 0,
-       y = 0,
-       width = 0,
-       height = 0,
-       xScale = 0,
-       yScale = 0,
-       rotation = 0
+       x = "",
+       y = "",
+       width = "",
+       height = "",
+       xScale = "",
+       yScale = "",
+       rotation = ""
     }
   },
+
   language = {
-    name = "",
-    reload = true
+    set = {
+      lang = "",
+      reload = true
+    }
   },
+
   layer = {
-			showHide = {
-        _target = "",
-        hide = true,
+    showHide = {
+      _target = "",
+      hide = true,
       toggle = true,
       time = 0,
       delay = 0
-      },
-      frontBack = {
-        _target = "",
-        front = true
-      }
+    },
+    frontBack = {
+      front = true
+    }
   },
+
+  loop = {
+    _while = {condition=""},
+    _for_next = {condition=""},
+    _for_pairs = {condition=""},
+    _repeat = {},
+    _until = {condition=""}
+  },
+
   multiplier = {
     play = {_target = ""},
     stop = {_target = ""},
   },
+
   page = {
     autoPlay = {
       time = 10,
@@ -238,28 +251,29 @@ M.commands = {
     showHideNavigation = {},
     reload = {canvas = true},
     gotoPage = {
-      page = "",
-      easing = "",
+      pageName = "",
+      effect = "",
       delay = 0,
       duration = 0,
     }
   },
+
   particles = {
     play = {_target = ""},
     stop = {_target = ""},
   },
+
   physics = {
     applyForce = {_target = "", xForce = 0, yForce = 0},
-    bodyType = {_target = "", type = ""},
-    gravity = {_target = "", xGravity =0, yGravity = 0 }
+    setBodyType = {_target = "", type = ""},
+    gravity = {_target = "", xg =0, yg = 0 }
   },
+
   purchase = {
     buy = {_target = ""},
     restore = {_target = ""}
   },
-  syncAudioText = {
-    play = {_target = "", language = "", type = "", channel = ""},
-  },
+
   screenshot = {
     take = {
       title = "",
@@ -268,6 +282,7 @@ M.commands = {
       hideLayers = {}
     }
   },
+
   sprite = {
     play = {
       _target = "",
@@ -277,12 +292,18 @@ M.commands = {
       _target = ""
     }
   },
+
+  syncAudioText = {
+    play = {_target = "", language = "", type = "", channel = ""},
+  },
+
   timer = {
     create = {
-      _target = "",
+      name = "",
       delay = "",
-      _trigger = "",
       loop = 0,
+      autoStart = true,
+      onComplete = "",
     },
     cancel = {
       _target = ""
@@ -294,19 +315,24 @@ M.commands = {
       _target = ""
     }
   },
+
   variable = {
     restartTrackVars = {},
     editVar = {_target="", value="", type=""} -- string is "{{value}}" otherwise {{value}} is rendered
   },
+
   video = {
     play = {_target = ""},
     pause = {_target = ""},
     resume = {_target = ""},
     rewind = {_target = ""},
-    muteUnmute = {videos = {}}
+    seek = {_target = "", seconds=0},
+    muteUnmute = {}
   },
+
   web = {
     goto = {url = ""}
   }
 }
+
 return M
