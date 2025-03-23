@@ -1,10 +1,11 @@
 local M = {
-  name = "parallax",
+  name = "",
   class="parallax",
   properties = {
     target = NIL,
-    type   = NIL,
     isActive = true,
+    dampX = true,
+    dampY = true,
     dpx = 0.5,
     dpy = 0.5,
   },
