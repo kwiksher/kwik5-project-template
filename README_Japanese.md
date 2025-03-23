@@ -60,7 +60,7 @@
 
   1. **kwik5-project-template**フォルダを選択します。
 
-    <img src="./img/2025-03-23-16-04-08.png" width="600" class="popup-image">
+      <img src="./img/2025-03-23-16-04-08.png" width="600" class="popup-image">
 
   2. **Photoshop**フォルダを選択します。
 
@@ -177,4 +177,68 @@ mode変数を「editing」または「production」のいずれかに設定し�
 
 > 「production」は、plugin.kwikがSolar2D公式プラグインに登録されていないため、Solar2Dフォルダにプラグインフォルダを作成します。自動的に統合されません。
 
-> 「production」から「editing」
+>「production」から「editing」に戻すと、productionモードで作成されたプラグインフォルダは自動的に削除され、Application Support/Corona/Pluginsフォルダ内のplugin.kwikを再び使用できるようになります。
+
+main .lua
+
+```lua
+local kwik = require "plugin.kwik"
+local lfs = require("lfs")
+--
+system.setTapDelay(0.2)
+
+--display.setDefault( "background", 0.2, 0.2, 0.2, 0.1 )
+kwik.useGradientBackground()
+--
+local mode = "editing"
+-- local mode = "production"
+-- local mode = "dev"
+--
+local props
+--
+if mode == "editing" or mode == "dev" then
+  props = {
+    name = "book",
+    editor = true,
+    gotoPage = "landscape",
+    language = "", -- empty string "" is for a single language project
+    position = {x = 0, y = 0},
+    gotoLastBook = true,
+    unitTest = false,
+    httpServer = false,
+    showPageName = true
+  }
+elseif mode == "production" then
+  props = {
+    name = "book",
+    editor = false,
+    gotoPage = "landscape",
+    language = "", -- empty string "" is for a single language project
+    position = {x = 0, y = 0},
+    gotoLastBook = false,
+    unitTest = false,
+    httpServer = false,
+    showPageName = false
+  }
+end
+...
+```
+
+### config.lua
+
+for the final build for device, you need to change the scale as "letterbox"
+
+```lua
+application = {
+	content =
+	{
+		fps = 60,
+		width = 320,
+		height = 480,
+		-- scale = "adaptive",
+		scale = "letterbox",
+		xAlign = "center",
+		yAlign = "center",
+ ...
+ ```
+
