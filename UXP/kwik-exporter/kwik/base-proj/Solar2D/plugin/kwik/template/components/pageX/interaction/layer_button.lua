@@ -1,6 +1,7 @@
-local parent,root, M = newModule(...)
+local name = ...
+local parent,root = newModule(name)
 
-local layerProps = require(M.layerMod).layerProps or {}
+local layerProps = require(parent.."{{layer}}").layerProps
 
 local M = {
   name ="{{layer}}_button",
@@ -32,16 +33,10 @@ function M:create(UI)
   UI.layers[self.properties.target] = obj
   sceneGroup[self.properties.target] = obj
   sceneGroup:insert(obj)
-  self.obj = obj
-
 end
 
 function M:didShow(UI)
-  -- for debug
-  -- function self.obj:tap(event)
-  --   print("tap")
-  -- end
- self:addEventListener(UI)
+  self:addEventListener(UI)
 end
 
 function M:didHide(UI)
