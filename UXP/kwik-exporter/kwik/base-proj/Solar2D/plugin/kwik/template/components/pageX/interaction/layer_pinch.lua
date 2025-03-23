@@ -1,7 +1,5 @@
-local name = ...
-local parent,root = newModule(name)
-
-local layerProps = require(parent.."{{layer}}").properties
+local parent,root, M = newModule(...)
+local layerProps = require(M.layerMod).layerProps or {}
 
 local M = {
   name="{{name}}",
@@ -12,15 +10,20 @@ local M = {
     type  = "{{type}}",
     isActive = "{{isActive}}",
     constrainAngle = {{constrainAngle}},
-    xStart={{xStart}}, yStart={{eEnd}}, yStart={{yStart}}, yEnd = {{yEnd}},
-    min = {{min}},
-    max = {{max}}
+    xStart={{xStart}},
+    yStart={{yStart}},
+    yStart={{yStart}},
+    yEnd = {{yEnd}},
+    scaleMin = {{scaleMin}},
+    scaleMax = {{scaleMax}}
     {{/properties}}
   },
   --
   actions={
+  {{#actions}}
     onEnded ="{{onEnded}}",
     onMoved="{{onMoved}}"
+  {{/actions}}
   },
   --
   layerProps = layerProps

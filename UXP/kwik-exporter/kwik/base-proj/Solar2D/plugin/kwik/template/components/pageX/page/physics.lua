@@ -11,14 +11,16 @@ local M = {
     gravityX = {{gravityX}},
     gravityY = {{gravityY}},
     drawMode = "{{drawMode}}", -- "hybrid" -- normal, debug
+    {{#walls}}
+    walls = {
+      top={{top}}, bottom={{bottom}}, left={{left}}, right={{right}}
+    }
+    {{/walls}}
    {{/properties}}
   }
 }
 
-M.walls = {
-  {{#walls}}
-  top={{top}}, bottom={{bottom}}, left={{left}}, right={{right}} }
-  {{/walls}}
-}
+-- M.walls = {
+-- }
 
-return M
+return require("components.kwik.page_physics").set(M)

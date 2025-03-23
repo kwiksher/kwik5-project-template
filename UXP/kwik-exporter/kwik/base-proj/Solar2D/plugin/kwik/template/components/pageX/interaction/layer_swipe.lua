@@ -1,7 +1,5 @@
-local name = ...
-local parent,root = newModule(name)
-
-local layerProps = require(parent.."{{layer}}").properties
+local parent,root, M = newModule(...)
+local layerProps = require(M.layerMod).layerProps or {}
 
 local M = {
   name="{{name}}",
@@ -10,18 +8,20 @@ local M = {
     {{#properties}}
     target = "{{layer}}",
     type  = "{{type}}",
-    isActive = "{{isActive}}",
+    isActive = {{isActive}},
     swipeLength = {{swipeLength}},
     limitAngle = {{limitAngle}},
-    useStrictBounds = {{useStrictBounds}}}
+    useStrictBounds = {{useStrictBounds}}
     {{/properties}}
   },
   --
   actions={
+  {{#actions}}
     onUp = "{{onUp}}",
     onDown ="{{onDown}}",
     onRight ="{{onRight}}",
     onLeft  = "{{onLeft}}"
+  {{/actions}}
   },
   --
   layerProps = layerProps

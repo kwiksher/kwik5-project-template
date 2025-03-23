@@ -1,8 +1,9 @@
 local M = {
-  name = NIL,
+  name = "{{layer}}",
   class="force",
   properties = {
     {{#properties}}
+    body = "{[layer]}",
     event = "{{event}}",
     isInitial = {{isInitial}},
     isImpluse = {{isImpluse}},

@@ -1,8 +1,9 @@
 local M = {
-  name = "alphabet",
+  name = "sync0",
   class = "sync",
   folder = "audios/sync",
   properties = {
+    target = NIL,
     autoPlay     = true,
     delay        = NIL,
     fadeDuration = 1000,
@@ -11,13 +12,13 @@ local M = {
   },
   actions = {onComplete = ""},
   audioProps = {
-    filename = "alphabet.mp3",
+    filename = "sync/sentence.mp3",
     channel = 2,
     volume      = 10,
     folder = nil,
   },
   textProps = {
-    filename        = "alphabet.txt",
+    filename        = "sync/sentence.txt",
     -- folder       = nil,
     font         = NIL,
     fontColor   = { 0,0,1 },
@@ -26,7 +27,7 @@ local M = {
     language    = NIL,
     padding     = 10,
     readDir     = "leftToRight",
-    sentenceDir = "alphabet", -- wordTouch
+    sentenceDir = "sync/sentence", -- wordTouch
   }
 }
 
