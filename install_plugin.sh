@@ -6,10 +6,14 @@
 REPO="kwiksher/kwik5-project-template"
 PLUGIN_NAME="plugin"
 PLUGIN_DIR="$HOME/Library/Application Support/Corona/Simulator/Plugins/$PLUGIN_NAME"
+SKINS_DIR="$HOME/Library/Application Support/Corona/Simulator/Skins"
 TEMP_FILE="/tmp/plugin.data.tgz"
 
 # Create the plugin directory if it doesn't exist
 mkdir -p "$PLUGIN_DIR"
+
+# Create the skins directory if it doesn't exist
+mkdir -p "$SKINS_DIR"
 
 # Fetch the latest release information
 echo "Fetching information about the latest release..."
@@ -40,8 +44,8 @@ fi
 
 # Remove old files before extraction
 echo "Removing old plugin files..."
-rm -f "$PLUGIN_DIR/kwikEditor.lua"
-rm -rf "$PLUGIN_DIR/kwikEditor"
+rm -f "$PLUGIN_DIR/kwik.lua"
+rm -rf "$PLUGIN_DIR/kwik"
 echo "Old files removed."
 
 # Extract the plugin.data.tgz file
@@ -53,6 +57,25 @@ else
     exit 1
 fi
 
+# Create the kwikEditorLandscape.lua skin file
+echo "Creating Kwik Editor Landscape skin file..."
+cat > "$SKINS_DIR/kwikEditorLandscape.lua" << 'EOF'
+simulator =
+{
+  device = "desktop-1920x1080",
+  screenOriginX = 0,
+  screenOriginY = 0,
+  screenWidth = 590,
+  screenHeight = 960,
+  deviceImage = nil,
+  displayManufacturer = "",
+  displayName = "Kwik Landscape",
+  supportsScreenRotation = false,
+  windowTitleBarName = "Kwik Landscape Editor"
+}
+EOF
+echo "Kwik Editor Landscape skin file created."
+
 # Clean up
 rm "$TEMP_FILE"
 
@@ -60,3 +83,4 @@ rm "$TEMP_FILE"
 RELEASE_TAG=$(echo "$RELEASE_INFO" | grep -o '"tag_name": "[^"]*' | cut -d'"' -f4)
 echo "Installation complete. Plugin version: $RELEASE_TAG"
 echo "You can now use the plugin in the Solar2D Simulator."
+echo "Kwik Editor Landscape skin is available in the Simulator."
