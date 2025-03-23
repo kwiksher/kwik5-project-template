@@ -1,5 +1,5 @@
 local M = {
-  name = "audio0",
+  name = "audio_",
   class="audio",
   type = "short",
   properties = {
@@ -11,7 +11,5 @@ local M = {
     loops = 0,
   }
 }
-
-M.actions = { onComplete = "" }
 
 return M

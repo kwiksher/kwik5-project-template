@@ -1,20 +1,20 @@
 local M = {
-  name = "blink0",
+  name = "blink",
   class="Blink",
   from = {
     x = nil,
     y = nil,
-    alpha = nil,
-    xScale = nil,
-    yScale = nil,
-    rotation = nil
+    alpha = 1,
+    xScale = 1,
+    yScale = 0.1,
+    rotation = 0
   },
   to = {
     x = nil,
     y = nil,
     alpha = 1,
     xScale = 1,
-    yScale = 0.1,
+    yScale = 1,
     rotation = 0
   },
   properties = {
@@ -26,8 +26,8 @@ local M = {
     loop=3,
     reverse=false,
     resetAtEnd=false,
-    xSwipe=false,
-    ySwipe=false,
+    xSwipe=nil,
+    ySwipe=nil,
     easing   = "inOutBack",
   -- 'Linear'
   -- 'inOutExpo'
@@ -46,7 +46,6 @@ local M = {
   -- 'outBack'
   -- 'inOutBack'
   ------------
-    useLang = false
   },
   breadcrumbs = nil,
   layerOptions = {

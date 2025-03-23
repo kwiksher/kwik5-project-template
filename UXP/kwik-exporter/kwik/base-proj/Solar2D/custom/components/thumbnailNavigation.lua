@@ -2,18 +2,18 @@ local M = {}
 local navigation = require("plugin.kwik.extlib.kNavi")
 local shapes     = require("plugin.kwik.extlib.shapes")
 
-local navigationProps = { bookFree = {
+local navigationProps = { book = {
     backColor       = {255, 255, 255},
     thumbnailWidth  = 1920/10,
     thumbnailHeight = 1280/10,
     alpha           = 0, --background
     direction       = "top",
-    -- exclude         = {"page1"}
+    exclude         = {"shape"}
   }
 }
 --
-local function naviListener()
-  print("page_navigation")
+local function naviListener(page)
+  print("page_navigation", page)
 end
 --
 function M:init(UI)
@@ -34,10 +34,10 @@ function M:create(UI)
     self.kNavi = obj
 
     -- self.triangle = shapes.triangle.equi( display.contentCenterX, (display.actualContentHeight - 1280/4)/2 - 10, 20 )
-    self.triangle = shapes.triangle.equi( 0,320/2, 20 )
+    self.triangle = shapes.triangle.equi( 10, 10, 20 )
 
-    self.triangle:rotate(180)
-    self.triangle:setFillColor(1,1,0)
+    self.triangle:rotate(90)
+    self.triangle:setFillColor(0,0,1)
     self.triangle.tap = function(event)
       self.kNavi:show()
       return true
