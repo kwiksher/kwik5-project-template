@@ -1,5 +1,3 @@
--- $.weight={{weight}}
---
 local scenes = {
   {{#pages}}
     "{{.}}",
