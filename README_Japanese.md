@@ -44,7 +44,9 @@
 
    - Solar2D/main.lua
 
-      ⭐️ Solar2D Simulatorで開きます。
+      Solar2D Simulatorで開きます。
+
+       - kwikEditorLandscape.lua: install_plugin.shで自動的にインストールされます、install_plugin.shを使用しない場合は、 ~/Library/Application Support/Corona/Simulator/Skins フォルダにコピーしてください。
 
    - install_plugin.sh
 
