@@ -49,7 +49,9 @@
 
    - Solar2D/main.lua
 
-      ⭐️ open it Solar2D Simulator
+     open it Solar2D Simulator
+
+      - kwikEditorLandscape.lua: this file should be created by install_plugin.sh or you can manually copy it to ~/Library/Application Support/Corona/Simulator/Skins folder
 
    - install_plugin.sh
 
@@ -65,7 +67,7 @@
 
   1. Select **kwik5-project-template** folder
 
-    <img src="./img/2025-03-23-16-04-08.png" width="600" class="popup-image">
+      <img src="./img/2025-03-23-16-04-08.png" width="600" class="popup-image">
 
   1. Select **Photoshop** folder
 
