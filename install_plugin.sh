@@ -67,11 +67,12 @@ simulator =
   screenOriginY = 0,
   screenWidth = 590,
   screenHeight = 960,
+	iosPointWidth = 590,
+	iosPointHeight = 960,
   deviceImage = nil,
-  displayManufacturer = "",
+  displayManufacturer = "Kwiksher",
   displayName = "Kwik Landscape",
-  supportsScreenRotation = false,
-  windowTitleBarName = "Kwik Landscape Editor"
+  windowTitleBarName = "Kwik Editor Landscape"
 }
 EOF
 echo "Kwik Editor Landscape skin file created."
