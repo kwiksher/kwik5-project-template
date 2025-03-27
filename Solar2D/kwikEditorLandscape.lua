@@ -36,17 +36,24 @@
 -- 	windowTitleBarName = "Kwik Editor",
 -- 	defaultFontSize = 17 * 3,		-- Converts default font point size to pixels.
 -- }
-
 simulator =
 {
-	device = "desktop-1920x1080",
+	device = "ios-tablet",
 	screenOriginX = 0,
 	screenOriginY = 0,
 	screenWidth = 590,
 	screenHeight = 960,
-	deviceImage = nil,
-	displayManufacturer = "",
-	displayName = "Kwik Landscape",
-	supportsScreenRotation = false,
-	windowTitleBarName = "Kwik Landscape Editor"
+	iosPointWidth = 590,
+	iosPointHeight = 960,
+	safeLandscapeScreenInsetStatusBar = 20,
+	safeScreenInsetStatusBar = 20,
+	displayManufacturer = "Kwiksher",
+	displayName = "iPad",
+	statusBarDefault = "iPadMiniStatusBarBlack.png", 
+	statusBarTranslucent = "iPadMiniStatusBarWhite.png", 
+	statusBarBlack = "iPadMiniStatusBarBlack.png", 
+	statusBarLightTransparent = "iPadMiniStatusBarWhite.png",
+	statusBarDarkTransparent = "iPadMiniStatusBarBlack.png",
+	windowTitleBarName = "Kwik @1x",
+	defaultFontSize = 17,
 }
