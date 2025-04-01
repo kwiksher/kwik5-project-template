@@ -6,9 +6,9 @@ system.setTapDelay(0.2)
 --display.setDefault( "background", 0.2, 0.2, 0.2, 0.1 )
 kwik.useGradientBackground()
 --
-local mode = "editing"
+-- local mode = "editing"
 -- local mode = "production"
--- local mode = "dev"
+local mode = "dev"
 --
 local props
 --
@@ -20,7 +20,7 @@ if mode == "editing" or mode == "dev" then
     language = "", -- empty string "" is for a single language project
     position = {x = 0, y = 0},
     gotoLastBook = true,
-    unitTest = false,
+    unitTest = true,
     httpServer = false,
     showPageName = true
   }
@@ -38,7 +38,13 @@ elseif mode == "production" then
   }
 end
 
--- kwik.restore()
+--[[
+  if kwik.restore() then
+    native.showAlert("kwik", "restored comment it out kwik.restore()")
+    return 
+  end
+--]]
+--
 -- kwik.autoUpdate()
 
 kwik.setCustomModule(
@@ -79,12 +85,20 @@ local function setPlugin(mode)
   --
   local src = "~/Library/Application Support/Corona/Simulator/Plugins/plugin/"
   local dst = "./plugin/kwik/template"
-  if system.getInfo("platform") == "win32" then
-    src = '"' .. src:gsub("/", "\\") .. '"'
-    dst = '"' .. src:gsub("/", "\\") .. '"'
+  
+  local archInfo = system.getInfo("architectureInfo")
+  local isWindows = archInfo == "x86" or archInfo == "x64" or 
+                   archInfo == "IA64" or archInfo == "ARM"
+  --                 
+  if isWindows then
+    -- Use the correct path for Windows
+    src = os.getenv("APPDATA") .. "\\Corona Labs\\Corona Simulator\\Plugins\\plugin\\"
+    print("src", src)
+    src = '"' .. src .. '"'
+    dst = '"' .. dst:gsub("/", "\\") .. '"'
   else
     src = src:gsub(" ", "\\ ")
-    dst = src:gsub(" ", "\\ ")
+    dst = dst:gsub(" ", "\\ ")
   end
   --
   -- print(system.getInfo("environment") )
@@ -105,28 +119,51 @@ local function setPlugin(mode)
     elseif mode == "dev" then
       if not isDir("plugin") then
         -- print("dev")
-        local scripts = {
-          'ln -s ../../kwik5-plugin plugin',
-          'mv '..src..'kwik '..src..'/_kwik',
-          'mv '..src..'kwik.lua '..src..'/_kwik.lua',
-        }
+        local scripts
+        if isWindows then
+          print("You need to run as administrator",
+               'runas /user:Administrator "cmd /c mklink /D plugin ..\\..\\kwik5-plugin"')
+          scripts = {
+            'move '..src..'kwik '..src..'\\_kwik',
+            'move '..src..'kwik.lua '..src..'\\_kwik.lua',
+          }
+        else
+          scripts = {
+            'ln -s ../../kwik5-plugin plugin',
+            'mv '..src..'kwik '..src..'/_kwik',
+            'mv '..src..'kwik.lua '..src..'/_kwik.lua',
+          }
+        end
+        --print(system.getInfo("architectureInfo"))
         for i, v in next, scripts do
           os.execute(v)
         end
         return false
       end
-      --]]
     elseif mode == "production" then
       if not isDir("plugin") then
         --
-        local scripts = {
-          "mkdir plugin",
-          "cp -f " .. src .. "kwik.lua plugin",
-          "cp -rf " .. src .. "kwik plugin",
-          "rm -rf " .. dst
-        }
+        local scripts
+        if isWindows then
+          scripts = {
+            "mkdir plugin",
+            "copy " .. src .. "kwik.lua plugin\\",
+            "xcopy /E /I " .. src .. "kwik plugin\\kwik",
+            "rmdir /S /Q " .. dst:gsub("/", "\\")
+          }
+        else
+          scripts = {
+            "mkdir plugin",
+            "cp -f " .. src .. "kwik.lua plugin",
+            "cp -rf " .. src .. "kwik plugin",
+            "rm -rf " .. dst
+          }
+        end
         --
+        print(system.getInfo("architectureInfo"))
+
         for i, v in next, scripts do
+          print("Executing: " .. v)
           os.execute(v)
         end
         return false

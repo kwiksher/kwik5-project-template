@@ -1,25 +1,23 @@
-local M = {
+local props = {
   name     = "{{name}}",
-  type     = "{{type}}", -- "global", "recorded"
+  type     = "{{type}}",
   properties = {
-    {{#properties}}
     autoPlay = {{autoPlay}},
     channel  = {{channel}},
     delay    = {{delay}},
-    fadein   = {{fadein}},
     filename = "{{filename}}",
     folder   = "{{folder}}",
     loops    = {{loops}}, -- 1 + 3 = 4 times
-    volume   = {{volume}}
-    {{/properties}}
   }
 }
 
+local M = {
   -- name        = {{aname}},
   -- type        = {{atype}},
   -- language    = nil  -- or {"en", "jp"},
   -- filename    = "{{fileName}}",
   -- folder      = nil
+  -- allowRepeat = false,
   -- autoPlay    = {{aplay}},
   -- deplay      = {{adelay}},
   -- volume      = {{avol}},
@@ -27,9 +25,8 @@ local M = {
   -- loops       = {{aloop}},
   -- fadein      = {{tofade}},
   -- retain      = {{akeep}}
-
-M.actions = { onComplete = "{{actionName}}" }
+}
 
 -- you can play it with UI.audios[self.name]:play()
 
-return require("components.kwik.page_audio").set(M)
+return require("components.kwik.page_audio").set(props)
