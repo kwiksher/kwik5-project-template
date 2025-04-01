@@ -35,7 +35,7 @@ settings = {
       {{#portrait}}
       default = "portrait",
       supported = { "portrait", "portraitUpsideDown" },
-      {{/portrait}
+      {{/portrait}}
       {{^portrait}}
       default = "landscapeRight",
       supported = { "landscapeLeft", "landscapeRight"}

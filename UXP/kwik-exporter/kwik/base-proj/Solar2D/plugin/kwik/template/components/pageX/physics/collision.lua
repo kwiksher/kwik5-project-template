@@ -1,5 +1,4 @@
-local name = ...
-local parent, root = newModule(name)
+local parent, root, M = newModule(...)
 
 local M = {
   name = "{{name}}",

@@ -1,4 +1,4 @@
-local parent,root = newModule(...)
+local parent,root, M = newModule(...)
 
 local M = {
   name = "{{layer}}",
