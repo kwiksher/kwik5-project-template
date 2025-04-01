@@ -1,11 +1,11 @@
 local M = {
-  name = "spin0",
+  name = "spin",
   class="spin",
   properties = {
     target = NIL,
     type   = NIL,
-    minAngle  = 0,
-    maxAngle  = 0,
+    minAngle  = NIL,
+    maxAngle  = NIL,
     isActive = true
   },
   actions={

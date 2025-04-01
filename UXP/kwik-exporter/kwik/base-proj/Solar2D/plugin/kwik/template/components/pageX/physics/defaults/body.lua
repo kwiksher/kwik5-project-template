@@ -2,15 +2,14 @@ local M = {
   name = "",
   class="body",
   properties = {
-    bounce = 1,
-    density = 1,
-    friction = 1,
+    bounce = 0,
+    density = 0,
+    friction = 0,
     gravityScale = 1.0,
-    isFixedRotation = false,
     isSensor = false,
-    radius = 0,  -- 0 means use object width/2 if cirlce is selected
-    shape   = "rectangle", -- circle, rectangle,  path
-    type = "dynamic", -- static, -- dynamic, kinematic
+    radius = NIL,
+    shape   = "circle", -- rect,  path
+    type = "static", -- dynamic, kinematic
 
   },
   dataPath = NIL, -- physicsEdtior(CodeAndWeb)
