@@ -6,12 +6,18 @@ set "REPO=kwiksher/kwik5-project-template"
 set "PLUGIN_NAME=plugin"
 set "PLUGIN_DIR=%APPDATA%\Corona Labs\Corona Simulator\Plugins\%PLUGIN_NAME%"
 set "SKINS_DIR=%APPDATA%\Corona Labs\Corona Simulator\Skins"
-set "TEMP_FILE=%TEMP%\plugin.data.tgz"
-set "TEMP_DIR=%TEMP%\kwik_plugin_temp"
-set "START_SOLAR2D_URL=https://raw.githubusercontent.com/kwiksher/kwik5-project-template/main/Scripts/startSolar2D.bat"
-set "START_SOLAR2D_PATH=%SKINS_DIR%\startSolar2D.bat"
-set "SOLAR2D_REG_URL=https://raw.githubusercontent.com/kwiksher/kwik5-project-template/main/Scripts/solar2d.reg"
-set "SOLAR2D_REG_PATH=%TEMP%\solar2d.reg"
+set "DOWNLOADS_DIR=%USERPROFILE%\Downloads"
+set "TEMP_FILE=%DOWNLOADS_DIR%\plugin.data.tgz"
+set "TEMP_DIR=%DOWNLOADS_DIR%\kwik_plugin_temp"
+set "START_SOLAR2D_URL=https://raw.githubusercontent.com/kwiksher/kwik5-project-template/develop/Scripts/startSolar2D.bat"
+set "START_SOLAR2D_PATH=%APPDATA%\Corona Labs\Corona Simulator\startSolar2D.bat"
+set "SOLAR2D_REG_URL=https://raw.githubusercontent.com/kwiksher/kwik5-project-template/develop/Scripts/solar2d.reg"
+set "SOLAR2D_REG_PATH=%DOWNLOADS_DIR%\solar2d.reg"
+set "CORONA_7ZIP=C:\Program Files (x86)\Corona Labs\Corona\7za.exe"
+
+    
+REM Create a temporary file for processing
+set "TEMP_REG_FILE=%DOWNLOADS_DIR%\solar2d_temp.reg"
 
 REM Create the plugin directory if it doesn't exist
 if not exist "%PLUGIN_DIR%" mkdir "%PLUGIN_DIR%"
@@ -38,6 +44,42 @@ if %errorlevel% neq 0 (
 ) else (
     echo solar2d.reg downloaded successfully to %SOLAR2D_REG_PATH%
     
+    REM Replace %APPDATA% in solar2d.reg with the full path directly using batch
+    echo Replacing %%APPDATA%% in solar2d.reg with the full path...
+    
+    REM Show environment variable for debugging
+    echo APPDATA environment variable: %APPDATA%
+    
+    REM Process the registry file line by line and perform the replacement
+    type nul > "%TEMP_REG_FILE%"
+    
+    echo.
+    echo Original registry file contents:
+    echo --------------------------------------
+    type "%SOLAR2D_REG_PATH%"
+    echo --------------------------------------
+    echo.
+    
+    echo Processing registry file line by line...
+    
+    for /f "usebackq tokens=* delims=" %%a in ("%SOLAR2D_REG_PATH%") do (
+        set "line=%%a"
+        call :ProcessLine
+        echo Line: !processed_line!
+        echo !processed_line!>> "%TEMP_REG_FILE%"
+    )
+    
+    echo.
+    echo Contents of the modified registry file:
+    echo --------------------------------------
+    type "%TEMP_REG_FILE%" || echo Failed to display registry file contents
+    echo --------------------------------------
+    echo.
+    
+    REM Replace the original with the modified file
+    copy /Y "%TEMP_REG_FILE%" "%SOLAR2D_REG_PATH%" > nul
+    @REM del "%TEMP_REG_FILE%"
+    
     REM Import the registry file
     echo Importing solar2d.reg to Windows registry...
     reg import "%SOLAR2D_REG_PATH%" >nul 2>&1
@@ -46,13 +88,13 @@ if %errorlevel% neq 0 (
         echo You can manually import the registry file from: %SOLAR2D_REG_PATH%
     ) else (
         echo solar2d.reg imported successfully. Solar2D URL scheme is now registered.
-        del "%SOLAR2D_REG_PATH%"
+        @REM del "%SOLAR2D_REG_PATH%"
     )
 )
 
 REM Fetch the latest release information
 echo Fetching information about the latest release...
-powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (Invoke-WebRequest -Uri 'https://api.github.com/repos/%REPO%/releases/latest' -UseBasicParsing).Content}" > "%TEMP%\release_info.json"
+powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (Invoke-WebRequest -Uri 'https://api.github.com/repos/%REPO%/releases/latest' -UseBasicParsing).Content}" > "%DOWNLOADS_DIR%\release_info.json"
 if %errorlevel% neq 0 (
     echo Failed to connect to GitHub API. Please check your internet connection.
     exit /b 1
@@ -60,7 +102,7 @@ if %errorlevel% neq 0 (
 
 REM Extract the download URL for plugin.data.tgz
 echo Extracting download URL...
-for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%TEMP%\release_info.json' | ConvertFrom-Json; $asset = $json.assets | Where-Object { $_.name -like '*plugin.data.tgz' }; $asset.browser_download_url}"') do (
+for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOADS_DIR%\release_info.json' | ConvertFrom-Json; $asset = $json.assets | Where-Object { $_.name -like '*plugin.data.tgz' }; $asset.browser_download_url}"') do (
     set "DOWNLOAD_URL=%%a"
 )
 
@@ -86,27 +128,38 @@ if exist "%PLUGIN_DIR%\kwik.lua" del /q "%PLUGIN_DIR%\kwik.lua"
 if exist "%PLUGIN_DIR%\kwik" rmdir /s /q "%PLUGIN_DIR%\kwik"
 echo Old files removed.
 
-REM Extract the plugin.data.tgz file using PowerShell and 7-Zip
+REM Extract the plugin.data.tgz file using 7-Zip or PowerShell
 echo Installing plugin to %PLUGIN_DIR%...
 
 REM Create temp extraction directory
 if exist "%TEMP_DIR%" rmdir /s /q "%TEMP_DIR%"
 mkdir "%TEMP_DIR%"
 
-REM Check if 7-Zip is installed and in PATH
-where 7z >nul 2>nul
-if %errorlevel% neq 0 (
-    echo 7-Zip not found. Using PowerShell tar extraction...
-    
-    REM Using PowerShell to extract
-    powershell -Command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory('%TEMP_FILE%', '%TEMP_DIR%')}"
+REM Check if 7za.exe exists in the specified path
+if exist "%CORONA_7ZIP%" (
+    echo Extracting with 7za.exe from Corona Labs...
+    "%CORONA_7ZIP%" x "%TEMP_FILE%" -o"%TEMP_DIR%" -y -bd >nul 2>&1
+    "%CORONA_7ZIP%" x "%TEMP_DIR%\plugin.data.tar" -o"%TEMP_DIR%" -y -bd >nul 2>&1
 ) else (
-    echo Extracting with 7-Zip...
-    7z x "%TEMP_FILE%" -o"%TEMP_DIR%" -y
+    REM Check if 7-Zip is installed and in PATH
+    where 7z >nul 2>nul
+    if %errorlevel% neq 0 (
+        echo 7-Zip not found. Using PowerShell tar extraction...
+        
+        REM Using PowerShell to extract
+        powershell -Command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory('%TEMP_FILE%', '%TEMP_DIR%')}"
+    ) else (
+        echo Extracting with 7-Zip...
+        7z x "%TEMP_FILE%" -o"%TEMP_DIR%" -y -bd >nul 2>&1
+        7z x "%TEMP_DIR%\plugin.data.tar" -o"%TEMP_DIR%" -y -bd >nul 2>&1
+    )
 )
 
 REM Copy extracted files to the plugin directory
-xcopy /E /I /Y "%TEMP_DIR%\*" "%PLUGIN_DIR%\"
+echo Copying kwik.lua and kwik directory to %PLUGIN_DIR%...
+if exist "%TEMP_DIR%\kwik.lua" xcopy /Y /Q "%TEMP_DIR%\kwik.lua" "%PLUGIN_DIR%\"
+if exist "%TEMP_DIR%\kwik" xcopy /E /I /Y /Q "%TEMP_DIR%\kwik" "%PLUGIN_DIR%\kwik\"
+
 if %errorlevel% neq 0 (
     echo Failed to install the plugin. The file may be corrupted.
     exit /b 1
@@ -134,12 +187,12 @@ echo }
 echo Kwik Editor Landscape skin file created.
 
 REM Clean up
-del "%TEMP_FILE%"
-rmdir /s /q "%TEMP_DIR%"
-del "%TEMP%\release_info.json"
+@REM del "%TEMP_FILE%"
+@REM rmdir /s /q "%TEMP_DIR%"
+@REM del "%DOWNLOADS_DIR%\release_info.json"
 
 REM Extract release tag for final message
-for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%TEMP%\release_info.json' -ErrorAction SilentlyContinue | ConvertFrom-Json; $json.tag_name}"') do (
+for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOADS_DIR%\release_info.json' -ErrorAction SilentlyContinue | ConvertFrom-Json; $json.tag_name}"') do (
     set "RELEASE_TAG=%%a"
 )
 
@@ -153,3 +206,9 @@ echo IMPORTANT: If the registry import failed, please run this script as adminis
 echo or manually import the registry file from: %SOLAR2D_REG_PATH%
 
 endlocal
+
+REM Subroutine to process a line and replace %APPDATA% with its actual value
+:ProcessLine
+set "ESCAPED_APPDATA=%APPDATA:\=\\%"
+set "processed_line=!line:%%APPDATA%%=%ESCAPED_APPDATA%!"
+goto :eof
