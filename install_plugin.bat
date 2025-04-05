@@ -78,17 +78,25 @@ if %errorlevel% neq 0 (
     
     REM Replace the original with the modified file
     copy /Y "%TEMP_REG_FILE%" "%SOLAR2D_REG_PATH%" > nul
-    @REM del "%TEMP_REG_FILE%"
+    del "%TEMP_REG_FILE%"
+
+    REM Launch Registry Editor with the registry file
+    echo.
+    echo Opening the registry file with Registry Editor...
+    echo Please click "Yes" when prompted to add the entries to the registry.
+    echo.
+    start "" regedit.exe "%SOLAR2D_REG_PATH%"
     
-    REM Import the registry file
-    echo Importing solar2d.reg to Windows registry...
-    reg import "%SOLAR2D_REG_PATH%" >nul 2>&1
-    if %errorlevel% neq 0 (
-        echo Failed to import solar2d.reg. Please run this script as administrator.
-        echo You can manually import the registry file from: %SOLAR2D_REG_PATH%
-    ) else (
-        echo solar2d.reg imported successfully. Solar2D URL scheme is now registered.
-        @REM del "%SOLAR2D_REG_PATH%"
+    echo Waiting for Registry Editor to complete...
+    timeout /t 5 /nobreak >nul
+    
+    echo.
+    echo Testing the registry entry:
+    reg query "HKEY_CLASSES_ROOT\solar2d" 2>nul && (
+        echo Registry entry exists - installation successful!
+    ) || (
+        echo Registry entry may not be installed yet. Please confirm in the Registry Editor window.
+        echo If Registry Editor shows a confirmation prompt, click "Yes" to add the entries.
     )
 )
 
