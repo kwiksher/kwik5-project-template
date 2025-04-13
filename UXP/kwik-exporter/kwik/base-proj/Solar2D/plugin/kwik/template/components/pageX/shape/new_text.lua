@@ -1,8 +1,9 @@
 -- $weight={{weight}}
 --
 local parent,root, M = newModule(...)
-
-local _layerProps = {
+local app = require "controller.Application"
+--
+local layerProps = {
   name     = "{{name}}",
   x        = {{x}},
   y        = {{y}},
@@ -20,17 +21,19 @@ local _layerProps = {
   -- width    = nil, -- {{width}},
   font     = {{font}},
   fontSize = {{size}}, -- {{fontSize}}
-  align    = "{{align}}"  -- Alignment parameter
+  align    = "{{align}}",  -- Alignment parameter
   shapedWith    = "new_text"
 }
+
+M.layerProps = layerProps
 --
 function M:init(UI)
   --local sceneGroup = UI.sceneGroup
 end
 --
 function M:create(UI)
-  local layerProps = self.layerProps or _layerProps
-  self.layerProps = layerProps
+  local layerProps = self.layerProps
+  -- layerProps.x, layerProps.y = app.getCenter(layerProps.x, layerProps.y)
 
   local  obj = display.newText(layerProps)
 
@@ -43,6 +46,8 @@ function M:create(UI)
   obj.anchorY = layerProps.anchorY or 0.5
   obj.rotation = layerProps.rotation or 0
   obj.shapedWith = layerProps.shapedWith
+
+  obj.oldAlpha = 1
 
   obj.layerIndex = #UI.layers+1
   UI.layers[obj.layerIndex] = obj
@@ -61,7 +66,7 @@ function  M:destroy(UI)
 end
 --
 function M:new(props)
-  return self:newInstance(props, _layerProps)
+  return self:newInstance(props, layerProps)
 end
 --
 return M
