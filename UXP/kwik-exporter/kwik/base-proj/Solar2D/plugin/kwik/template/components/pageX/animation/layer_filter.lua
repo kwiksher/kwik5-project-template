@@ -1,46 +1,37 @@
 local M = {
-  {{#properties}}
-  properties = {
-    target     = {{layer}},
-    type    = "{{type}}", -- group, page, sprite
-    animation  = false,
-    delay      = 0,
-    duration   = 1000,
-    autoPlay   = true,
-    loop       = 1,        -- 0 to play once
-    easing     = "inQuad",
-    -- reverse    = nil,
-    -- resetAtEnd = nil,
-  },
-  {{/properties}}
+  target     = NIL,
+  type    = {{type}}, -- group, page, sprite
+  animation  = false,
+  delay      = 0,
+  duration   = 1000,
+  autoPlay   = true,
+  loop       = 1,        -- 0 to play once
+  easing     = "inQuad",
+  reverse    = nil,
+  resetAtEnd = nil,
+  xSwipe     = nil,
+  ySwipe     = nil,
   {{#composite}}
   composite = {
-    -- name   = "composite.{{effect}}",
-    type = "composite",
-    effect = "{{effect}}",
-    paint1 = "{{paint1}}",
-    paint2 = "{{paint2}}",
-    folder = "{{folder}}"
+    name   = NIL,
+    paint1 = NIL,
+    paint2 = NIL,
+    folder = NIL
   },
   {{/composite}}
   {{#filter}}
   filter = {
-    -- name = "filter.{{effect}}",
-    type = "filter",
-    effect = "{{effect}}"
+    name = NIL,
   } ,
   {{/filter}}
   {{#generator}}
   generator = {
-    -- name = "generator.{{effect}}",
-    type = "generator",
-    effect = "{{effect}}"
+    name = NIL,
   } ,
   {{/generator}}
   actions = {onComplete = NIL},
-  layer == "{{layer}}",
-  filterTable = {},
 }
+--
 --
 --
 {{#bloom}}
@@ -56,7 +47,7 @@ M.filterTable["filter.bloom"] = {
         effect.blur.horizontal.sigma    = value.blur.horizontal.sigma
         effect.add.alpha                = value.add.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.levels.gamma             = {{levels_gamma}}
         effect.levels.black             = {{levels_black}}
         effect.levels.white             = {{levels_white}}
@@ -65,11 +56,11 @@ M.filterTable["filter.bloom"] = {
         effect.blur.horizontal.blurSize = {{blur_horizontal_blurSize}}
         effect.blur.horizontal.sigma    = {{blur_horizontal_sigma}}
         effect.add.alpha                = {{add_alpha}}
-        {{/from}}
+        {{/filterFrom}}
       end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
         local effect = {}
         effect.levels = {}
         effect.blur  = {vertical={}, horizontal = {}}
@@ -82,11 +73,12 @@ M.filterTable["filter.bloom"] = {
         effect.blur.horizontal.blurSize = {{blur_horizontal_blurSize}}
         effect.blur.horizontal.sigma    = {{blur_horizontal_sigma}}
         effect.add.alpha                = {{add_alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/bloom}}
+--
 {{#blur}}
 M.filterTable["filter.blur"] = {
     set = function(effect, value)
@@ -97,6 +89,7 @@ M.filterTable["filter.blur"] = {
     end
 }
 {{/blur}}
+--
 {{#blurGaussian}}
 M.filterTable["filter.blurGaussian"] = {
     set = function(effect, value)
@@ -106,16 +99,16 @@ M.filterTable["filter.blurGaussian"] = {
           effect.horizontal.blurSize = value.horizontal.blurSize
           effect.horizontal.sigma    = value.horizontal.sigma
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.vertical.blurSize   = {{vertical_blurSize}}
         effect.vertical.sigma      = {{vertical_sigma}}
         effect.horizontal.blurSize = {{horizontal_blurSize}}
         effect.horizontal.sigma    = {{horizontal_sigma}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.vertical = {}
           effect.horizontal = {}
@@ -123,11 +116,12 @@ M.filterTable["filter.blurGaussian"] = {
           effect.vertical.sigma      = {{vertical_sigma}}
           effect.horizontal.blurSize = {{horizontal_blurSize}}
           effect.horizontal.sigma    = {{horizontal_sigma}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/blurGaussian}}
+--
 {{#blurHorizontal}}
 M.filterTable["filter.blurHorizontal"] = {
     set = function(effect, value)
@@ -135,22 +129,23 @@ M.filterTable["filter.blurHorizontal"] = {
           effect.blurSize   = value.blurSize
           effect.sigma      = value.sigma
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.blurSize   = {{blurSize}}
         effect.sigma      = {{sigma}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.blurSize   = {{blurSize}}
           effect.sigma      = {{sigma}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/blurHorizontal}}
+--
 --
 {{#blurVertical}}
 M.filterTable["filter.blurVertical"] = {
@@ -159,62 +154,65 @@ M.filterTable["filter.blurVertical"] = {
           effect.blurSize   = value.blurSize
           effect.sigma      = value.sigma
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.blurSize   = {{blurSize}}
         effect.sigma      = {{sigma}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.blurSize   = {{blurSize}}
           effect.sigma      = {{sigma}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/blurVertical}}
+--
 {{#brightness}}
 M.filterTable["filter.brightness"] = {
     set = function(effect, value)
       if value then
           effect.intensity   = value.intensity
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.intensity   = {{intensity}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.intensity   = {{intensity}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/brightness}}
+--
 {{#bulge}}
 M.filterTable["filter.bulge"] = {
     set = function(effect, value)
       if value then
           effect.intensity   = value.intensity
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.intensity   = {{intensity}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.intensity   = {{intensity}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/bulge}}
+--
 {{#chromaKey}}
 M.filterTable["filter.chromaKey"] = {
     set = function(effect, value)
@@ -223,7 +221,7 @@ M.filterTable["filter.chromaKey"] = {
           effect.smoothing   = value.smoothing
           effect.color       = value.color
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.sensitivity = {{sensitivity}}
           effect.smoothing   = {{smoothing}}
           effect.color       = {
@@ -231,11 +229,11 @@ M.filterTable["filter.chromaKey"] = {
             {{color_1}},
             {{color_2}}
           }
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.sensitivity = {{sensitivity}}
           effect.smoothing   = {{smoothing}}
@@ -244,11 +242,12 @@ M.filterTable["filter.chromaKey"] = {
             {{color_1}},
             {{color_2}}
           }
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/chromaKey}}
+--
 {{#colorChannelOffset}}
 M.filterTable["filter.colorChannelOffset"] = {
     set = function(effect, value)
@@ -256,122 +255,128 @@ M.filterTable["filter.colorChannelOffset"] = {
           effect.yTexels = value.yTexels
           effect.xTexels = value.xTexels
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.yTexels = {{yTexels}}
           effect.xTexels = {{xTexels}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.yTexels = {{yTexels}}
           effect.xTexels = {{xTexels}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/colorChannelOffset}}
+--
 {{#contrast}}
 M.filterTable["filter.contrast"] = {
     set = function(effect, value)
       if value then
           effect.contrast = value.contrast
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.contrast = {{contrast}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.contrast = {{contrast}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/contrast}}
+--
 {{#crosshatch}}
 M.filterTable["filter.crosshatch"] = {
     set = function(effect, value)
       if value then
           effect.grain = value.grain
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.grain = {{grain}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.grain = {{grain}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/crosshatch}}
+--
 {{#crystallize}}
 M.filterTable["filter.crystallize"] = {
     set = function(effect, value)
       if value then
           effect.numTiles = value.numTiles
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.numTiles = {{numTiles}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.numTiles = {{numTiles}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/crystallize}}
+--
 {{#desaturate}}
 M.filterTable["filter.desaturate"] = {
     set = function(effect, value)
       if value then
           effect.intensity = value.intensity
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.intensity = {{intensity}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.intensity = {{intensity}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/desaturate}}
+--
 {{#dissolve}}
 M.filterTable["filter.dissolve"] = {
     set = function(effect, value)
       if value then
           effect.threshold = value.threshold
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.threshold = {{threshold}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.threshold = {{threshold}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/dissolve}}
+--
 {{#duotone}}
 M.filterTable["filter.duotone"] = {
     set = function(effect, value)
@@ -381,7 +386,7 @@ M.filterTable["filter.duotone"] = {
         effect.lightColor = value.lightColor
         -- effect.lightColor2 = value.lightColor2
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.darkColor = {
           {{darkColor_0}},
           {{darkColor_1}},
@@ -406,11 +411,11 @@ M.filterTable["filter.duotone"] = {
         --   {{lightColor2_2}},
         --   {{lightColor2_3}}
         -- }
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
         effect.darkColor = {
           {{darkColor_0}},
@@ -436,71 +441,75 @@ M.filterTable["filter.duotone"] = {
         --   {{lightColor2_2}},
         --   {{lightColor2_3}}
         -- }
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/duotone}}
+--
 {{#emboss}}
 M.filterTable["filter.emboss"] = {
     set = function(effect, value)
       if value then
           effect.intensity = value.intensity
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.intensity = {{intensity}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.intensity = {{intensity}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/emboss}}
+--
 {{#exposure}}
 M.filterTable["filter.exposure"] = {
     set = function(effect, value)
       if value then
           effect.exposure = value.exposure
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.exposure = {{exposure}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.exposure = {{exposure}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/exposure}}
+--
 {{#frostedGlass}}
 M.filterTable["filter.frostedGlass"] = {
     set = function(effect, value)
       if value then
           effect.scale = value.scale
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.scale = {{scale}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.scale = {{scale}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/frostedGlass}}
+--
 {{#grayscale}}
 M.filterTable["filter.grayscale"] = {
     set = function(effect, value)
@@ -511,26 +520,28 @@ M.filterTable["filter.grayscale"] = {
     end
 }
 {{/grayscale}}
+--
 {{#hue}}
 M.filterTable["filter.hue"] = {
     set = function(effect, value)
       if value then
           effect.angle = value.angle
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.angle = {{angle}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.angle = {{angle}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/hue}}
+--
 {{#invert}}
 M.filterTable["filter.invert"] = {
     set = function(effect, value)
@@ -541,6 +552,7 @@ M.filterTable["filter.invert"] = {
     end
 }
 {{/invert}}
+--
 {{#iris}}
 M.filterTable["filter.iris"] = {
     set = function(effect, value)
@@ -551,28 +563,29 @@ M.filterTable["filter.iris"] = {
           effect.center_1 = value.center_0
           effect.aperture = value.aperture
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.smoothness = {{smoothness}}
           effect.aspectRatio = {{aspectRatio}}
           effect.center_0 = {{center_0}}
           effect.center_1 = {{center_1}}
           effect.aperture = {{aperture}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.smoothness = {{smoothness}}
           effect.aspectRatio = {{aspectRatio}}
           effect.center_0 = {{center_0}}
           effect.center_1 = {{center_1}}
           effect.aperture = {{aperture}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/iris}}
+--
 {{#levels}}
 M.filterTable["filter.levels"] = {
     set = function(effect, value)
@@ -581,24 +594,25 @@ M.filterTable["filter.levels"] = {
           effect.white = value.white
           effect.black = value.black
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.gamma = {{gamma}}
           effect.white = {{white}}
           effect.black = {{black}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.gamma = {{gamma}}
           effect.white = {{white}}
           effect.black = {{black}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/levels}}
+--
 {{#linearWipe}}
 M.filterTable["filter.linearWipe"] = {
     set = function(effect, value)
@@ -608,26 +622,27 @@ M.filterTable["filter.linearWipe"] = {
           effect.direction_0 = value.direction_0
           effect.direction_1 = value.direction_1
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.progress = {{progress}}
           effect.smoothness = {{smoothness}}
           effect.direction_0 = {{direction_0}}
           effect.direction_1 = {{direction_1}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.progress = {{progress}}
           effect.smoothness = {{smoothness}}
           effect.direction_0 = {{direction_0}}
           effect.direction_1 = {{direction_1}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/linearWipe}}
+--
 {{#median}}
 M.filterTable["filter.median"] = {
     set = function(effect, value)
@@ -638,6 +653,7 @@ M.filterTable["filter.median"] = {
     end
 }
 {{/median}}
+--
 {{#monotone}}
 M.filterTable["filter.monotone"] = {
     set = function(effect, value)
@@ -647,26 +663,27 @@ M.filterTable["filter.monotone"] = {
           effect.g = value.g
           effect.r = value.r
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.a = {{a}}
           effect.b = {{b}}
           effect.g = {{g}}
           effect.r = {{r}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.a = {{a}}
           effect.b = {{b}}
           effect.g = {{g}}
           effect.r = {{r}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/monotone}}
+--
 {{#opTile}}
 M.filterTable["filter.opTile"] = {
     set = function(effect, value)
@@ -675,44 +692,46 @@ M.filterTable["filter.opTile"] = {
           effect.angle = value.angle
           effect.numPixels = value.numPixels
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.scale = {{scale}}
           effect.angle = {{angle}}
           effect.numPixels = {{numPixels}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.scale = {{scale}}
           effect.angle = {{angle}}
           effect.numPixels = {{numPixels}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/opTile}}
+--
 {{#pixelate}}
 M.filterTable["filter.pixelate"] = {
     set = function(effect, value)
       if value then
           effect.numPixels = value.numPixels
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.numPixels = {{numPixels}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.numPixels = {{numPixels}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/pixelate}}
+--
 {{#polkaDots}}
 M.filterTable["filter.polkaDots"] = {
     set = function(effect, value)
@@ -721,44 +740,46 @@ M.filterTable["filter.polkaDots"] = {
           effect.dotRadius = value.dotRadius
           effect.numPixels = value.numPixels
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.aspectRatio = {{aspectRatio}}
           effect.dotRadius = {{dotRadius}}
           effect.numPixels = {{numPixels}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.aspectRatio = {{aspectRatio}}
           effect.dotRadius = {{dotRadius}}
           effect.numPixels = {{numPixels}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/polkaDots}}
+--
 {{#posterize}}
 M.filterTable["filter.posterize"] = {
     set = function(effect, value)
       if value then
           effect.colorsPerChannel = value.colorsPerChannel
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.colorsPerChannel = {{colorsPerChannel}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.colorsPerChannel = {{colorsPerChannel}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/posterize}}
+--
 {{#radialWipe}}
 M.filterTable["filter.radialWipe"] = {
     set = function(effect, value)
@@ -769,115 +790,120 @@ M.filterTable["filter.radialWipe"] = {
           effect.center_1 = value.center_0
           effect.axisOrientation = value.axisOrientation
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.smoothness = {{smoothness}}
           effect.progress = {{progress}}
           effect.center_0 = {{center_0}}
           effect.center_1 = {{center_1}}
           effect.axisOrientation = {{axisOrientation}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.smoothness = {{smoothness}}
           effect.progress = {{progress}}
           effect.center_0 = {{center_0}}
           effect.center_1 = {{center_1}}
           effect.axisOrientation = {{axisOrientation}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/radialWipe}}
+--
 {{#saturate}}
 M.filterTable["filter.saturate"] = {
     set = function(effect, value)
       if value then
           effect.intensity = value.intensity
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.intensity = {{intensity}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.intensity = {{intensity}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/saturate}}
+--
 {{#scatter}}
 M.filterTable["filter.scatter"] = {
     set = function(effect, value)
       if value then
           effect.intensity = value.intensity
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.intensity = {{intensity}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.intensity = {{intensity}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/scatter}}
+--
 {{#sepia}}
 M.filterTable["filter.sepia"] = {
     set = function(effect, value)
       if value then
           effect.intensity = value.intensity
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.intensity = {{intensity}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.intensity = {{intensity}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/sepia}}
+--
 {{#sharpenLuminance}}
 M.filterTable["filter.sharpenLuminance"] = {
     set = function(effect, value)
       if value then
           effect.sharpness = value.sharpness
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.sharpness = {{sharpness}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.sharpness = {{sharpness}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/sharpenLuminance}}
+--
 {{#sobel}}
 M.filterTable["filter.sobel"] = {
     set = function(effect, value)
       if value then
       else
-        {{#from}}
-         {{/from}}
+        {{#filterFrom}}
+         {{/filterFrom}}
        end
     end,
     get = function()
@@ -886,6 +912,7 @@ M.filterTable["filter.sobel"] = {
     end
 }
 {{/sobel}}
+--
 {{#straighten}}
 M.filterTable["filter.straighten"] = {
     set = function(effect, value)
@@ -894,64 +921,67 @@ M.filterTable["filter.straighten"] = {
           effect.angle = value.angle
           effect.width = value.width
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.height = {{height}}
           effect.angle = {{angle}}
           effect.width = {{width}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.height = {{height}}
           effect.angle = {{angle}}
           effect.width = {{width}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/straighten}}
+--
 {{#swirl}}
 M.filterTable["filter.swirl"] = {
     set = function(effect, value)
       if value then
           effect.intensity = value.intensity
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.intensity = {{intensity}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.intensity = {{intensity}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/swirl}}
+--
 {{#vignette}}
 M.filterTable["filter.vignette"] = {
     set = function(effect, value)
       if value then
           effect.radius = value.radius
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.radius = {{radius}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.radius = {{radius}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/vignette}}
+--
 {{#vignetteMask}}
 M.filterTable["filter.vignetteMask"] = {
     set = function(effect, value)
@@ -959,62 +989,65 @@ M.filterTable["filter.vignetteMask"] = {
           effect.outerRadius = value.outerRadius
           effect.innerRadius = value.innerRadius
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.outerRadius = {{outerRadius}}
           effect.innerRadius = {{innerRadius}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.outerRadius = {{outerRadius}}
           effect.innerRadius = {{innerRadius}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/vignetteMask}}
+--
 {{#wobble}}
 M.filterTable["filter.wobble"] = {
     set = function(effect, value)
       if value then
           effect.amplitude = value.amplitude
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.amplitude = {{amplitude}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.amplitude = {{amplitude}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/wobble}}
+--
 {{#woodCut}}
 M.filterTable["filter.woodCut"] = {
     set = function(effect, value)
       if value then
           effect.intensity = value.intensity
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.intensity = {{intensity}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.intensity = {{intensity}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/woodCut}}
+--
 {{#zoomBlur}}
 M.filterTable["filter.zoomBlur"] = {
     set = function(effect, value)
@@ -1023,24 +1056,25 @@ M.filterTable["filter.zoomBlur"] = {
           effect.u = value.u
           effect.v = value.v
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.intensity = {{intensity}}
           effect.u = {{u}}
           effect.v = {{v}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.intensity = {{intensity}}
           effect.u = {{u}}
           effect.v = {{v}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/zoomBlur}}
+--
 {{#checkerboard}}
 M.filterTable["generator.checkerboard"] = {
     set = function(effect, value)
@@ -1050,7 +1084,7 @@ M.filterTable["generator.checkerboard"] = {
         effect.xStep  = value.xStep
         effect.yStep  = value.yStep
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.color1 = {
           {{color1_0}},
           {{color1_1}},
@@ -1065,11 +1099,11 @@ M.filterTable["generator.checkerboard"] = {
         }
         effect.xStep  = {{xStep}}
         effect.yStep  = {{yStep}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
         effect.color1 = {
           {{color1_0}},
@@ -1085,11 +1119,12 @@ M.filterTable["generator.checkerboard"] = {
         }
         effect.xStep  = {{xStep}}
         effect.yStep  = {{yStep}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/checkerboard}}
+--
 {{#lenticularHalo}}
 M.filterTable["generator.lenticularHalo"] = {
     set = function(effect, value)
@@ -1099,26 +1134,27 @@ M.filterTable["generator.lenticularHalo"] = {
         effect.posY  = value.posY
         effect.posX  = value.posX
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.seed  = {{seed}}
         effect.aspectRatio  = {{aspectRatio}}
         effect.posY  = {{posY}}
         effect.posX  = {{posX}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
         effect.seed  = {{seed}}
         effect.aspectRatio  = {{aspectRatio}}
         effect.posY  = {{posY}}
         effect.posX  = {{posX}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/lenticularHalo}}
+--
 {{#linearGradient}}
 M.filterTable["generator.linearGradient"] = {
     set = function(effect, value)
@@ -1128,7 +1164,7 @@ M.filterTable["generator.linearGradient"] = {
         effect.position1 = value.position1
         effect.position2 = value.position2
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.color1 = {
           {{color1_0}},
           {{color1_1}},
@@ -1149,11 +1185,11 @@ M.filterTable["generator.linearGradient"] = {
           {{position2_0}},
           {{position2_1}},
         }
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
         effect.color1 = {
           {{color1_0}},
@@ -1175,11 +1211,12 @@ M.filterTable["generator.linearGradient"] = {
           {{position2_0}},
           {{position2_1}},
         }
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/linearGradient}}
+--
 {{#marchingAnts}}
 M.filterTable["generator.marchingAnts"] = {
     set = function(effect, value)
@@ -1190,6 +1227,7 @@ M.filterTable["generator.marchingAnts"] = {
     end
 }
 {{/marchingAnts}}
+--
 {{#perlinNoise}}
 M.filterTable["generator.perlinNoise"] = {
     set = function(effect, value)
@@ -1198,7 +1236,7 @@ M.filterTable["generator.perlinNoise"] = {
         effect.color2 = value.color2
         effect.scale  = value.scale
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.color1 = {
           {{color1_0}},
           {{color1_1}},
@@ -1212,11 +1250,11 @@ M.filterTable["generator.perlinNoise"] = {
           {{color2_3}}
         }
         effect.scale  = {{scale}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
         effect.color1 = {
           {{color1_0}},
@@ -1231,11 +1269,12 @@ M.filterTable["generator.perlinNoise"] = {
           {{color2_3}}
         }
         effect.scale  = {{scale}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/perlinNoise}}
+--
 {{#radialGradient}}
 M.filterTable["generator.radialGradient"] = {
     set = function(effect, value)
@@ -1245,7 +1284,7 @@ M.filterTable["generator.radialGradient"] = {
         effect.center_and_radiuses = value.center_and_radiuses
         effect.aspectRatio = value.aspectRatio
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.color1 = {
           {{color1_0}},
           {{color1_1}},
@@ -1265,11 +1304,11 @@ M.filterTable["generator.radialGradient"] = {
           {{center_and_radiuses_3}}
         }
         effect.aspectRatio ={{aspectRatio}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
         effect.color1 = {
           {{color1_0}},
@@ -1290,11 +1329,12 @@ M.filterTable["generator.radialGradient"] = {
           {{center_and_radiuses_3}}
         }
         effect.aspectRatio = {{aspectRatio}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/radialGradient}}
+--
 {{#random}}
 M.filterTable["generator.random"] = {
     set = function(effect, value)
@@ -1305,6 +1345,7 @@ M.filterTable["generator.random"] = {
     end
 }
 {{/random}}
+--
 {{#stripes}}
 M.filterTable["generator.stripes"] = {
     set = function(effect, value)
@@ -1313,7 +1354,7 @@ M.filterTable["generator.stripes"] = {
         effect.angle = value.angle
         effect.translation = value.translation
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.periods = {
           {{periods_0}},
           {{periods_1}},
@@ -1322,11 +1363,11 @@ M.filterTable["generator.stripes"] = {
         }
         effect.angle ={{angle}}
         effect.translation ={{translation}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
         effect.periods = {
           {{periods_0}},
@@ -1336,11 +1377,12 @@ M.filterTable["generator.stripes"] = {
         }
         effect.angle = {{angle}}
         effect.translation = {{translation}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/stripes}}
+--
 {{#sunbeams}}
 M.filterTable["generator.sunbeams"] = {
     set = function(effect, value)
@@ -1351,306 +1393,321 @@ M.filterTable["generator.sunbeams"] = {
         effect.posX = value.posX
 
       else
-        {{#from}}
+        {{#filterFrom}}
         effect.seed ={{seed}}
         effect.aspectRatio ={{aspectRatio}}
         effect.posY ={{posY}}
         effect.posX ={{posX}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
         effect.seed = {{seed}}
         effect.aspectRatio = {{aspectRatio}}
         effect.posY = {{posY}}
         effect.posX = {{posX}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/sunbeams}}
+--
 {{#add}}
 M.filterTable["composite.add"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/add}}
+--
 {{#average}}
 M.filterTable["composite.average"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/average}}
+--
 {{#colorBurn}}
 M.filterTable["composite.colorBurn"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/colorBurn}}
+--
 {{#colorDodge}}
 M.filterTable["composite.colorDodge"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/colorDodge}}
+--
 {{#darken}}
 M.filterTable["composite.darken"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/darken}}
+--
 {{#difference}}
 M.filterTable["composite.difference"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/difference}}
+--
 {{#exclusion}}
 M.filterTable["composite.exclusion"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/exclusion}}
+--
 {{#glow}}
 M.filterTable["composite.glow"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/glow}}
+--
 {{#hardLight}}
 M.filterTable["composite.hardLight"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/hardLight}}
+--
 {{#hardMix}}
 M.filterTable["composite.hardMix"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/hardMix}}
+--
 {{#lighten}}
 M.filterTable["composite.lighten"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/lighten}}
+--
 {{#linearLight}}
 M.filterTable["composite.linearLight"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/linearLight}}
+--
 {{#multiply}}
 M.filterTable["composite.multiply"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/multiply}}
+--
 {{#negation}}
 M.filterTable["composite.negation"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/negation}}
+--
 {{#normalMapWith1DirLight}}
 M.filterTable["composite.normalMapWith1DirLight"] = {
     set = function(effect, value)
@@ -1659,7 +1716,7 @@ M.filterTable["composite.normalMapWith1DirLight"] = {
           effect.dirLightColor = value.dirLightColor
           effect.ambientLightIntensity = value.ambientLightIntensity
         else
-        {{#from}}
+        {{#filterFrom}}
           effect.dirLightDirection ={
             {{dirLightDirection_0}},
             {{dirLightDirection_1}},
@@ -1672,11 +1729,11 @@ M.filterTable["composite.normalMapWith1DirLight"] = {
              {{dirLightColor_3}}
            }
           effect.ambientLightIntensity = {{ambientLightIntensity}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
         local effect = {}
         effect.dirLightDirection=  {}
         effect.dirLightColor    =  {}
@@ -1692,11 +1749,12 @@ M.filterTable["composite.normalMapWith1DirLight"] = {
            {{dirLightColor_3}}
          }
         effect.ambientLightIntensity = {{ambientLightIntensity}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/normalMapWith1DirLight}}
+--
 {{#normalMapWith1PointLight}}
 M.filterTable["composite.normalMapWith1PointLight"] = {
     set = function(effect, value)
@@ -1707,7 +1765,7 @@ M.filterTable["composite.normalMapWith1PointLight"] = {
           effect.attenuationFactors = value.attenuationFactors
 
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.pointLightPos ={
             {{pointLightPos_0}},
             {{pointLightPos_1}},
@@ -1725,11 +1783,11 @@ M.filterTable["composite.normalMapWith1PointLight"] = {
             {{attenuationFactors_1}},
             {{attenuationFactors_2}},
           }
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function(param)
-        {{#to}}
+        {{#filterTo}}
         local effect = {}
         effect.pointLightPos      =  {}
         effect.pointLightColor    =  {}
@@ -1751,184 +1809,179 @@ M.filterTable["composite.normalMapWith1PointLight"] = {
           {{attenuationFactors_1}},
           {{attenuationFactors_2}},
         }
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/normalMapWith1PointLight}}
+--
 {{#overlay}}
 M.filterTable["composite.overlay"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/overlay}}
+--
 {{#phoenix}}
 M.filterTable["composite.phoenix"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/phoenix}}
+--
 {{#pinLight}}
 M.filterTable["composite.pinLight"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/pinLight}}
+--
 {{#screen}}
 M.filterTable["composite.screen"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/screen}}
+--
 {{#softLight}}
 M.filterTable["composite.softLight"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/softLight}}
+--
 {{#subtract}}
 M.filterTable["composite.subtract"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/subtract}}
+--
 {{#vividLight}}
 M.filterTable["composite.vividLight"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/vividLight}}
+
 {{#reflec}}
 M.filterTable["composite.reflect"] = {
     set = function(effect, value)
       if value then
           effect.alpha    = value.alpha
       else
-        {{#from}}
+        {{#filterFrom}}
           effect.alpha    = {{alpha}}
-         {{/from}}
+         {{/filterFrom}}
        end
     end,
     get = function()
-        {{#to}}
+        {{#filterTo}}
           local effect = {}
           effect.alpha    = {{alpha}}
-        {{/to}}
+        {{/filterTo}}
         return effect
     end
 }
 {{/reflec}}
 
-local name
-if M.filter then
-  name = "filter."..M.filter.effect
-elseif M.composite then
-  name = "filter."..M.composite.effect
-elseif M.generator then
-  name = "filter."..M.generator.effect
-end
---
-M.to = M.filterTable[name].get()
-M.from = M.filterTable[name].get()
-M.filterTable[name].set(M.from)
--- M.filter.params = M.filterTable[name].get()
 return M
 
