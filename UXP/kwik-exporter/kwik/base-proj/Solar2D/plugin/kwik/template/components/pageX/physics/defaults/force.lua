@@ -6,8 +6,8 @@ local M = {
     isInitial = false,
     isImpluse = true,
     type = "pull", -- push, none
-    xForce = 0,
-    yForce = 0,
+    xForce = 10,
+    yForce = 10,
   }
 }
 

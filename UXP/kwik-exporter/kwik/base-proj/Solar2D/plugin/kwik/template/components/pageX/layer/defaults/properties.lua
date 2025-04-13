@@ -31,10 +31,13 @@ local M = {
     font = nil,
     fontSize = nil,
     ---
-    infinity = NIL,
-    infinitySpeed = NIL,
-    infinityDistance = NIL,
-    ---
+    infinity = {
+      enabled = false,
+      speed = 1,
+      distance = 0,
+      direction = "right",
+    },
+      ---
     imagePath   = nil,
     imageHeight = nil,
     imageWidth  = nil
