@@ -1,21 +1,18 @@
-local parent, root, M = newModule(...)
+local name = ...
+local parent, root = newModule(name)
 
 local M = {
   name = "{{name}}",
   class="collision",
   properties = {
     {{#properties}}
-    body          = "{{layer}}",
+    body          = "{{body}}",
     isRemoveOther = {{isRemoveOther}},
     isRemoveSelf = {{isRemoveSelf}},
-    others  =  "{{others}}"
+    othersGroup  =  require(root.."groups.".."{{othersGroup}}")
     {{/properties}}
   },
-  actions = {
-    {{#actions}}
-      onCollision="{{onCollision}}"
-    {{/actions}}
-  },
+  actions = { onCollision="{{onCollision}}" },
 }
 
 return require("components.kwik.layer_physicsCollision").set(M)

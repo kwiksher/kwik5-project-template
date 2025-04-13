@@ -9,9 +9,9 @@ local M = {
     scale = 1,
     gravityX = 0,
     gravityY = 9.8,
-    drawMode = "hybrid", -- normal, debug
-    walls = {top=false, bottom=true, left=false, right=false}
+    drawMode = "hybrid" -- normal, debug
 },
+walls = {top=false, bottom=false, left=false, right=false}
 }
 
 return M
