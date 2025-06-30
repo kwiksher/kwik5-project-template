@@ -40,7 +40,7 @@ end
 
 local function onKeyEvent(event)
   -- Print which key was pressed down/up
-  -- print("onKeyEvent")
+  -- print("layersTable.onKeyEvent - key:", event.keyName, "phase:", event.phase)
   --
   local message = "Key '" .. event.keyName .. "' was pressed " .. event.phase
 
@@ -247,12 +247,12 @@ end
 
 
 function M:didShow(UI)
-  -- print("didShow")
+  print("layersTable.didShow - registering key handler")
   keyEventManager.register("layersTable", onKeyEvent, 1)
 end
 --
 function M:didHide(UI)
-  -- print("didHide")
+  print("layersTable.didHide - unregistering key handler")
   keyEventManager.unregister("layersTable")
 end
 --

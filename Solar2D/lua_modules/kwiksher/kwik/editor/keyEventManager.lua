@@ -43,7 +43,8 @@ end
 -- Start listening for key events if not already listening
 local function startListening()
   if not isListening then
-    --Runtime:addEventListener("key", onKeyEvent)
+    -- print("Adding Runtime key event listener")
+    Runtime:addEventListener("key", onKeyEvent)
     isListening = true
   end
 end
@@ -59,6 +60,7 @@ local function stopListening()
   end
 
   if not hasActiveHandlers and isListening then
+    -- print("Removing Runtime key event listener")
     Runtime:removeEventListener("key", onKeyEvent)
     isListening = false
   end
