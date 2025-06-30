@@ -6,6 +6,7 @@ M.weight = 1
 M.width = 60
 
 local App = require("Application")
+local keyEventManager = require("editor.keyEventManager")
 
 local screen = require("spyric.screen")
 
@@ -592,7 +593,7 @@ function M:show()
     return false
   end
 
-  Runtime:addEventListener("key", self.onKeyEvent)
+  keyEventManager.register("partsButtons_" .. (self.id or "default"), self.onKeyEvent, 1)
 
 end
 
@@ -611,7 +612,7 @@ function M:hide()
 
     end
   end
-  Runtime:removeEventListener("key", self.onKeyEvent)
+  keyEventManager.unregister("partsButtons_" .. (self.id or "default"))
   self.openEditorObj.text = self.openEditorObj.originalText
 
 end

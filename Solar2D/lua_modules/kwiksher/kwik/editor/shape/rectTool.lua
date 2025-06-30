@@ -4,6 +4,7 @@ local popup  = require(parent.."popup")
 local tools = require ("com.gieson.Tools")
 local json = require("json")
 local editorUtil = require(kwikGlobal.ROOT.."editor.util")
+local keyEventManager = require(kwikGlobal.ROOT.."editor.keyEventManager")
 
 local archInfo = system.getInfo("architectureInfo")
 local isWindows = archInfo == "x86" or archInfo == "x64" or
@@ -69,7 +70,7 @@ function M:drawRect()
 
         self.obj = rectangle
         Runtime:removeEventListener( "touch", touchListener )
-        Runtime:removeEventListener("key", onKeyEvent)
+        keyEventManager.unregister("rectTool")
         self.onDraw = false
       else
         -- popup:pos(x, y)
@@ -130,8 +131,8 @@ function M:drawRect()
   else
     local margin = 50
     self.obj = display.newRect( display.contentCenterX, display.contentCenterY, 480-margin, 320-margin)
-    -- Runtime:addEventListener( "touch", touchListener )
-    -- Runtime:addEventListener("key", onKeyEvent)
+    Runtime:addEventListener( "touch", touchListener )
+    keyEventManager.register("rectTool", onKeyEvent, 1)
   end
   popup:pos(display.contentCenterX, display.contentCenterY-400/2)
   self.obj.alpha = 0.5

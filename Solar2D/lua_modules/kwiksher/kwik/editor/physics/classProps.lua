@@ -1,9 +1,10 @@
 local current = ...
 local parent,root, M = newModule(current)
+local keyEventManager = require("editor.keyEventManager")
 
 local archInfo = system.getInfo("architectureInfo")
-local isWindows = archInfo == "x86" or archInfo == "x64" or 
-                 archInfo == "IA64" or archInfo == "ARM"                 
+local isWindows = archInfo == "x86" or archInfo == "x64" or
+                 archInfo == "IA64" or archInfo == "ARM"
 
 local function onKeyEvent(self, event)
   -- Print which key was pressed down/up
@@ -204,13 +205,13 @@ end
 function M:didShow(UI)
   self.UI = UI
   self.keyListener = function(event) onKeyEvent(self, event)end
-  Runtime:addEventListener("key", self.keyListener)
+  keyEventManager.register("physicsClassProps", self.keyListener, 1)
 end
 
 --
 function M:didHide(UI)
   -- print(self.name, "didHide")
-  Runtime:removeEventListener("key", self.keyListener)
+  keyEventManager.unregister("physicsClassProps")
 end
 
 return setmetatable( M, {__index=require(root.."parts.classProps")} )

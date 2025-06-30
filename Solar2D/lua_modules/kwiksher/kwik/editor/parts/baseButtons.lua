@@ -6,6 +6,7 @@ M.name = current
 M.weight = 1
 
 local App = require("Application")
+local keyEventManager = require(kwikGlobal.ROOT.."editor.keyEventManager")
 -- local rootButtons = require(parent.."buttons")
 
 --
@@ -176,7 +177,9 @@ function M:show()
       return false
     end
     --
-    Runtime:addEventListener("key", self.onKeyEvent)
+    -- Register with centralized key event manager
+    local handlerId = "baseButtons_" .. self.commandClass
+    keyEventManager.register(handlerId, self.onKeyEvent, 1) -- priority 1 for UI elements
   end
 end
 
@@ -190,7 +193,9 @@ function M:hide()
   end
   if self.group then
     self.group.isVisible = false
-    Runtime:removeEventListener("key", self.onKeyEvent)
+    -- Unregister from centralized key event manager
+    local handlerId = "baseButtons_" .. self.commandClass
+    keyEventManager.unregister(handlerId)
   end
 end
 

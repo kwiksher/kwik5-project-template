@@ -7,6 +7,7 @@ local isWindows = archInfo == "x86" or archInfo == "x64" or
 M = {}
 
 local json = require("json")
+local keyEventManager = require(kwikGlobal.ROOT.."editor.keyEventManager")
 
 -- local transition = require("transition2")
 
@@ -134,7 +135,7 @@ function M.drawRect(UI, listener)
         }
 
         Runtime:removeEventListener( "touch", touchListener )
-        Runtime:removeEventListener("key", onKeyEvent)
+        keyEventManager.unregister("shapeDrawRect")
         if onCreate then
           onCreate("ended", _props)
         end
@@ -183,10 +184,10 @@ function M.drawRect(UI, listener)
   end
   ---
   Runtime:addEventListener( "touch", touchListener )
-  Runtime:addEventListener("key", onKeyEvent)
+  keyEventManager.register("shapeDrawRect", onKeyEvent, 1)
   M.removeEventListener = function()
     Runtime:removeEventListener( "touch", touchListener )
-    Runtime:removeEventListener("key", onKeyEvent)
+    keyEventManager.unregister("shapeDrawRect")
   end
 end
 
@@ -258,7 +259,6 @@ function M.drawEllipse(UI)
         }
 
         Runtime:removeEventListener( "touch", touchListener )
-        Runtime:removeEventListener("key", onKeyEvent)
         if onCreate then
           onCreate("ended", _props)
         end
@@ -363,7 +363,7 @@ function M.drawText(UI, listener)
       obj:removeSelf()
 
       Runtime:removeEventListener( "touch", touchListener )
-      Runtime:removeEventListener("key", onKeyEvent)
+      keyEventManager.unregister("shapeDrawText")
 		elseif ( event.phase == "editor" ) then
 			print( event.newCharacters )
 			print( event.oldText )
@@ -489,10 +489,10 @@ function M.drawText(UI, listener)
   end
   ---
   Runtime:addEventListener( "touch", touchListener )
-  Runtime:addEventListener("key", onKeyEvent)
+  keyEventManager.register("shapeDrawText", onKeyEvent, 1)
   M.removeEventListener = function()
     Runtime:removeEventListener( "touch", touchListener )
-    Runtime:removeEventListener("key", onKeyEvent)
+    keyEventManager.unregister("shapeDrawText")
     end
 end
 

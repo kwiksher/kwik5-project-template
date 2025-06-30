@@ -2,10 +2,11 @@ local name = ...
 local parent = name:match("(.-)[^%.]+$")
 local util = require(kwikGlobal.ROOT.."editor.util")
 local layerTableCommands = require(kwikGlobal.ROOT.."editor.parts.layerTableCommands")
+local keyEventManager = require("editor.keyEventManager")
 
 local archInfo = system.getInfo("architectureInfo")
-local isWindows = archInfo == "x86" or archInfo == "x64" or 
-                 archInfo == "IA64" or archInfo == "ARM"                 
+local isWindows = archInfo == "x86" or archInfo == "x64" or
+                 archInfo == "IA64" or archInfo == "ARM"
 
 local M = {
   model = {},
@@ -38,7 +39,7 @@ local function onKeyEvent(event)
 end
 
 function M:didShow(UI)
-  Runtime:addEventListener("key", onKeyEvent)
+  keyEventManager.register("linkboxMulti", onKeyEvent, 1)
   self:_didShow(UI)
 end
 --
@@ -52,7 +53,7 @@ end
 
 --
 function M:didHide(UI)
-  Runtime:removeEventListener("key", onKeyEvent)
+  keyEventManager.unregister("linkboxMulti")
   self:_didHide(UI)
 end
 

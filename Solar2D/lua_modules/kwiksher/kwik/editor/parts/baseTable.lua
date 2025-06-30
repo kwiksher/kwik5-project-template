@@ -9,6 +9,7 @@ local muiIcon    = require(kwikGlobal.ROOT.."components.mui.icon").new()
 local layerTableCommands = require(kwikGlobal.ROOT.."editor.parts.layerTableCommands")
 local contextButtons = require(kwikGlobal.ROOT.."editor.parts.buttons")
 local util = require(kwikGlobal.ROOT.."lib.util")
+local keyEventManager = require("editor.keyEventManager")
 
 local classProps = require(kwikGlobal.ROOT.."editor.parts.classProps")
 local debugName = "_groupTable"
@@ -442,13 +443,13 @@ function M:didShow(UI)
   self.UI = UI
   -- print(self.name, "didShow")
   self.keyListener = function(event) onKeyEvent(self, event)end
-  Runtime:addEventListener("key", self.keyListener)
+  keyEventManager.register("baseTable_" .. (self.name or "default"), self.keyListener, 1)
 end
 
 --
 function M:didHide(UI)
   -- print(self.name, "didHide")
-  Runtime:removeEventListener("key", self.keyListener)
+  keyEventManager.unregister("baseTable_" .. (self.name or "default"))
 end
 
 function M:show()

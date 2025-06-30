@@ -6,6 +6,7 @@ M.name = current
 M.weight = 1
 
 local App = require("Application")
+local keyEventManager = require("editor.keyEventManager")
 
 --
 -- local button = require("com.gieson.Button")
@@ -207,7 +208,7 @@ function M:show()
     return false
   end
 
-  --Runtime:addEventListener("key", self.onKeyEvent)
+  --keyEventManager.register("actionButtons", self.onKeyEvent, 1)
 
 end
 
@@ -222,7 +223,7 @@ function M:hide()
     obj.rect.isVisible = obj.isVisible
   end
 
-  Runtime:removeEventListener("key", self.onKeyEvent)
+  --keyEventManager.unregister("actionButtons")
 
 end
 
