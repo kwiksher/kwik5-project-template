@@ -1,43 +1,10 @@
--- Get the correct resource directory path
-local resourcePath = system.pathForFile("", system.ResourceDirectory)
-package.path = resourcePath .. "/lua_modules/?.lua;" .. resourcePath .. "/lua_modules/?/?.lua;"..package.path
-
-print("Resource path:", resourcePath)
-print("Package path:", package.path)
-print("Trying to require kwiksher.kwik...")
-
--- Check if the file exists using absolute path
-local file_path = resourcePath .. "/lua_modules/kwiksher/kwik.lua"
-local file = io.open(file_path, "r")
-if file then
-    print("File exists:", file_path)
-    file:close()
-else
-    print("File NOT found:", file_path)
-    -- Also check what's in the resource directory
-    print("Resource directory files:")
-    local lfs = require("lfs")
-    for file in lfs.dir(resourcePath) do
-        print("  ", file)
-    end
-end
-
-local kwik = require("kwiksher.kwik")
-local lfs = require("lfs")
+local env = require("env")
+env.mode = "development"
+-- local env.mode = "production"
+-- local env.mode = "debug" -- need kwik5-plugin src from kwiksher's repo
 --
-system.setTapDelay(0.2)
-
---display.setDefault( "background", 0.2, 0.2, 0.2, 0.1 )
-kwik.useGradientBackground()
---
--- local mode = "editing"
--- local mode = "production"
-local mode = "dev"
---
-local props
---
-if mode == "editing" or mode == "dev" then
-  props = {
+if env.mode == "development" or env.mode == "debug" then
+  env.props = {
     name = "book",
     editor = true,
     gotoPage = "landscape",
@@ -48,8 +15,8 @@ if mode == "editing" or mode == "dev" then
     httpServer = false,
     showPageName = true
   }
-elseif mode == "production" then
-  props = {
+elseif env.mode == "production" then
+  env.props = {
     name = "book",
     editor = false,
     gotoPage = "landscape",
@@ -61,148 +28,41 @@ elseif mode == "production" then
     showPageName = false
   }
 end
-
---[[
-  if kwik.restore() then
-    native.showAlert("kwik", "restored comment it out kwik.restore()")
-    return
-  end
---]]
 --
--- kwik.autoUpdate()
+--
+system.setTapDelay(0.2)
+--
+--
+if env.setPlugin(env.mode)  then
+  local kwik = require("kwiksher.kwik")
+  --
+  --display.setDefault( "background", 0.2, 0.2, 0.2, 0.1 )
+  kwik.useGradientBackground()
+  --
 
-kwik.setCustomModule(
-  "custom",
-  {
-    commands = {"myEvent"},
-    components = {
-      -- "align",
-      "myComponent",
-      "thumbnailNavigation",
-      "index"
-      -- "keyboardNavigation",
+  --[[
+    if kwik.restore() then
+      native.showAlert("kwik", "restored comment it out kwik.restore()")
+      return
+    end
+  --]]
+  --
+
+  kwik.setCustomModule(
+    "custom",
+    {
+      commands = {"myEvent"},
+      components = {
+        -- "align",
+        "myComponent",
+        "thumbnailNavigation",
+        "index"
+        -- "keyboardNavigation",
+      }
     }
-  }
-)
-
-local function setPlugin(mode)
-  local script
-  local current_path = system.pathForFile("", system.ResourceDirectory)
-  -- print(current_path)
-  local ret = lfs.chdir(current_path)
-  -- print(ret)
-  local current_dir = lfs.currentdir(current_path)
-  -- print("current_dir", current_dir)
+  )
   --
-  local isDir = function(name)
-    if type(name) ~= "string" then
-      return false
-    end
-    local is = lfs.chdir(current_dir .. "/" .. name)
-    -- print(is)
-    if is then
-      lfs.chdir(current_dir)
-    end
-    -- print(is and true or false)
-    return is and true or false
-  end
+  kwik.bootstrap(env.props)
   --
-  local src = "~/Library/Application Support/Corona/Simulator/Plugins/plugin/"
-  local dst = "./plugin/kwik/template"
-
-  local archInfo = system.getInfo("architectureInfo")
-  local isWindows = archInfo == "x86" or archInfo == "x64" or
-                   archInfo == "IA64" or archInfo == "ARM"
-  --
-  if isWindows then
-    -- Use the correct path for Windows
-    src = os.getenv("APPDATA") .. "\\Corona Labs\\Corona Simulator\\Plugins\\plugin\\"
-    print("src", src)
-    src = '"' .. src .. '"'
-    dst = '"' .. dst:gsub("/", "\\") .. '"'
-  else
-    src = src:gsub(" ", "\\ ")
-    dst = dst:gsub(" ", "\\ ")
-  end
-  --
-  -- print(system.getInfo("environment") )
-  if system.getInfo("environment") == "simulator" then
-    if mode == "editing" then
-      if isDir("plugin") then
-        -- print("editing")
-        local scripts = {
-          'rm -rf ./plugin',
-          'mv '..src..'_kwik '..src..'/kwik',
-          'mv '..src..'_kwik.lua '..src..'/kwik.lua',
-        }
-        for i, v in next, scripts do
-          os.execute(v)
-        end
-        return false
-      end
-    elseif mode == "dev" then
-      if not isDir("plugin") then
-        -- print("dev")
-        local scripts
-        if isWindows then
-          print("You need to run as administrator",
-               'runas /user:Administrator "cmd /c mklink /D plugin ..\\..\\kwik5-plugin"')
-          scripts = {
-            'move '..src..'kwik '..src..'\\_kwik',
-            'move '..src..'kwik.lua '..src..'\\_kwik.lua',
-          }
-        else
-          scripts = {
-            'ln -s ../../kwik5-plugin plugin',
-            'mv '..src..'kwik '..src..'/_kwik',
-            'mv '..src..'kwik.lua '..src..'/_kwik.lua',
-          }
-        end
-        --print(system.getInfo("architectureInfo"))
-        for i, v in next, scripts do
-          os.execute(v)
-        end
-        return false
-      end
-    elseif mode == "production" then
-      if not isDir("plugin") then
-        --
-        local scripts
-        if isWindows then
-          scripts = {
-            "mkdir plugin",
-            "copy " .. src .. "kwik.lua plugin\\",
-            "xcopy /E /I " .. src .. "kwik plugin\\kwik",
-            "rmdir /S /Q " .. dst:gsub("/", "\\")
-          }
-        else
-          scripts = {
-            "mkdir plugin",
-            "cp -f " .. src .. "kwik.lua plugin",
-            "cp -rf " .. src .. "kwik plugin",
-            "rm -rf " .. dst
-          }
-        end
-        --
-        print(system.getInfo("architectureInfo"))
-
-        for i, v in next, scripts do
-          print("Executing: " .. v)
-          os.execute(v)
-        end
-        return false
-      end
-    end
-  end
-  return true
 end
---
-if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
-  local lldebugger = loadfile(os.getenv("LOCAL_LUA_DEBUGGER_FILEPATH"))()
-  lldebugger.start()
-end
---
---if setPlugin(mode) then
-  kwik.bootstrap(props)
---end
---
+

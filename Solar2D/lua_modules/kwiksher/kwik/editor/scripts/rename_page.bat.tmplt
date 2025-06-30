@@ -1,8 +1,0 @@
-@echo off
-
-cd {{dst}}
-copy /Y {{newIndex}} App\{{book}}\
-move App\{{book}}\assets\images\{{page}} App\{{book}}\assets\images\{{newName}}
-move App\{{book}}\commands\{{page}} App\{{book}}\commands\{{newName}}
-move App\{{book}}\components\{{page}} App\{{book}}\components\{{newName}}
-exit
