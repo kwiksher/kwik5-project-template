@@ -6,6 +6,7 @@ local actionCommandTableListener = require(parent.."actionCommandTableListener")
 local buttonContext              = require(parent.."buttonCommandContext")
 local util                       = require(kwikGlobal.ROOT.."lib.util")
 local widget                     = require("widget")
+local keyEventManager            = require(kwikGlobal.ROOT .. "editor.keyEventManager")
 
 M.top = display.contentCenterY-- 22
 M.left = nil
@@ -17,10 +18,6 @@ M.radius = 20
 M.touchthreshold = 0   -- touchthreshold or display.actualContentWidth * .1
 M.groupName = "rootGroup"
 M.selections = {}
-
-local function onKeyEvent(event)
-  return M:onKeyEvent(event)
-end
 
 local option, newText = util.newTextFactory {
     x = 0,
@@ -146,11 +143,11 @@ function M:create(UI)
 end
 
 function M:didShow(UI)
-  Runtime:addEventListener("key", onKeyEvent)
+  keyEventManager.register("actionCommandTable", function(event) return M:onKeyEvent(event) end, 1)
 end
 --
 function M:didHide(UI)
-  Runtime:removeEventListener("key", onKeyEvent)
+  keyEventManager.unregister("actionCommandTable")
 end
 
 function M:hide()

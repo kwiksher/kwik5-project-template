@@ -6,6 +6,7 @@ M.name = current
 M.weight = 1
 
 local App = require("Application")
+local keyEventManager = require(kwikGlobal.ROOT .. "editor.keyEventManager")
 
 --
 -- local button = require("com.gieson.Button")
@@ -194,7 +195,8 @@ function M:show()
       return false
     end
 
-    Runtime:addEventListener("key", self.onKeyEvent)
+    -- Register with centralized key event manager
+    keyEventManager.register("actionCommandButtons", self.onKeyEvent, 1)
 
 end
 
@@ -205,7 +207,8 @@ function M:hide()
     end
     self.isVisible = false
 
-  Runtime:removeEventListener("key", self.onKeyEvent)
+  -- Unregister from centralized key event manager
+  keyEventManager.unregister("actionCommandButtons")
 
 end
 

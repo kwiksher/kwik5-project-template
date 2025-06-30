@@ -5,6 +5,7 @@ require("dragitemscrollview")
 
 local utileditor = require(kwikGlobal.ROOT.."editor.util")
 local util = require(kwikGlobal.ROOT.."lib.util")
+local keyEventManager = require(kwikGlobal.ROOT.."editor.keyEventManager")
 
 -- local layerTableCommands = require(kwikGlobal.ROOT.."editor.parts.layerTableCommands")
 
@@ -247,12 +248,12 @@ end
 
 function M:didShow(UI)
   -- print("didShow")
-  Runtime:addEventListener("key", onKeyEvent)
+  keyEventManager.register("layersTable", onKeyEvent, 1)
 end
 --
 function M:didHide(UI)
   -- print("didHide")
-  Runtime:removeEventListener("key", onKeyEvent)
+  keyEventManager.unregister("layersTable")
 end
 --
 function M:hide(UI)

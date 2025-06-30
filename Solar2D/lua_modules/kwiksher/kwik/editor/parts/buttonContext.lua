@@ -5,6 +5,8 @@ M.name = current
 M.width = 60
 M.model = {"New", "Select"}
 
+local keyEventManager = require("editor.keyEventManager")
+
 local isCancel = function(event)
   local ret = event.phase == "up" and event.keyName == 'escape'
   return ret or (system.getInfo("platform") == "android" and event.keyName == "back")
@@ -176,7 +178,7 @@ function M:show()
     return false
   end
   self.group.isVisible = true
-  Runtime:addEventListener("key", self.onKeyEvent)
+  keyEventManager.register("buttonContext_" .. (self.name or "default"), self.onKeyEvent, 1)
 end
 
 function M:hide()
@@ -191,7 +193,7 @@ function M:hide()
     end
   end
   self.group.isVisible = false
-  Runtime:removeEventListener("key", self.onKeyEvent)
+  keyEventManager.unregister("buttonContext_" .. (self.name or "default"))
 end
 
 M.new = function(instance)

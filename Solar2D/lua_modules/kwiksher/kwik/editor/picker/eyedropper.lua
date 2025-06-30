@@ -1,5 +1,6 @@
 local M={}
 local shapes = require("shapes")
+local keyEventManager = require("editor.keyEventManager")
 
 function M:create(listener)
   self.triangle = shapes.triangle.right.tL( display.contentCenterX, display.contentCenterY, 10, 20 )
@@ -37,14 +38,14 @@ end
 function M:show()
   native.setProperty("mouseCursorVisible", false)
   Runtime:addEventListener("mouse",self)
-  Runtime:addEventListener("key", self)
+  keyEventManager.register("eyedropper", function(event) return self:key(event) end, 1)
 
 end
 
 function M:destroy()
   self.triangle:removeSelf()
   Runtime:removeEventListener("mouse",self)
-  Runtime:removeEventListener("key",self)
+  keyEventManager.unregister("eyedropper")
   native.setProperty("mouseCursorVisible", true)
 end
 

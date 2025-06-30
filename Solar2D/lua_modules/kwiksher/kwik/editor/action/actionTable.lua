@@ -4,6 +4,7 @@ local actionTableListener      = require(parent.."actionTableListener")
 local buttonContext            = require(parent.."buttonContext")
 --    local layerTableCommands = require(kwikGlobal.ROOT.."editor.parts.layerTableCommands")
 local util                     = require(kwikGlobal.ROOT.."lib.util")
+local keyEventManager          = require(kwikGlobal.ROOT .. "editor.keyEventManager")
 --
 -- local actionbox = require(root.."parts.actionbox")
 -- local buttons = require(parent.."buttons")
@@ -15,10 +16,6 @@ M.width = 80 -- 52
 M.groupName = "rootGroup"
 
 local option, newText = util.newTextFactory{anchorX=0}
-
-local function onKeyEvent(event)
-  return M:onKeyEvent(event)
-end
 
 --
 --  Selector will show action Table
@@ -180,14 +177,14 @@ function M:didShow(UI)
   if self.newButton then
     self.newButton.isVisible = true
   end
-  Runtime:addEventListener("key", onKeyEvent)
+  keyEventManager.register("actionTable", function(event) return M:onKeyEvent(event) end, 1)
 end
 --
 function M:didHide(UI)
   if self.newButton then
     self.newButton.isVisible = false
   end
-  Runtime:removeEventListener("key", onKeyEvent)
+  keyEventManager.unregister("actionTable")
 end
 
 function M:hide()
