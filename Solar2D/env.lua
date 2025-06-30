@@ -46,8 +46,10 @@ function M.setPlugin(mode)
   local src = "./lua_modules/kwiksher/kwik/"
   local current_path = system.pathForFile(src, system.ResourceDirectory)
   -- print(current_path)
-  if not lfs.chdir(current_path) then
+  if current_path == nil or not lfs.chdir(current_path) then
+    print("###")
     print("### Please use installer.sh(mac) or installer.bat(win) to set up kwik")
+    print("###")
     return false
   end
 
