@@ -1,8 +1,0 @@
-#!/bin/bash
-
-cd {{dst}}
-cp -f {{newMain}} .
-# mv App/{{book}} App/{{book}}.bak 
-open App/{{book}}
-
-exit 0

@@ -1,7 +1,0 @@
-@echo off
-
-cd {{dst}}
-copy /Y {{newIndex}} App\{{book}}\components\{{page}}\
-move App\{{book}}\components\{{page}}\joints\{{joint}}.lua App\{{book}}\components\{{page}}\joints\{{newName}}.lua
-powershell -Command "(Get-Content App\{{book}}\components\{{page}}\joints\{{newName}}.lua) -replace '{{group}}', '{{newName}}' | Set-Content App\{{book}}\components\{{page}}\joints\{{newName}}.lua"
-exit
