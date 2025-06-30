@@ -1,0 +1,23 @@
+## PUT
+
+### creates a new lua file in App directory if not exist. scafolding a lua file
+
+@host=http://localhost:9090
+
+GET /app
+###
+GET /book
+PUT /book
+GET /book/page01
+
+### update index.lua too
+PUT /book/page01/newLayer
+PUT /book/page01/newLayer/?class=linear
+PUT /book/page01/groupOne/groupTwo/E
+PUT /book/page01/groupOne/groupTwo/E?class=linear
+
+### events
+GET /book/commands/page01
+PUT /book/commands/page01/myAction
+PUT /book/commands/page01/myEvents.testHandler
+

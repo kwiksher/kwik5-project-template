@@ -1,0 +1,30 @@
+## DELETE
+
+### creates a new lua file in App directory if not exist. scafolding a lua file
+
+@host=http://localhost:9090
+
+GET /app
+
+###
+GET /bookTest01
+PUT /bookTest01
+PUT /bookTest01/page2
+
+### update index.lua too
+PUT /bookTest01/page2/imageOne
+PUT /bookTest01/page2/imageOne/?class=linear
+DELETE /bookTest01/page2/imageOne
+DELETE  /bookTest01/page2/newLaye/?class=linear
+
+### custom class?
+GET /components/custom
+PUT /components/custom/newClass
+PUT /bookTest01/page2/imageOne/?class=newClass
+DELETE /components/custom/newClass
+DELETE /bookTest01/page2/imageOne/?class=newClass
+
+### events
+GET /bookTest01/commands/page2
+PUT /bookTest01/commands/page2/newEvent
+DELETE /bookTest01/commands/page2/newEvent

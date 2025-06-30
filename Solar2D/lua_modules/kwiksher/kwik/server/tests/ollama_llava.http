@@ -1,0 +1,46 @@
+#@host=http://kwiksher-hx80g.local:11434
+@host=https://5fkh59dz-11434.asse.devtunnels.ms
+@api_key=app-om5ZUzj8u3HOF08P5NzyQfF1
+
+{{
+
+const myPath = "/Users/ymmtny/Documents/GitHub/kwik-visual-code/develop/Solar2D/kwik-editor-proj/Solar2D/server/tests/"
+// read_png.js
+const fs = require('fs');
+
+function base64Encode(file) {
+  // read binary data
+  var bitmap = fs.readFileSync(file);
+  // convert binary data to base64 encoded string
+  return Buffer.from(bitmap).toString('base64');
+}
+
+// Replace 'your_image.png' with the actual path to your PNG file
+const base64Image = base64Encode(myPath+'a_white_dog.jpeg');
+module.exports = { base64Image };
+}}
+
+@fooExtended=<img src='data:image/jpeg;base64, {{base64Image}}'>
+
+POST /api/generate
+Content-Type: application/json
+
+{
+  "model": "llava",
+  "prompt":"What is in this picture?",
+  "stream": false,
+  "images": ["{{base64Image}}"]
+}
+
+POST /api/generate
+Content-Type: application/json
+
+{
+  "model": "llava",
+  "prompt":"hello",
+  "stream": false,
+}
+
+
+GET /
+

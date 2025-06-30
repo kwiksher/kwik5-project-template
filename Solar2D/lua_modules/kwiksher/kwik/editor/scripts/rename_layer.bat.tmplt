@@ -1,0 +1,11 @@
+@echo off
+
+cd {{dst}}
+copy /Y {{newIndex}} App\{{book}}\components\{{page}}\
+move App\{{book}}\components\{{page}}\layers\{{layer}}.lua App\{{book}}\components\{{page}}\layers\{{newName}}.lua
+powershell -Command "(Get-Content App\{{book}}\components\{{page}}\layers\{{newName}}.lua) -replace '{{layer}}', '{{newName}}' | Set-Content App\{{book}}\components\{{page}}\layers\{{newName}}.lua"
+{{#class}}
+move App\{{book}}\components\{{page}}\layers\{{layer}}_{{.}}.lua App\{{book}}\components\{{page}}\layers\{{newName}}_{{.}}.lua
+powershell -Command "(Get-Content App\{{book}}\components\{{page}}\layers\{{newName}}_{{.}}.lua) -replace '{{layer}}', '{{newName}}' | Set-Content App\{{book}}\components\{{page}}\layers\{{newName}}_{{.}}.lua"
+{{/class}}
+exit

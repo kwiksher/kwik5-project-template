@@ -1,0 +1,141 @@
+@host=http://localhost:9090
+
+###
+GET /unittest
+
+### run pegasus server if not running, and return books
+GET /app
+
+###
+GET /bookFree
+
+###
+GET /bookFree/page1
+
+### selectLayer
+GET /bookFree/page1/title
+
+###
+GET /bookFree/page1/title/?class=linear
+
+### modify layer props
+POST /bookFree/page1/title/
+Content-Type: application/yaml
+
+{
+  alpha=0.5
+}
+
+### save layer props with the current value
+PUT /bookFree/page1/title/
+Content-Type: application/yaml
+
+
+### save layer props with value
+POST /bookFree/page1/title/
+Content-Type: application/yaml
+
+{
+  alpha=0.1
+}
+
+### new blink animation with default props
+POST /bookFree/page1/title/?class=blink
+Content-Type: application/yaml
+
+name: blinkTest
+
+### change values of props
+POST /bookFree/page1/title/?class=blink
+Content-Type: application/lua
+
+{
+  name = "blinkTest",
+  class="Blink",
+  from = {
+    x = nil,
+    y = nil,
+    alpha = 0,
+    xScale = 0.5,
+    yScale = 0.5,
+    rotation = 0
+  },
+  to = {
+    x = nil,
+    y = nil,
+    alpha = 1,
+    xScale = 1.5,
+    yScale = 1.5,
+    rotation = 0
+  },
+  controls = {
+    autoPlay=true,
+    delay=0,
+    duration=100,
+    loop=10,
+    reverse=false,
+    resetAtEnd=false,
+  },
+}
+
+### save
+PUT /bookFree/page1/title/?class=blink
+Content-Type: application/yaml
+
+name: blinkTest
+
+
+### new/modify linear
+POST /bookFree/page1/title/?class=linear
+Content-Type: application/yaml
+
+class: Linear
+name: linear
+from:
+  x: 0
+  y: 0
+  alpha: 0
+  xScale: 1
+  yScale: 1
+  rotation: 0
+to:
+  x: 100
+  y: 400
+  alpha: 1
+  xScale: 1.5
+  yScale: 1.5
+  rotation: 90
+controls:
+  type: null
+  autoPlay: true
+  delay: 0
+  duration: 1000
+  loop: 1
+  reverse: false
+  resetAtEnd: false
+  easing: null
+  xSwipe: null
+  ySwipe: null
+audio:
+  name: ""
+  volume: 5
+  channel: 1
+  loop: 1
+  fadeIn: false
+  repeatable: false
+breadcrumbs:
+  dispose: true
+  shape: ""
+  color:
+    - 1
+    - 0
+    - 1
+  interval: 300
+  time: 2000
+  width: 30
+  height: 30
+layerOptions:
+  referencePoint: Center
+  deltaX: 0
+  deltaY: 0
+actionName: eventTwo

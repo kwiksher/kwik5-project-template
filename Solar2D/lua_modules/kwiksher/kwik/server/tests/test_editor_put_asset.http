@@ -1,0 +1,42 @@
+## PUT
+
+### creates a new lua file in App directory if not exist. scafolding a lua file
+
+@host=http://localhost:9090
+
+GET /book/assets
+
+/*
+{
+  audios = {},
+  fonts = {},
+  -- images = {}
+  particles = {},
+  sprites = {},
+  videos = {
+    {
+      name = "videoA.mp4",
+      path = "videos",
+      links = {{page= "page01", layers = {"imageOne"}},
+              {page= "page02", layers = {"iamgeTwo"}}}
+      },
+  },
+}
+*/
+
+### download and save?
+
+/*
+  see [Generative AI > Image](/ai/image/)
+*/
+PUT /book/assets/videos
+
+url:  https://kwiksher.com/tutorials/Video/kwikplant.mp4
+
+POST /book/page/newLayer/?class=video
+
+url: video.mp4
+
+POST /book/page/newLayer/?class=video
+
+url:  https://kwiksher.com/tutorials/Video/kwikplant.mp4

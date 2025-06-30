@@ -1,0 +1,9 @@
+@host=http://kwiksher-hx80g.local:11434
+
+POST api/embeddings
+Content-Type: application/json
+
+{
+    "model": "nomic-embed-text",
+    "prompt": "The sky is blue because of Rayleigh scattering"
+}

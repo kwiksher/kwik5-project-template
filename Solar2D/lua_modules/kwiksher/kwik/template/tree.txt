@@ -1,0 +1,48 @@
+.
+├── assets
+│   ├── audios
+│   │   ├── long
+│   │   ├── short
+│   │   └── sync
+│   │       ├── en
+│   │       ├── jp
+│   │       ├── page01_Text1.mp3
+│   │       ├── page01_Text1.txt
+│   │       ├── page02_Text1.mp3
+│   │       └── page02_Text1.txt
+│   ├── fonts
+│   ├── images
+│   │   └── pageX
+│   │       ├── bg.png
+│   │       ├── bg@2x.png
+│   │       └── bg@4x.png
+│   ├── model.json
+│   ├── particles
+│   ├── sprites
+│   ├── thumbnails
+│   ├── videos
+│   └── www
+├── build.settings
+├── commands
+│   └── pageX
+├── components
+│   └── pageX
+│       ├── audios
+│       ├── groups
+│       ├── page
+│       │   ├── common.lua
+│       │   ├── common_curl.lua
+│       │   └── controllers
+│       │       ├── button.lua
+│       │       ├── pinch.lua
+│       │       ├── swipe.lua
+│       │       └── swipe_curl.lua
+│       ├── timers
+│       └── variables
+├── config.lua
+├── mediators
+├── scenes
+    ├── index.lua
+    └── pageX
+        ├── index.lua
+        ├── layer_image.lua

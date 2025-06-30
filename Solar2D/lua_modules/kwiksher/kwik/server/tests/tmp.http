@@ -1,0 +1,46 @@
+@host=http://kwiksher-hx80g.local
+@api_key=app-om5ZUzj8u3HOF08P5NzyQfF1
+
+@foo=iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==
+@fooExtended=<img src='data:image/png;base64, {{foo}}'>
+
+{{
+
+const myPath = "/Users/ymmtny/Documents/GitHub/kwik-visual-code/develop/Solar2D/kwik-editor-proj/Solar2D/server/tests/"
+// read_png.js
+const fs = require('fs');
+
+function base64Encode(file) {
+  // read binary data
+  var bitmap = fs.readFileSync(file);
+  // convert binary data to base64 encoded string
+  return Buffer.from(bitmap).toString('base64');
+}
+
+// Replace 'your_image.png' with the actual path to your PNG file
+const base64Image = base64Encode(myPath+'a_white_dog.jpeg');
+module.exports = { base64Image };
+}}
+
+@fooExtended=<img src='data:image/jpeg;base64, {{base64Image}}'>
+
+POST /v1/workflows/run
+Authorization: Bearer {{api_key}}
+Content-Type: application/json
+
+{
+    "inputs": {"text":"tell me what is this image? \n{{fooExtended}}"},
+    "response_mode": "blocking",
+    "user": "ymmtny"
+}
+
+
+POST /v1/workflows/run
+Authorization: Bearer {{api_key}}
+Content-Type: application/json
+
+{
+    "inputs": {"texts":"hello"},
+    "response_mode": "blocking",
+    "user": "ymmtny"
+}

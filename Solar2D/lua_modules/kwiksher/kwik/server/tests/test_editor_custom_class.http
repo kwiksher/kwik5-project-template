@@ -1,0 +1,32 @@
+@host=http://localhost:9090
+
+### run pegasus server if not running, and return books
+GET /app
+
+### NEW custom class, scafolding a skelton lua
+GET /components/custom
+PUT /components/custom/newClass
+
+###
+GET /bookFree
+
+###
+GET /bookFree/page1
+
+### selectLayer
+GET /bookFree/page1/title
+
+### get a class of a layer if not exists, it will return null
+GET /bookFree/page1/title/?class=newClass
+
+### set new class to a layer for a preview
+POST /bookFree/page1/title/?class=newClass
+Content-Type: application/yaml
+
+message: hello
+
+### save
+PUT /bookFree/page1/title/?class=newClass
+Content-Type: application/yaml
+
+message: hello

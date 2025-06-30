@@ -6,7 +6,7 @@ M.libs = {
 }
 
 -- enable the line belor for kwik5-sample-books/App/keyvoard. See https://kwiksher.github.io/kwik5docs/tutorial/keyboard/index.html
-local keyboardPath = system.pathForFile("keyboard", system.ResourceDirectory)
+--local keyboardPath = system.pathForFile("keyboard", system.ResourceDirectory)
 if keyboardPath then
   local attr = lfs.attributes(keyboardPath)
   if attr and attr.mode == "directory" then

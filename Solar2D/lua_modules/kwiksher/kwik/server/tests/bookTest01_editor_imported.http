@@ -1,0 +1,43 @@
+@host=http://localhost:9090
+
+### run pegasus server if not running, and return books
+GET /app
+
+###
+GET /bookTest01
+
+###
+GET /bookTest01/page1
+
+### selectLayer
+GET /bookTest01/page1/imageOne
+
+### get a class of a layer if not exists, it will return null
+GET /bookTest01/page1/imageOne/?class=imported
+
+### set new class to a layer for a preview
+  /*
+  if layerProps is missing, it uses the layerProps of the path
+  response contains the curret layerProps, classProps
+  */
+POST /bookTest01/page1/imageOne/?class=imported
+Content-Type: application/yaml
+
+path: bookTest01.components.parts.layers.imageOne
+name: imageOne
+### update the properties
+POST /bookTest01/page1/imageOne/?class=imported
+Content-Type: application/yaml
+
+path: bookTest01.components.parts.layers.imageOne
+name: imageOne
+layerProps:
+  x: 100
+  y: 100
+classProps:
+  linear: {}
+  button: {}
+
+### save
+PUT /bookTest01/page1/imageOne/?class=imported
+Content-Type: application/yaml
