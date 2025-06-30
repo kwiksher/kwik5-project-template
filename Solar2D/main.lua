@@ -1,4 +1,28 @@
-local kwik = require "plugin.kwik"
+-- Get the correct resource directory path
+local resourcePath = system.pathForFile("", system.ResourceDirectory)
+package.path = resourcePath .. "/lua_modules/?.lua;" .. resourcePath .. "/lua_modules/?/?.lua;"..package.path
+
+print("Resource path:", resourcePath)
+print("Package path:", package.path)
+print("Trying to require kwiksher.kwik...")
+
+-- Check if the file exists using absolute path
+local file_path = resourcePath .. "/lua_modules/kwiksher/kwik.lua"
+local file = io.open(file_path, "r")
+if file then
+    print("File exists:", file_path)
+    file:close()
+else
+    print("File NOT found:", file_path)
+    -- Also check what's in the resource directory
+    print("Resource directory files:")
+    local lfs = require("lfs")
+    for file in lfs.dir(resourcePath) do
+        print("  ", file)
+    end
+end
+
+local kwik = require("kwiksher.kwik")
 local lfs = require("lfs")
 --
 system.setTapDelay(0.2)
@@ -41,7 +65,7 @@ end
 --[[
   if kwik.restore() then
     native.showAlert("kwik", "restored comment it out kwik.restore()")
-    return 
+    return
   end
 --]]
 --
@@ -85,11 +109,11 @@ local function setPlugin(mode)
   --
   local src = "~/Library/Application Support/Corona/Simulator/Plugins/plugin/"
   local dst = "./plugin/kwik/template"
-  
+
   local archInfo = system.getInfo("architectureInfo")
-  local isWindows = archInfo == "x86" or archInfo == "x64" or 
+  local isWindows = archInfo == "x86" or archInfo == "x64" or
                    archInfo == "IA64" or archInfo == "ARM"
-  --                 
+  --
   if isWindows then
     -- Use the correct path for Windows
     src = os.getenv("APPDATA") .. "\\Corona Labs\\Corona Simulator\\Plugins\\plugin\\"
@@ -178,7 +202,7 @@ if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
   lldebugger.start()
 end
 --
-if setPlugin(mode) then
+--if setPlugin(mode) then
   kwik.bootstrap(props)
-end
+--end
 --

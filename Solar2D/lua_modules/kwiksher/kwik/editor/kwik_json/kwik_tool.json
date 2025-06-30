@@ -1,0 +1,488 @@
+[
+    {
+        "id": "Pages",
+        "txt": "Project and Pages",
+        "img": "k2_toolPage",
+        "cmds" :[
+            {
+                "id":"butProjProp",
+                "img":"k2_ProjProp",
+                "txt":"Project Properties",
+                "script":"projProperties"
+            },
+            {
+                "id":"butPageProp",
+                "img":"k2_PageProp",
+                "txt":"Page Properties",
+                "script":"pageProperties"
+            },
+            {
+                "id":"butAddLib",
+                "img":"k2_ExtLib",
+                "txt":"Add External Library",
+                "script":"addExternalLib"
+            },
+            {
+                "id":"butAddMain",
+                "img":"k2_AddMain",
+                "txt":"Add Main.lua External Code",
+                "script":"addMain"
+            },
+            {
+                "id":"butAddCode",
+                "img":"k2_AddCode",
+                "txt":"Add External Code",
+                "script":"addExternalCode"
+            },
+            {
+                "id":"butProjOrderGroup",
+                "img":"k2_groupOrder",
+                "txt":"Order Groups",
+                "script":"orderGroup"
+            },
+            {
+                "id":"butAddPage",
+                "img":"k2_NewPage",
+                "txt":"Add new page",
+                "script":"addPage"
+            },
+            {
+                "id":"butAddAudio",
+                "img":"k2_addAudio",
+                "txt":"Add audio",
+                "script":"addPageAudio"
+            },
+            {
+                "id":"butToolsAction",
+                "img":"k2_Actions",
+                "txt":"Actions",
+                "script":"addInter",
+                "params":["undefined","undefined", "act"]
+            },
+            {
+                "id":"butToolsTimer",
+                "img":"k2_Timers",
+                "txt":"Timers",
+                "script":"addTimer"
+            },
+            {
+                "id":"butAddGroup",
+                "img":"k2_Groups",
+                "txt":"Create Groups",
+                "script":"createGroup"
+            },
+            {
+                "id":"butHide",
+                "img":"k2_Hide",
+                "txt":"Hide layer or group",
+                "script":"hideLayer"
+            },
+            {
+                "id":"butAddVar",
+                "img":"k2_addVar",
+                "txt":"Create Variable",
+                "script":"addVar"
+            }
+        ]
+    },
+    {
+        "id": "Layers",
+        "txt": "Layers and Replacements",
+        "img": "k2_toolLayer",
+        "cmds" :[
+            {
+                "id":"butLayerProp",
+                "img":"k2_LayerProp",
+                "txt":"Layer Properties",
+                "script":"layerProperties"
+            },
+            {
+                "id":"butLayerLang",
+                "img":"k2_setLang",
+                "txt":"Set language to a layer",
+                "script":"setLang"
+            },
+            {
+                "id":"butRepSS",
+                "img":"k2_repSprite",
+                "txt":"Sprite sheet replacement",
+                "script":"addSpriteRep"
+            },
+            {
+                "id":"butRepSync",
+                "img":"k2_repSync",
+                "txt":"Sync audio and text replacement",
+                "script":"textSync"
+            },
+            {
+                "id":"butRepVideo",
+                "img":"k2_repVideo",
+                "txt":"Video replacement",
+                "script":"addVideoRep"
+            },
+            {
+                "id":"butRepWeb",
+                "img":"k2_repWeb",
+                "txt":"Web replacement",
+                "script":"addWebRep"
+            },
+            {
+                "id":"butRepVector",
+                "img":"k2_repVector",
+                "txt":"Vector replacement",
+                "script":"addVectorRep"
+            },
+            {
+                "id":"butRepMap",
+                "img":"k2_repMap",
+                "txt":"Map replacement",
+                "script":"addMapRep"
+            },
+            {
+                "id":"butRepMultiplier",
+                "img":"k2_repMultiplier",
+                "txt":"Multiplier replacement",
+                "script":"addMultiplierRep"
+            },
+            {
+                "id":"butRepParticles",
+                "img":"k2_repParticles",
+                "txt":"Particles replacement",
+                "script":"addParticlesRep"
+            },
+            {
+                "id":"butRepDynamic",
+                "img":"k2_repDyn",
+                "txt":"Dynamic text replacement",
+                "script":"addDynamicRep"
+            },
+            {
+                "id":"butRepTextInput",
+                "img":"k2_repInput",
+                "txt":"Text input replacement",
+                "script":"addTextInputRep"
+            },
+            {
+                "id":"butRepCountdown",
+                "img":"k2_repCounter",
+                "txt":"Countdown replacement",
+                "script":"addCountdownRep"
+            },
+            {
+                "id":"butRepText",
+                "img":"k2_repText",
+                "txt":"Text replacement",
+                "script":"addTextRep"
+            },
+            {
+                "id":"butRepMask",
+                "img":"k2_repMask",
+                "txt":"Mask replacement",
+                "script":"addMaskRep"
+            }
+        ]
+    },
+    {
+        "id": "Anim",
+        "txt": "Animations",
+        "img": "k2_toolAnim",
+        "cmds" :[
+            {
+                "id":"butAnimLinear",
+                "img":"k2_animLinear",
+                "txt":"Linear animation",
+                "script":"addAnimLinear"
+            },
+            {
+                "id":"butAnimPath",
+                "img":"k2_animPath",
+                "txt":"Path animation",
+                "script":"addAnimPath"
+            },
+            {
+                "id":"butAnimSwitch",
+                "img":"k2_animSwitch",
+                "txt":"Switch images widget",
+                "script":"widDissolve"
+            },
+            {
+                "id":"butAnimRotation",
+                "img":"k2_animRotation",
+                "txt":"Rotation widget",
+                "script":"widRotation"
+            },
+            {
+                "id":"butAnimPulse",
+                "img":"k2_animPulse",
+                "txt":"Pulse widget",
+                "script":"widPulse"
+            },
+            {
+                "id":"butAnimBounce",
+                "img":"k2_animBounce",
+                "txt":"Bounce widget",
+                "script":"widBounce"
+            },
+            {
+                "id":"butAnimBlink",
+                "img":"k2_animBlink",
+                "txt":"Blink widget",
+                "script":"widBlink"
+            },
+            {
+                "id":"butAnimShake",
+                "img":"k2_animShake",
+                "txt":"Shake widget",
+                "script":"widShake"
+            },
+            {
+                "id":"butAnimFilter",
+                "img":"k2_animFilter",
+                "txt":"Filter",
+                "script":"addFilter"
+            }
+        ]
+    },
+    {
+        "id": "Inter",
+        "txt": "Interactions",
+        "img": "k2_toolInter",
+        "cmds" :[
+            {
+                "id":"butInterButton",
+                "img":"k2_intButton",
+                "txt":"Add button",
+                "script":"addInter",
+                "params":["undefined","undefined", "but"]
+            },
+            {
+                "id":"butInterDrag",
+                "img":"k2_intDrag",
+                "txt":"Drag object",
+                "script":"dragLayer"
+            },
+            {
+                "id":"butInterSwipe",
+                "img":"k2_intSwipe",
+                "txt":"Swipe object",
+                "script":"swipeLayer"
+            },
+            {
+                "id":"butInterPinch",
+                "img":"k2_intPinch",
+                "txt":"Pinch object",
+                "script":"pinchLayer"
+            },
+            {
+                "id":"butInterSpin",
+                "img":"k2_intSpin",
+                "txt":"Spin object",
+                "script":"spinLayer"
+            },
+            {
+                "id":"butInterShake",
+                "img":"k2_intShake",
+                "txt":"Enable shake",
+                "script":"addShake"
+            },
+            {
+                "id":"butInterScroll",
+                "img":"k2_intScroll",
+                "txt":"Scroll object",
+                "script":"addScroll"
+            },
+            {
+                "id":"butInterParallax",
+                "img":"k3_intParallax",
+                "txt":"Parallax object",
+                "script":"addParallax"
+            },
+            {
+                "id":"butInterCanvas",
+                "img":"k2_intCanvas",
+                "txt":"Set canvas",
+                "script":"addCanvas"
+            }
+        ]
+    },
+    {
+        "id": "Physics",
+        "txt": "Physics",
+        "img": "k2_toolPhysics",
+        "cmds" :[
+            {
+                "id":"butPhyEnv",
+                "img":"k2_PhyProp",
+                "txt":"Environment properties",
+                "script":"physicsProperties"
+            },
+            {
+                "id":"butPhyBody",
+                "img":"k2_PhyBody",
+                "txt":"Set body properties",
+                "script":"physicsBody"
+            },
+            {
+                "id":"butPhyForce",
+                "img":"k2_PhyForce",
+                "txt":"Set force properties",
+                "script":"physicsForce"
+            },
+            {
+                "id":"butPhyJoint",
+                "img":"k2_PhyJoint",
+                "txt":"Set joint properties",
+                "script":"physicsJoint"
+            },
+            {
+                "id":"butPhyColl",
+                "img":"k2_PhyColl",
+                "txt":"Set collisions",
+                "script":"physicsCollision"
+            }
+        ]
+    },
+    {
+        "id": "Header",
+        "txt": "",
+        "img": "",
+        "cmds" :[
+            {
+                "id":"butNewProj",
+                "img":"k2_newProject",
+                "txt":"New project",
+                "script":"newProject"
+            },
+            {
+                "id":"butOpenProj",
+                "img":"k2_openProject",
+                "txt":"Open project",
+                "script":"openProject"
+            },
+            {
+                "id":"butOpenLastProj",
+                "img":"k2_openLast",
+                "txt":"Open last project",
+                "script":"openLastProject"
+            }
+        ]
+    },
+    {
+        "id": "Footer",
+        "txt": "",
+        "img": "",
+        "cmds" :[
+            {
+                "id":"butSettings",
+                "img":"k2_Settings",
+                "txt":"Settings",
+                "script":"openSettings"
+            },
+            {
+                "id":"cloudBut",
+                "img":"k2_cloud",
+                "txt":"Get updates",
+                "script":"checkUpdates"
+            }
+        ]
+    },
+    {
+        "id": "Publish",
+        "txt": "",
+        "img": "",
+        "cmds" :[
+            {
+                "id":"bPreview",
+                "img":"k2_publish",
+                "txt":"Publish",
+                "script":"preview"
+            },
+            {
+                "id":"pngBut",
+                "img":"k2_pngquant",
+                "txt":"Compress PNG files",
+                "script":"compressPNG"
+            },
+            {
+                "id":"pngGen",
+                "img":"k2_pngasm",
+                "txt":"Assemble PNG files",
+                "script":"assemblePNG"
+            },
+            {
+                "id":"butExpImg",
+                "img":"k2_expImages2",
+                "txt":"Export images",
+                "script":"setExpImages"
+            },
+            {
+                "id":"butExpAll",
+                "img":"k2_expPages2",
+                "txt":"Export current page only",
+                "script":"setExpAll"
+            },
+            {
+                "id":"butClose",
+                "img":"k2_close",
+                "txt":"Close Project",
+                "script":"closeProject"
+            }
+        ]
+    },
+    {
+        "id": "Edit",
+        "txt": "",
+        "img": "",
+        "cmds" :[
+            {
+                "id":"butSwitch",
+                "img":"k2_switchPages",
+                "txt":"Switch to Pages view",
+                "script":"",
+                "key":80
+            },
+            {
+                "id":"butSwitch2",
+                "img":"k2_switchComp",
+                "txt":"Switch to Components view",
+                "script":"",
+                "key":67
+            }
+        ]
+    },
+    {
+        "id": "Search",
+        "txt": "",
+        "img": "",
+        "cmds" :[
+            {
+                "id":"butSearchKind",
+                "img":"k2_searchKind",
+                "txt":"Search by Kind/Name",
+                "script":""
+            },
+            {
+                "id":"butPaste",
+                "img":"k2_Paste",
+                "txt":"Paste interaction",
+                "script":"pastePage",
+                "params":["SelA", "InfoA", "PageA" , "len"]
+            },
+            {
+                "id":"butCopy",
+                "img":"k2_Copy",
+                "txt":"Copy interaction",
+                "script":"copyPage",
+                "params":["SelA", "InfoA", "PageA" , "len", "str"]
+            },
+            {
+                "id":"butDelete2",
+                "img":"k2_Trash",
+                "txt":"Delete",
+                "script":"delPage",
+                "params":["SelA","InfoA","PageA"],
+                "key":8
+            }
+        ]
+    }
+]

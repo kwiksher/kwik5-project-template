@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd {{dst}}
+cp {{newIndex}} App/{{book}}/components/{{page}}/
+mv App/{{book}}/components/{{page}}/joints/{{joint}}.lua App/{{book}}/components/{{page}}/joints/{{newName}}.lua
+sed -i '' 's/{{group}}/{{newName}}/g'  App/{{book}}/components/{{page}}/joints/{{newName}}.lua
+exit

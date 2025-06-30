@@ -7,7 +7,7 @@ REPO="kwiksher/kwik5-project-template"
 PLUGIN_NAME="plugin"
 PLUGIN_DIR="$HOME/Library/Application Support/Corona/Simulator/Plugins/$PLUGIN_NAME"
 SKINS_DIR="$HOME/Library/Application Support/Corona/Simulator/Skins"
-TEMP_FILE="/tmp/plugin.data.tgz"
+TEMP_FILE="/tmp/kwik5-plugin.tgz"
 
 # Create the plugin directory if it doesn't exist
 mkdir -p "$PLUGIN_DIR"
@@ -23,17 +23,17 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Extract the download URL for plugin.data.tgz
-DOWNLOAD_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": ".*plugin.data.tgz"' | cut -d'"' -f4)
+# Extract the download URL for kwik5-plugin.tgz
+DOWNLOAD_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": ".*kwik5-plugin.tgz"' | cut -d'"' -f4)
 
 # Check if we found a download URL
 if [ -z "$DOWNLOAD_URL" ]; then
-    echo "Could not find plugin.data.tgz in the latest release."
+    echo "Could not find kwik5-plugin.tgz in the latest release."
     echo "Please check if the file exists in the latest release of $REPO."
     exit 1
 fi
 
-# Download the plugin.data.tgz file
+# Download the kwik5-plugin.tgz file
 echo "Downloading plugin from $DOWNLOAD_URL..."
 if curl -L -o "$TEMP_FILE" "$DOWNLOAD_URL"; then
     echo "Download complete."
@@ -48,7 +48,7 @@ rm -f "$PLUGIN_DIR/kwik.lua"
 rm -rf "$PLUGIN_DIR/kwik"
 echo "Old files removed."
 
-# Extract the plugin.data.tgz file
+# Extract the kwik5-plugin.tgz file
 echo "Installing plugin to $PLUGIN_DIR..."
 if tar -xzf "$TEMP_FILE" -C "$PLUGIN_DIR"; then
     echo "Plugin installed successfully!"

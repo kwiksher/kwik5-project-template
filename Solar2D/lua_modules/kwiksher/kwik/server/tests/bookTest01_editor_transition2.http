@@ -1,0 +1,267 @@
+# https://httpyac.github.io/guide/request.html#request-line
+#
+# load sample-projects/Misc/Transition2/page.lua from server.index
+#   composer.gotoScene is called in index.lua by harness.gotoScene when doGet
+
+@host=http://localhost:9090
+
+### run pegasus server if not running, and return books
+GET /app
+
+###
+GET /bookTest01/page1
+
+### this is a normal solar2D composer's page not with kwik's index model
+GET /bookTest01/page1/imageOne
+
+### selectLayer with class if exists or not
+GET /bookTest01/page1/imageOne/?class=transition2
+
+### selectLayer with class if exists or not
+GET /bookTest01/page1/imageOne/?class=transition2.to
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.to
+Content-Type: application/lua
+
+{
+	{x = 260, delay = 400},
+	{y = 260, xScale = -0.8, delay = 800},
+	{xScale = -1, yScale = 1, delay = 400},
+	{x = 60, xScale = -0.6, yScale = 0.6, delay = 1200},
+	{rotation = 135, delay = 400},
+	{x = 260, y = 60, alpha = 0, delay = 400},
+	{rotation = 0, alpha = 1, delay = 800},
+	{x = 60, delay = 400},
+	{xScale = 0.8, yScale = 0.8, delay = 400}
+}
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.to
+Content-Type: application/yaml
+
+- {rotation: 135, delay: 400}
+- {delay: 400, x: 260}
+- delay: -400
+  x: 260
+- {y: 260, xScale: -0.8, delay: 800}
+- {yScale: 1, xScale: -1, delay: 400}
+- {yScale: 0.6, x: 60, delay: 1200, xScale: -0.6}
+- {y: 60, x: 260, alpha: 0, delay: 400}
+- {rotation: 0, alpha: 1, delay: 800}
+- {delay: 400, x: 60}
+- {yScale: 0.8, xScale: 0.8, delay: 400}
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.to
+Content-Type: application/json
+
+[
+  {
+    "delay": 400,
+    "x": 260
+  },
+  {
+    "y": 260,
+    "xScale": -0.8,
+    "delay": 800
+  },
+  {
+    "yScale": 1,
+    "xScale": -1,
+    "delay": 400
+  },
+  {
+    "yScale": 0.6,
+    "x": 60,
+    "delay": 1200,
+    "xScale": -0.6
+  },
+  {
+    "rotation": 135,
+    "delay": 400
+  },
+  {
+    "y": 60,
+    "x": 260,
+    "alpha": 0,
+    "delay": 400
+  },
+  {
+    "rotation": 0,
+    "alpha": 1,
+    "delay": 800
+  },
+  {
+    "delay": 400,
+    "x": 60
+  },
+  {
+    "yScale": 0.8,
+    "xScale": 0.8,
+    "delay": 400
+  }
+]
+###
+POST /bookTest01/page1/imageOne/?class=transition2.blink
+Content-Type: application/yaml
+
+time: 500
+
+# Default: 1000
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.dissolve
+Content-Type: application/yaml
+
+time: 1000
+delay: 0
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.fadeIn
+Content-Type: application/yaml
+
+time: 2000
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.fadeOut
+Content-Type: application/yaml
+
+time: 2000
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.moveBy
+Content-Type: application/yaml
+
+x: 200
+y: 100
+time: 2000
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.moveTo
+Content-Type: application/yaml
+
+x: 200
+y: 400
+time: 2000
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.scaleBy
+Content-Type: application/yaml
+
+xScale: 2.0
+yScale: 1.5
+time: 2000
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.scaleTo
+Content-Type: application/yaml
+
+xScale: 2.0
+yScale: 1.5
+time: 2000
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.bounce
+Content-Type: application/yaml
+
+height: 400
+width: 200
+time: 1000
+iterations: 0
+# Bounces upwards. Set to negative value to bounce downwards.
+# Bounces to the right. Set to negative value to bounce left.
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.color
+Content-Type: application/yaml
+
+- startColor: {1, 1, 0, 1}
+# Yellow
+- endColor: {1, 0, 0, 1}
+# Red
+- time: 500,
+- stroke: true,
+# Enable stroke color fade
+- fill: false,
+# Disable fill color fade
+- reverse: true,
+# Will fade back from endColor to startColor when done
+- iterations: 0
+# Repeat forever
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.glow
+Content-Type: application/yaml
+
+- startColor: {1, 1, 0, 1}
+		# Yellow
+- endColor: {1, 0, 0, 1}
+		# Red
+- time: 1000
+- stroke: true
+		# Enable stroke color glow
+- fill: false
+		# Disable fill color glow
+
+###
+/bookTest01/page1/imageOne/?class=transition2.moveBungy
+Content-Type: application/yaml
+
+- time: 750
+- offsetY: 200
+- offsetX: 0
+- iterations: 0
+- iterationDelay: 100
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.moveSine
+Content-Type: application/yaml
+
+- radiusX: 400
+- radiusY: 200
+- time: 5000
+- startDegreesX: 180
+- startDegreesY: 90
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.waterBalloon
+Content-Type: application/yaml
+
+- time: 500
+- intensity: 0.4
+		# A value between 0-1. Default: 0.25.
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.zRotate
+Content-Type: application/yaml
+
+- degrees: 360
+# Required. The number of degrees (delta) that the object should rotate, either from its current zRotation angle or from params.startDegrees.
+- startDegrees: 180
+# Optional. If specified, the object will always start rotating FROM this angle instead of from its current zRotation angle. Default: 0.
+- time: 2000
+- iterations: 0
+
+###
+POST /bookTest01/page1/imageOne/?class=transition2.easing.inOutSine
+Content-Type: application/yaml
+
+- reverse: true
+- perspective: 0.25
+# A value between 0-1. Defaults to 0.5.
+- horizontal: true
+# Set to true for horizontal rotation (around the y axis). Default is vertical rotation (around the x axis)
+- disableStrokeScaling: true
+# Set to true to disable scaling of strokes. Defaults is false, i.e. strokes are scaled.
+- shading: true
+# Applies a shading effect as the object rotates away
+- shadingDarknessIntensity: 0.75
+# A value between 0-1. Default: 1. Requires shading=true.
+- shadingBrightnessIntensity: 0.25
+# A value between 0-1. Default: 0. Requires shading=true.
+- static: false
+# Optional, default: false. Set to true to apply final rotation immediately without doing an actual transition:  If static=true, params like time, iterations etcetera have no effect.
+hideBackside: true
+# Optional, default = false. Set to true to hide the target object if it appears to be turned away from the display.
+

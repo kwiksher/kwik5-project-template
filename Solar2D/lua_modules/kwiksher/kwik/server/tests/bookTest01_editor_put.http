@@ -1,0 +1,37 @@
+## PUT
+
+### creates a new lua file in App directory if not exist. scafolding a lua file
+
+@host=http://localhost:9090
+
+GET /app
+
+###
+GET /bookTest01
+PUT /bookTest01
+GET /bookTest01/page1
+PUT /bookTest01/page4
+
+### update index.lua too
+PUT /bookTest01/page1/imageFour
+PUT /bookTest01/page1/imageOne/?class=linear
+
+### events
+GET /bookTest01/commands/page1
+PUT /bookTest01/commands/page1/eventOne
+PUT /bookTest01/commands/page01/myEvents.testHandler
+
+// create page2 and copy *.lua from page2 by the copy script
+PUT /bookTest01/page2?copyFrom=bookTest01/page1
+
+//rename
+PUT /bookTest01/page1?newName=page01
+PUT /bookTest01/page01/imageOne?newName=image01
+PUT /bookTest01/commands/page01/eventOne?newName=event01
+
+// layer group
+PUT /bookTest01/page1/groupOne/groupTwo/index
+PUT /bookTest01/page1/groupOne/image01
+PUT /bookTest01/page1/groupOne/groupTwo/image20
+PUT /bookTest01/page1/groupOne/groupTwo/image20?class=linear
+//

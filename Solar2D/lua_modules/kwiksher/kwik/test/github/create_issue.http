@@ -1,0 +1,10 @@
+@token={{$dotenv token}}
+
+POST https://api.github.com/repos/kwiksher/kwik5-plugin/issues
+Content-Type: application/json
+Authorization: token {{token}}
+
+{
+  "title": "Refactor kwik/test/helper.lua",
+  "body": "After reviewing the `kwik/test/helper.lua` file, I've identified several potential refactoring tasks and issues. Here's a list of them: "
+}

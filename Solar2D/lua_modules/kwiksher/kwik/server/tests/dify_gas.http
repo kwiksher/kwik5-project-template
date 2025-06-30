@@ -1,0 +1,22 @@
+
+@host=http://kwiksher-hx80g.local
+@api_key=app-om5ZUzj8u3HOF08P5NzyQfF1
+
+@prompt='What is unusual about this image: \n<img src="data:image/jpeg;base64,{{img_str}}">'
+
+@img_str="iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="
+
+POST /v1/workflows/run
+Authorization: Bearer {{api_key}}
+Content-Type: application/json
+
+{
+    "inputs": {"texts":"What is unusual about this image: \n<img src='data:image/jpeg;base64,{{img_str}}'>"},
+    "response_mode": "streaming",
+    "user": "ymmtny"
+}
+
+
+// @host=http://kwiksher-hx80g.local
+// POST /api/generate
+>
