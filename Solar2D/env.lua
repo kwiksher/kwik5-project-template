@@ -35,6 +35,7 @@ local  function createSymbolicLink()
     end
     --print(system.getInfo("architectureInfo"))
     for i, v in next, scripts do
+      print(v)
       os.execute(v)
     end
     return false
@@ -50,6 +51,33 @@ function M.setPlugin(mode)
     print("###")
     print("### Please use installer.sh(mac) or installer.bat(win) to set up kwik")
     print("###")
+    if mode == "debug" then
+      createSymbolicLink()
+    else
+      -- Check for installer files
+      local archInfo = system.getInfo("architectureInfo")
+      local isWindows = archInfo == "x86" or archInfo == "x64" or
+                       archInfo == "IA64" or archInfo == "ARM"
+
+      local path
+      path = system.pathForFile("", system.ResourceDirectory).."/../"
+      if isWindows then
+        path = path:gsub('/', '\\')
+      end
+
+      if path then
+        print("Found installer file:", path)
+        local cmd = 'cd "'.. path.. '"; source install_plugin.sh'
+        if isWindows then
+           cmd = "cd .. & start cmd /k call install_plugin.bat"
+        end
+        print(cmd)
+        os.execute(cmd)
+      else
+        print("No installer found. Please download and run the appropriate installer:")
+        print("https://github.com/kwiksher/kwik5-project-template/tree/develop")
+      end
+    end
     return false
   end
 
@@ -116,8 +144,6 @@ function M.setPlugin(mode)
         end
         return false
       end
-    elseif mode == "debug" then
-      return createSymbolicLink()
     end
   end
   return true
