@@ -6,8 +6,8 @@ local M = {
   languageBooks = {lingualSample = "en"}
 }
 --
-local pageCommand = require("plugin.kwik").pageCommand
-local model = require("plugin.kwik").model
+local pageCommand = require("kwiksher.kwik").pageCommand
+local model = require("kwiksher.kwik").model
 --
 model.debug = true
 model.URL = "http://localhost:8080/bookshop/"

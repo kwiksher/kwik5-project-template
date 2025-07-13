@@ -3,9 +3,12 @@ settings = {
         ["plugin.zip"] = {
             publisherId = "com.coronalabs",
         },
-       ["plugin.kwik"] = {
-            publisherId = "com.kwiksher",
-       },
+      --  ["plugin.kwik"] = {
+      --       publisherId = "com.kwiksher",
+            --   supportedPlatforms = {
+            --    ["iphone"] = {url = "https://github.com/kwiksher/kwik5-project-template/releases/download/20250413-1302/kwik5-plugin.tgz"},
+            -- }
+      --  },
        -- Google in app billing v2
        -- ["plugin.google.iap.billing.v2"] = {
        --     -- required
@@ -29,6 +32,9 @@ settings = {
         {
             publisherId = "com.coronalabs"
         },
+        -- ["plugin.mouseHover"] = {
+        --   publisherId = "sg.btn"
+        -- }
     },
     orientation = {
    --  default = "portrait",
@@ -138,7 +144,7 @@ settings = {
     },
     excludeFiles = {
         -- Exclude all files at all paths which end with "secret.txt"
-        all = {  "Icon*.png", "Images.xcassets", "Icon*.ico", "Icon*.icns", "*.vbs", "*.bat", "*.command", "copy_projects"},
+        all = {  "Icon*.png", "Images.xcassets", "Icon*.ico", "Icon*.icns", "*.vbs", "*.bat", "*.command", "copy_projects", "lua_modules/kwiksher/resources/template/*"},
         android = { "LaunchScreen.storyboardc" },
         win32 = { "LaunchScreen.storyboardc" },
     },
