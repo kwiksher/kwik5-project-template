@@ -1,0 +1,12 @@
+@echo off
+REM Generated backup script by Kwik
+cd {{dst}}
+
+{{#files}}
+set LUA_PATH={{file}}
+if exist %LUA_PATH% (
+    copy %LUA_PATH% %LUA_PATH%.bak
+)
+{{/files}}
+
+exit

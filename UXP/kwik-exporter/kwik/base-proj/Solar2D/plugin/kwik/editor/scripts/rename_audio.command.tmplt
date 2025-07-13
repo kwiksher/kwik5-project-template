@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd {{dst}}
+cp {{newIndex}} App/{{book}}/components/{{page}}/
+mv App/{{book}}/components/{{page}}/audios/{{subclass}}/{{audio}}.lua App/{{book}}/components/{{page}}/audios/{{subclass}}/{{newName}}.lua
+exit
