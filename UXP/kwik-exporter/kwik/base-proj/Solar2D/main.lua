@@ -19,8 +19,8 @@ if mode == "editing" or mode == "dev" then
     gotoPage = "landscape",
     language = "", -- empty string "" is for a single language project
     position = {x = 0, y = 0},
-    gotoLastBook = true,
-    unitTest = true,
+    gotoLastBook = false,
+    unitTest = false,
     httpServer = false,
     showPageName = true
   }
@@ -38,9 +38,12 @@ elseif mode == "production" then
   }
 end
 
+--[[ create_book_bg.bat mybook "page1 page2"
+--]]
+
 --[[
   if kwik.restore() then
-    native.showAlert("kwik", "restored comment it out kwik.restore()")
+    native.showAlert("kwik", "restored, comment out kwik.restore()")
     return 
   end
 --]]
@@ -121,12 +124,32 @@ local function setPlugin(mode)
         -- print("dev")
         local scripts
         if isWindows then
-          print("You need to run as administrator",
-               'runas /user:Administrator "cmd /c mklink /D plugin ..\\..\\kwik5-plugin"')
+          -- print("You need to run as administrator",
+          --      'runas /user:Administrator "cmd /c mklink /D plugin ..\\..\\kwik5-plugin"')
+
+          -- Dynamically calculate the full path for `..\..\kwik5-plugin`
+          local kwik5_plugin_path = current_dir .. "\\..\\..\\kwik5-plugin"
+          kwik5_plugin_path = kwik5_plugin_path:gsub("/", "\\") -- Ensure Windows-style backslashes
+          -- print("Full path to kwik5-plugin:", kwik5_plugin_path)
+
+          -- Dynamically calculate the plugin path based on current directory
+          local plugin_path = current_dir .. "\\plugin"
+          plugin_path = plugin_path:gsub("/", "\\") -- Ensure Windows-style backslashes
+          -- print("Full path to plugin:", plugin_path)
+
           scripts = {
             'move '..src..'kwik '..src..'\\_kwik',
             'move '..src..'kwik.lua '..src..'\\_kwik.lua',
           }
+
+          -- Create the command using the dynamically calculated paths
+          local command = string.format(
+            'powershell.exe -Command "Start-Process cmd -ArgumentList \'/c mklink /D "%s" "%s"\' -Verb RunAs"',
+            plugin_path, kwik5_plugin_path
+          )
+          -- print("Attempting to create a symbolic link as Administrator...")
+          -- print(command)
+          os.execute(command)
         else
           scripts = {
             'ln -s ../../kwik5-plugin plugin',
@@ -136,7 +159,7 @@ local function setPlugin(mode)
         end
         --print(system.getInfo("architectureInfo"))
         for i, v in next, scripts do
-          os.execute(v)
+           os.execute(v)
         end
         return false
       end

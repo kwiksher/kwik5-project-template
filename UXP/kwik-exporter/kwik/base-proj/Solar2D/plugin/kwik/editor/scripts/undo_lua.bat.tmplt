@@ -1,0 +1,11 @@
+@echo off
+cd {{dst}}
+
+{{#files}}
+if exist {{file}}.bak (
+  copy /Y {{file}}.bak {{file}}
+  del {{file}}.bak
+)
+{{/files}}
+
+exit

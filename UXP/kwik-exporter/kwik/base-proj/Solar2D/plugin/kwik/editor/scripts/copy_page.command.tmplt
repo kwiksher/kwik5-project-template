@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd {{dst}}
+cp {{newIndex}} App/{{book}}/index.lua
+cp -r App/{{book}}/assets/images/{{page}} App/{{book}}/assets/images/{{newName}}
+cp -r App/{{book}}/commands/{{page}} App/{{book}}/commands/{{newName}}
+cp -r App/{{book}}/components/{{page}} App/{{book}}/components/{{newName}}
+
+exit

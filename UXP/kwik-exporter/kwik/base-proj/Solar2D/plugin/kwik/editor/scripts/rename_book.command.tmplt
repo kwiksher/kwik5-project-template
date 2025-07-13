@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd {{dst}}
+cp {{newMain}} .
+mv App/{{book}} App/{{newName}}
+exit
