@@ -1,31 +1,40 @@
 local env = require("env")
+env.book   = "book"
+env.goPage = "landscape"
+env.lang   = ""
+--
+env.restore = false
+--
 env.mode = "development"
--- local env.mode = "production"
--- local env.mode = "debug" -- need kwik5-plugin src from kwiksher's repo
+-- env.mode = "production"
+-- env.mode = "debug" -- need kwik5-plugin src from kwiksher's repo
+
 --
 if env.mode == "development" or env.mode == "debug" then
   env.props = {
-    name = "book",
+    name = env.book,
     editor = true,
-    gotoPage = "landscape",
-    language = "", -- empty string "" is for a single language project
+    gotoPage = env.goPage,
+    language = env.lang, -- empty string "" is for a single language project
     position = {x = 0, y = 0},
     gotoLastBook = true,
     unitTest = true,
     httpServer = false,
-    showPageName = true
+    showPageName = true,
+    turnOffNativeVideo = true
   }
 elseif env.mode == "production" then
   env.props = {
-    name = "book",
+    name = env.book,
     editor = false,
-    gotoPage = "landscape",
-    language = "", -- empty string "" is for a single language project
+    gotoPage = env.goPage,
+    language = env.lang, -- empty string "" is for a single language project
     position = {x = 0, y = 0},
     gotoLastBook = false,
     unitTest = false,
     httpServer = false,
-    showPageName = false
+    showPageName = false,
+    turnOffNativeVideo = false
   }
 end
 --
@@ -40,13 +49,10 @@ if env.setPlugin(env.mode)  then
   kwik.useGradientBackground()
   --
 
-  --[[
-    if kwik.restore() then
-      native.showAlert("kwik", "restored comment it out kwik.restore()")
-      return
-    end
-  --]]
-  --
+  if env.restore and  kwik.restore() then
+    native.showAlert("kwik", "restored comment it out kwik.restore()")
+    return
+  end
 
   kwik.setCustomModule(
     "custom",
