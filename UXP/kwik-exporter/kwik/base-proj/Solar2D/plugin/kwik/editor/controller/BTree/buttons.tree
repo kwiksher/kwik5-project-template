@@ -1,0 +1,32 @@
+->
+|  ?
+|  |  ->
+|  |  |  (!new)
+|  |  |  [load json]
+|  |  ->
+|  |  |  (new)
+|  |  |  [load template]
+|  =1
+|  |  [Copy]
+|  |  [Paste]
+|  |  ?
+|  |  |  ->
+|  |  |  |  (!visible)
+|  |  |  |  [Show]
+|  |  |  ->
+|  |  |  |  (visiable)
+|  |  |  |  [Hide]
+|  |  [Preview]
+|  |  ?
+|  |  |  ->
+|  |  |  |  (!publish)
+|  |  |  |  [Save json]
+|  |  |  ->
+|  |  |  |  (publish)
+|  |  |  |  [Save json]
+|  |  |  |  [Render lua]
+|  |  |  |  [Reload]
+|  |  |  |  [Select book]
+|  |  |  |  [Select page]
+|  |  |  |  [Select layer]
+|  |  [Cancel]

@@ -17,8 +17,8 @@ if env.mode == "development" or env.mode == "debug" then
     gotoPage = env.goPage,
     language = env.lang, -- empty string "" is for a single language project
     position = {x = 0, y = 0},
-    gotoLastBook = true,
-    unitTest = true,
+    gotoLastBook = false,
+    unitTest = false,
     httpServer = false,
     showPageName = true,
     turnOffNativeVideo = true

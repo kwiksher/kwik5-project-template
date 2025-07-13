@@ -1,0 +1,9 @@
+@echo off
+REM Generated copy script by Kwik
+cd {{dst}}
+
+{{#cmd}}
+{{.}}
+{{/cmd}}
+
+exit

@@ -1,0 +1,57 @@
+local M = {}
+--
+local pageCommand = require("components.bookstore.controller.pageCommand")
+local model = require("components.bookstore.model.base")
+--
+M.debug = true
+M.URL = "http://localhost:8080/bookshop/"
+-- M.URL = nil means simple IAP store without network download
+-- downloadBtn, savingTxt won'T be used. You don't need to create them.
+----------
+M.LIBRARY_PAGES = {en = "App.bookTOC.components.library", jp="App.bookTOC.components.libraryJP"}
+M.DIALOG_PAGES  = {en = "App.bookTOC.components.dialog", jp= "App.bookTOC.components.dialogJP"}
+--
+M.name = "catalog01"
+--
+M.books = {
+  bookFree = {
+    name         = "bookFree",
+    versions     = {"en", "jp"},
+    titles       = {en="bookOne", jp=""},
+    descriptions = {en="desc", jp =""},
+    isFree       = true,
+    isOnlineImg  = false,
+    isDownloadable = false,
+    image        = "App/bookFree/assets/images/page1/bg.png",
+    productNames = {apple = "bookFree", google = "bookFree", amazon = "bookFree"},
+  },
+  bookOne = {
+    name         = "bookOne",
+    versions     = {"en", "jp"},
+    titles       = {en="bookOne", jp=""},
+    descriptions = {en="desc",jp=""},
+    isFree       = false,
+    isOnlineImg  = false, -- true
+    isDownloadable = false,
+    image        = "App/bookOne/assets/images/page1/bg.png",
+    productNames = {apple = "bookOne", google = "bookOne", amazon = "bookOne"},
+  }
+}
+--
+M.purchaseAlertMessages = {en="Your purchase was successful", jp="購入されました"}
+M.restoreAlertMessages  = {en="Your items are being restored", jp="復元されました"}
+M.downloadErrorMessages = {en="Check network alive to download the content", jp="ネットワーク接続をご確認ください。"}
+M.descriptions = {en="", jp=""}
+M.titles = {en="", jp=""}
+
+--
+M.gotoSceneEffect = "slideRight"
+M.showOverlayEffect = "slideBottom"
+
+--
+M.new = function()
+  return pageCommand.newBookstore(model)
+end
+--
+
+return M

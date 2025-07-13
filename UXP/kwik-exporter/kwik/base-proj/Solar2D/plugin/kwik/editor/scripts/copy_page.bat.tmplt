@@ -1,0 +1,9 @@
+@echo off
+
+cd {{dst}}
+copy /Y {{newIndex}} App\{{book}}\index.lua
+xcopy /E /I /Y App\{{book}}\assets\images\{{page}} App\{{book}}\assets\images\{{newName}}
+xcopy /E /I /Y App\{{book}}\commands\{{page}} App\{{book}}\commands\{{newName}}
+xcopy /E /I /Y App\{{book}}\components\{{page}} App\{{book}}\components\{{newName}}
+
+exit

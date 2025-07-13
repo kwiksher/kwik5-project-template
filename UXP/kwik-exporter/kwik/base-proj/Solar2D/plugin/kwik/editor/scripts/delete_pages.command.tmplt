@@ -1,0 +1,19 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(cd $(dirname $0); pwd)
+
+dst={{dst}}
+book={{book}}
+newIndex={{newIndex}}
+
+cd $dst/App/$book
+cp index.lua index.lua.bak
+cp "$newIndex" .
+
+{{#cmd}}
+{{.}}
+{{/cmd}}
+
+cd $SCRIPT_DIR/$dst
+
+exit

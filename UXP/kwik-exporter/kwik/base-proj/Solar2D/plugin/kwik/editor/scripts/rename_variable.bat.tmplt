@@ -1,0 +1,7 @@
+@echo off
+
+cd {{dst}}
+copy /Y {{newIndex}} App\{{book}}\components\{{page}}\
+move App\{{book}}\components\{{page}}\variables\{{variable}}.lua App\{{book}}\components\{{page}}\variables\{{newName}}.lua
+powershell -Command "(Get-Content App\{{book}}\components\{{page}}\variables\{{newName}}.lua) -replace '{{group}}', '{{newName}}' | Set-Content App\{{book}}\components\{{page}}\variables\{{newName}}.lua"
+exit

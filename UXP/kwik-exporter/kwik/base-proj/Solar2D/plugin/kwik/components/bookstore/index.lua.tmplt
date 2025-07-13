@@ -1,0 +1,44 @@
+local M = {}
+--
+local pageCommand = require("components.bookstore.controller.pageCommand")
+local model = require("components.bookstore.model.base")
+
+M.debug = {{iapDebug}}
+M.URL = "{{URL}}" -- http://localhost:8080/books/"
+-- M.URL = nil means simple IAP store without network download
+-- downloadBtn, savingTxt won'T be used. You don't need to create them.
+----------
+M.LIBRARY_PAGES = {en = "App.bookTOC.components.library", jp=""}
+M.DIALOG_PAGES  = {en = "App.bookTOC.components.dialog", jp= ""}
+--
+M.name = "catalog01"
+--
+M.books = {
+  {{#list}}
+  {{product}} = {
+    name         = "{{product}}",
+    versions     = {"en", "jp"},
+    titles       = {en="bookOne", jp=""},
+    descriptions = {en="desc", jp =""},
+    isFree       = true,
+    isOnlineImg  = false,
+    image        = "App/{{product}}/assets/images/title/bg.png",
+    productNames = {apple = "{{appleID}}", google = "{{googleID}}", amazon = "{{amazonID}}"},
+  },
+  {{/list}}
+}
+--
+M.purchaseAlertMessages = {en="Your purchase was successful", jp="購入されました"}
+M.restoreAlertMessages  = {en="Your items are being restored", jp="復元されました"}
+M.downloadErrorMessages = {en="Check network alive to download the content", jp="ネットワーク接続をご確認ください。"}
+--
+M.gotoSceneEffect = "slideRight"
+M.showOverlayEffect = "slideBottom"
+
+--
+M.new = function()
+  return pageCommand.newBookstore(model)
+end
+--
+
+return M
