@@ -21,6 +21,15 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Verify branch and list files
+      run: |
+        echo "Current Branch:"
+        git branch --show-current
+        echo "Recent Commits:"
+        git log -n 5 --oneline
+        echo "Listing files in Solar2D:"
+        ls -la Solar2D/
+
     - name: Set Time
       env:
         TZ: 'Asia/Tokyo'
