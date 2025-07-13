@@ -16,7 +16,7 @@
 -- demoScene.create( "Spyric Screen", true )
 
 -- Require the screen module and set it to automatically monitor for resize events.
-local screen = require("extlib.spyric.screen")
+local screen = require("spyric.screen")
 
 local group = nil
 

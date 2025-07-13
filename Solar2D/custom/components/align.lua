@@ -1,4 +1,4 @@
-local Align = require("extlib.align")
+local Align = require("align")
 local M = {}
 
 local function slice (t, first, last)

@@ -5,7 +5,7 @@ local parent = current:match("(.-)[^%.]+$")
 local root = parent:sub(1, parent:len()-1):match("(.-)[^%.]+$")
 
 -- print(current, parent ,root)
--- local app = require("plugin.kwik.controller.Application").get()
+-- local app = require("kwiksher.kwik.controller.Application").get()
 -- local app = require("Application").get()
 
 -- local editor = require("editor.index")
@@ -16,7 +16,7 @@ local root = parent:sub(1, parent:len()-1):match("(.-)[^%.]+$")
 function M:showSceneCollection()
   local composer = require("composer")
   local name = "sceneCollection"
-  local collection = require("plugin.kwik.controller.sceneCollection").new()
+  local collection = require("kwiksher.kwik.controller.sceneCollection").new()
   composer.gotoScene( "sceneCollection",  {effect = "flip", time = 1000})
 end
 --
