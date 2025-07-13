@@ -1,8 +1,0 @@
-@echo off
-
-cd {{dst}}
-copy /Y {{newMain}} .
-REM move App/{{book}} App/{{newName}}
-start explorer App\{{book}}
-
-exit
