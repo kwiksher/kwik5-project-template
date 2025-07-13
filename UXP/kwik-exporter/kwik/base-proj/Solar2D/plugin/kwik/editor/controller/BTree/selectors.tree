@@ -1,0 +1,81 @@
+->
+|    ->
+|    |    (select book)
+|    |    [load book]
+|    ->
+|    |    (select page)
+|    |    [load page]
+|    ?    ->
+|    |    |   (select layer)
+|    |    |   [load layer]
+|    |    |   ?
+|    |    |   |  ->
+|    |    |   |  |  (select props)
+|    |    |   |  |  [editor props]
+|    |    |   |  ->
+|    |    |   |  |  !(press esc)
+|    |    |   |  |  ?
+|    |    |   |  |  |  ->
+|    |    |   |  |  |  |  (add component)
+|    |    |   |  |  |  |  ?
+|    |    |   |  |  |  |  |  ->
+|    |    |   |  |  |  |  |  |  (select animation)
+|    |    |   |  |  |  |  |  |  [editor component]
+|    |    |   |  |  |  |  |  ->
+|    |    |   |  |  |  |  |  |  (select replacements)
+|    |    |   |  |  |  |  |  |  [editor component]
+|    |    |   |  |  |  |  |  ->
+|    |    |   |  |  |  |  |  |  (select interactions)
+|    |    |   |  |  |  |  |  |  [editor component]
+|    |    |   |  |  |  |  |  ->
+|    |    |   |  |  |  |  |  |  (select physics)
+|    |    |   |  |  |  |  |  |  [editor component]
+|    |    |   |  |  |  ->
+|    |    |   |  |  |  |  (modify component)
+|    |    |   |  |  |  |  [editor component]
+|    |    |   |  |  |  ->
+|    |    |   |  |  |  |  (delete component)
+|    |    |   |  |  |  |  [editor component]
+|    |    |   |  ->
+|    |    |   |  |  (press esc)
+|    |    |   |  |  [editor component]
+|    |    ->
+|    |    |   (select component)
+|    |    |   ?
+|    |    |   |  ->
+|    |    |   |  |  (select audio)
+|    |    |   |  |  [load audio]
+|    |    |   |  ->
+|    |    |   |  |  (select group)
+|    |    |   |  |  [load group]
+|    |    |   |  ->
+|    |    |   |  |  (select timer)
+|    |    |   |  |  [load timer]
+|    |    |   |  ->
+|    |    |   |  |  (select variable)
+|    |    |   |  |  [load variable]
+|    |    |   |  ->
+|    |    |   |  |  (select joint)
+|    |    |   |  |  [load joint]
+|    |    ->
+|    |    |   (select asset)
+|    |    |   [load asset]
+|    |    |   ?
+|    |    |   |  ->
+|    |    |   |  |  (select asset props)
+|    |    |   |  |  [editor asset props]
+|    |    |   |  ->
+|    |    |   |  |  !(press esc)
+|    |    |   |  |  ?
+|    |    |   |  |  |  ->
+|    |    |   |  |  |  |  (add asset)
+|    |    |   |  |  |  |  [editor asset]
+|    |    |   |  |  |  ->
+|    |    |   |  |  |  |  (modify asset)
+|    |    |   |  |  |  |  [editor asset]
+|    |    |   |  |  |  ->
+|    |    |   |  |  |  |  (delete asset)
+|    |    |   |  |  |  |  [editor asset]
+|    |    |   |  ->
+|    |    |   |  |  (press esc)
+|    |    |   |  |  [editor asset]

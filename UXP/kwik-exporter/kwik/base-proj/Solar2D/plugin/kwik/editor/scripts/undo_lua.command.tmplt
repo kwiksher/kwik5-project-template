@@ -1,0 +1,10 @@
+cd {{dst}}
+
+{{#files}}
+if test -f {{file}}.bak; then
+  cp {{file}}.bak {{file}}
+  rm {{file}}.bak
+fi
+{{/files}}
+
+exit

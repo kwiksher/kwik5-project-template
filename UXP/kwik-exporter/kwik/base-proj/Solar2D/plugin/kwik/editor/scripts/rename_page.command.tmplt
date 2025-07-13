@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd {{dst}}
+cp "{{newIndex}}" App/{{book}}/
+mv App/{{book}}/assets/images/{{page}} App/{{book}}/assets/images/{{newName}}
+mv App/{{book}}/commands/{{page}} App/{{book}}/commands/{{newName}}
+mv App/{{book}}/components/{{page}} App/{{book}}/components/{{newName}}
+
+exit
