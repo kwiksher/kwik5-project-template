@@ -60,6 +60,13 @@ jobs:
         filename: ${{ env.CCX_NAME}}.exporter_PS.ccx
         exclusions: '*.git*'
 
+    - name: Tag and Push
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git tag -a "${{ env.CURRENT_DATETIME }}" -m "Release ${{ env.CURRENT_DATETIME }}"
+        git push origin "${{ env.CURRENT_DATETIME }}"
+
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v2
