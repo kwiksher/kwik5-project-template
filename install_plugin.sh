@@ -4,7 +4,7 @@
 
 # Variables
 REPO="kwiksher/kwik5-project-template"
-SOLAR2D_DIR= "./Solar2D"
+SOLAR2D_DIR="./Solar2D"
 LUA_MODULES_TARGET="$SOLAR2D_DIR/lua_modules"
 PLUGIN_DIR="$SOLAR2D_DIR/lua_modules/kwiksher"
 SKINS_DIR="$HOME/Library/Application Support/Corona/Simulator/Skins"
@@ -20,6 +20,7 @@ mkdir -p "$SKINS_DIR"
 
 # Fetch the latest release information
 echo "Fetching information about the latest release..."
+echo "https://api.github.com/repos/$REPO/releases/latest"
 RELEASE_INFO=$(curl -s "https://api.github.com/repos/$REPO/releases/latest")
 if [ $? -ne 0 ]; then
     echo "Failed to connect to GitHub API. Please check your internet connection."
@@ -81,6 +82,18 @@ tar -xzf "$TEMP_SRC_FILE" -C "$EXTRACT_DIR"
 # Find the extracted folder (it will be named kwiksher-kwik5-project-template-*)
 EXTRACTED_SUBDIR=$(find "$EXTRACT_DIR" -maxdepth 1 -type d -name 'kwiksher-kwik5-project-template-*' | head -n 1)
 
+# --- START DEBUG BLOCK ---
+echo "--- DEBUG INFO ---"
+echo "EXTRACT_DIR is: $EXTRACT_DIR"
+echo "EXTRACTED_SUBDIR is: $EXTRACTED_SUBDIR"
+echo "Listing contents of EXTRACT_DIR:"
+ls -l "$EXTRACT_DIR"
+if [ -n "$EXTRACTED_SUBDIR" ]; then
+    echo "Listing contents of EXTRACTED_SUBDIR:"
+    ls -lR "$EXTRACTED_SUBDIR"
+fi
+echo "--- END DEBUG INFO ---"
+
 if [ -z "$EXTRACTED_SUBDIR" ]; then
     echo "Failed to find extracted source directory."
     exit 1
@@ -88,8 +101,8 @@ fi
 
 # Copy lua_modules to the target location
 echo "Copying lua_modules to $LUA_MODULES_TARGET..."
-if [ -d "$EXTRACTED_SUBDIR/lua_modules" ]; then
-  cp -R "$EXTRACTED_SUBDIR/lua_modules" "$SOLAR2D_DIR"
+if [ -d "$EXTRACTED_SUBDIR/Solar2D/lua_modules" ]; then
+  cp -R "$EXTRACTED_SUBDIR/Solar2D/lua_modules" "$SOLAR2D_DIR"
 else
   echo "lua_modules not found in source tarball, copying from ../kwik5-project-template/Solar2D..."
   if [ -d "../kwik5-project-template/Solar2D/lua_modules" ]; then

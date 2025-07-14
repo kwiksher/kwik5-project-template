@@ -1,234 +1,214 @@
 # kwik5-project-template
 
-- Solar2D plugin kwik
+- step1 kwik exporterのインストール
+- step2 プロジェクトフォルダでkwik exporterをセットアップ
+- step3 kwik exporterからパブリッシュされたコードでSolar2Dシミュレータを実行
 
-  このリポジトリのinstall_plugin.shを使用して取得できます。スクリプトはプラグインを~/Library/Application Support/Corona/Simulator/Plugins/plugin/フォルダにインストールします。
+## Step1 - Photoshop UXP .ccx
 
-    ```
-    source ./install_plugin.sh
-    ```
-
-  または手動でダウンロードします。
-
-  - https://github.com/kwiksher/kwik5-project-template/releases/latest/download/plugin.data.tgz
-
-    ~/Library/Application Support/Corona/Simulator/Plugins/plugin/にコピーします。
-
-      <img src="./img/2025-03-23-15-44-21.png" width="800" class="popup-image">
-
-- Photoshop UXP
+このリポジトリのリリースから、Photoshop用のkwik exporter ccxをダウンロードできます。
 
   - https://github.com/kwiksher/kwik5-project-template/releases/latest/download/com.kwiksher.kwik5.exporter_PS.ccx
 
-    - 上記のccx ファイルをダウンロードしてダブルクリックしてインストールします。
 
-    - Creative Cloud アプリが開き、ダイアログが表示されるので、インストールボタンをクリックします。
+    - ccxをダウンロードし、ダブルクリックしてインストールします。
+
+    - Creative Cloudアプリが開き、ダイアログが表示されたら、インストールボタンをクリックします。
 
       <img src="./img/2025-03-23-15-47-42.png" width="800" class="popup-image">
 
-      「はい」をクリックします。
+      はいをクリック
 
       <img src="./img/2025-03-23-15-48-24.png" width="800" class="popup-image">
 
-      Photoshopを開きます。
+      photoshopを開く
 
       <img src="./img/2025-03-23-15-49-01.png" width="600" class="popup-image">
 
-- kwik5-project-template
 
-   Photoshop > book
+### kwik5-project-templateのソースファイル
+
+kwik exporterにはこのリポジトリと同じコードベースが含まれており、kwik exporterの設定タブから新しいプロジェクトを作成すると、PCの指定したフォルダの下にPhotoshopとSolar2Dフォルダが作成されます。
+
+  - BookServer (作業中)
+  - **Photoshop** > book
     - landscape.psd
     - portrait.psd
 
       <img src="./img/2025-03-23-16-15-10.png" width="400" class="popup-image">
 
-   - Solar2D/main.lua
+  - Scripts(作業中)
 
-      Solar2D Simulatorで開きます。
+  - **Solar2D**/main.lua
 
-       - kwikEditorLandscape.lua: install_plugin.shで自動的にインストールされます、install_plugin.shを使用しない場合は、 ~/Library/Application Support/Corona/Simulator/Skins フォルダにコピーしてください。
+     Solar2Dシミュレータで開きます
 
-   - install_plugin.sh
+      - kwikEditorLandscape.lua: このファイルはinstall_plugin.shによって作成されるか、手動で~/Library/Application Support/Corona/Simulator/Skinsフォルダにコピーできます。
 
    - UXP/kwik-exporter
 
-       com.kwiksher.kwik5.exporter_PS.ccxをクリックする代わりに、Adobe UXP Developer Toolsを使用してkwik-exporterを開くことができます。
+      gh action: Create Release, ファイルをcom.kwiksher.kwik5.exporter_PS.ccxにパックします。
 
-## Photoshop kwik-exporter
+## Step2 - Photoshop kwik-exporter
 
-  プラグイン > Kwik Exporter を選択して開きます。Kwik ExporterはPhotoshopファイルがどこにあるか、またPSDファイルの画像とluaファイルをKwik Exporterが公開するSolar2D/App/bookフォルダがどこにあるかを知る必要があります。
+  プラグイン > Kwik Exporterで開きます。Kwik Exporterは、photoshopファイルの場所、Solar2D/App/bookフォルダの場所、そしてKwik Exporterがpsdファイルの画像とluaファイルをどこにパブリッシュするかを知る必要があります。
+
+  1. **~/Documents/GitHub/kwik5-project-template/のようなプロジェクトのルートディレクトリを選択します**
+
+  1. .psdファイルを含む**Photoshop/{book}**フォルダを選択します
+
+  1. kwik exporterが.psdファイルから画像/luaファイルをパブリッシュする**Solar2D/App/{book}**フォルダを選択します
+
+
+  Photoshopメニューのプラグイン > Kwik Exporterからkwik exporterを開くことができます。
 
   <img src="./img/2025-03-23-15-59-19.png" width="600" class="popup-image">
 
-  1. **kwik5-project-template**フォルダを選択します。
 
-      <img src="./img/2025-03-23-16-04-08.png" width="600" class="popup-image">
+1. 設定タブに移動
 
-  2. **Photoshop**フォルダを選択します。
+    New Projectで、プロジェクト名とブック名を設定できます。
 
-  3. **Solar2D/App/book**フォルダを選択します。
+    <img src="./img/2025-07-14-12-46-19.png" width="600" class="popup-image">
 
-  リセットチェックボックスを選択し、開くをクリックして新しいフォルダを参照することで、これらの設定を変更できます。
+    - 作成ボタン > New Kwik Project
 
-  - ルートプロジェクトフォルダを変更するための設定タブ
+      <img src="./img/2025-07-14-12-44-43.png" width="600" class="popup-image">
 
-    <img src="./img/2025-03-23-16-08-55.png" width="400" class="popup-image">
+   - Exportでプロジェクトを作成
 
-  - PhotoshopとSolar2Dのメニュータブ
+      <img src="./img/2025-07-14-12-52-36.png" width="1200" class="popup-image">
 
-    <img src="./img/2025-03-23-16-20-04.png" width="400" class="popup-image">
 
-  ### psdファイルを開く
+1. メニュータブに移動 - Photoshop Files
 
-  psdファイルの名前をクリックして開くことができます。
+    > Resetチェックボックスはボタンの状態をOpenに変更します
 
-  <img src="./img/2025-03-23-16-27-21.png" width="1600" class="popup-image">
+    - Openボタンで.psdファイルが存在するフォルダを選択
 
-  - ガイドレイアウトはKwik_ATNアクションによって作成されます。独自のガイドレイアウトを使用できます。
+      <img src="./img/2025-07-14-12-55-25.png" width="600" class="popup-image">
 
-    <img src="./img/2025-03-23-16-29-02.png" width="400" class="popup-image">
+    - psdファイルの名前をクリックして開くことができます
 
-  ### Publish
+      <img src="./img/2025-07-14-13-00-25.png" width="600" class="popup-image">
 
-  1. 公開するpsdファイルを選択します。**すべて**チェックボックスを使用し、公開ボタンをクリックできます。
+    - ガイドレイアウトはKwik_ATNアクションによって作成されます。独自のガイドレイアウトを使用することもできます
 
-      <img src="./img/2025-03-23-16-33-02.png" width="400" class="popup-image">
+      <img src="./img/2025-03-23-16-29-02.png" width="300" class="popup-image">
 
-  2. 公開ダイアログが表示されます。
+    - 設定タブ > ツール
+
+      セーフエリア用のガイドラインも利用可能です
+
+      <img src="./img/2025-07-14-13-04-39.png" width="600" class="popup-image">
+
+1. Solar2Dプロジェクト
+
+    kwik exporterが画像とluaファイルを作成するApp/{book}フォルダを選択します
+
+    <img src="./img/2025-07-14-13-12-09.png" width="600" class="popup-image">
+
+
+### パブリッシュ
+
+1. パブリッシュするpsdファイルを選択します。**all**チェックボックスを使用できます。その後、Publishボタンをクリックします。チェックマークの付いたpsdファイルがデフォルトでパブリッシュされます。
+
+  <img src="./img/2025-07-14-13-15-49.png" width="600" class="popup-image">
+
+  1. パブリッシュダイアログ
 
       <img src="./img/2025-03-23-16-34-23.png" width="400" class="popup-image">
 
-      Photoshop UXPの既知のバグのため、エクスポートタスクを自動化するためにスクリプトを使用する前に、画像のエクスポートが機能することを確認する必要があります。機能しない場合は、Photoshopを再起動する必要があります。
+      Photoshop UXPの既知のバグのため、エクスポートタスクを自動化するスクリプトを使用する前に、画像のエクスポートが機能することを確認する必要があります。機能しない場合は、Photoshopを再起動する必要があります。
 
-      チェックプロセスは、単純に手動でpngをエクスポートしてみることです。
+      確認プロセスは、単に手動でpngをエクスポートしてみることです。
 
-      - レイヤーを選択し、右クリックしてPNGとしてクイックエクスポートします。完了したら、このチェックを再度繰り返す必要はありません。
+      - レイヤーを選択し、右クリックしてPNGとしてクイック書き出しを選択します。一度完了すれば、この確認を再度繰り返す必要はありません。
 
         <img src="./img/2025-03-23-16-38-23.png" width="400" class="popup-image">
 
-      OK、動作することを確認したら、再度公開を選択し、**続行**をクリックして、Kwik Exporterによって選択されたpsdファイルを公開します。
+      OK、動作することを確認したら、再度Publishを選択し、**Continue**をクリックして、Kwik Exporterによって選択されたpsdファイルをパブリッシュします。
 
-      公開オプションとApp/bookフォルダパスのチェックボックスを確認してください。
+
+      パブリッシュオプションのチェックボックスと、App/bookフォルダのパスを確認してください。
 
       <img src="./img/2025-03-23-16-42-02.png" width="400" class="popup-image">
 
-      Kwik Exporterはpsdファイルとレイヤーをトラバースし、最後にダイアログを表示します。
+      Kwik exporterはpsdファイルとレイヤーを走査し、最後にダイアログを表示します。
 
       <img src="./img/2025-03-23-16-47-50.png" width="300" class="popup-image">
 
- 3. Load Simulator
+ 1. シミュレータをロード
 
-    <img src="./img/2025-03-23-20-29-59.png" width="600" class="popup-image">
+    <img src="./img/2025-07-14-13-18-08.png" width="600" class="popup-image">
 
-    install_plugin.shによってインストールされたKwik Edito Landscapeが選択されています。
+
+    <img src="./img/2025-03-23-20-29-59.png" width="800" class="popup-image">
+
+
+    install_plugin.shによってインストールされたKwik Editor Landscapeが選択されています。
 
     <img src="./img/2025-03-23-20-47-38.png" width="600" class="popup-image">
 
- ### Active Document
+ ### アクティブドキュメント
 
-  - Validate Name & Opacity: 名前と不透明度の検証
+<img src="./img/2025-07-14-13-19-35.png" width="600" class="popup-image">
 
-    日本語カタカナはアルファベットに変換されます。
+  - 名前と不透明度の検証
 
-    Photoshopは透明なレイヤーをpngとしてエクスポートしないため、不透明度ゼロは調整されます。
+    日本語のカタカナはアルファベットに変換されます
 
-  - Export Code: コードのエクスポート
+    不透明度ゼロは、Photoshopが透明なレイヤーをpngとしてエクスポートしないため調整されます
 
-    luaファイルのみをエクスポートします。
+  - コードのエクスポート
 
-  - Skip scenes: シーンをスキップします。これは、Photoshopファイルのリストにないpsdファイルを開く場合に便利です。
+    luaファイルのみをエクスポートします
 
-      チェックを外すと、シーン（ページ）インデックスは常にPhotoshopファイルのリストで更新されます。これがデフォルトの動作です。
+  - シーンをスキップ: これは、Photoshopファイルのリストにないpsdファイルを開く場合に便利です。
 
-  - Export Images: 画像のエクスポート
+      チェックを外すと、シーン（ページ）のインデックスは常にPhotoshopファイルのリストで更新されます。これがデフォルトの動作です。
 
-    - {option) shiftキーを押した場合は、選択したレイヤーのみが出力されます。
+  - 画像のエクスポート
 
-      アクティブドキュメントで**画像のエクスポート**を選択している間、選択した単一のレイヤーのみをエクスポートします。
+    - （オプション）shiftキーを押す
 
-    - 先頭に"-"（ハイフン）が付いたレイヤー名は、コードと画像をエクスポートするときに無視されます。
+      アクティブドキュメントの**Export images**中に選択された単一のレイヤーのみをエクスポートします
 
-    <img src="./img/2025-03-23-20-55-50.png" width="600" class="popup-image">
+    - "-"（ハイフン）で始まるレイヤー名は、コードと画像のエクスポート時に無視されます
 
- ### Layer Groups
-  - Unmerge マージ解除
+ ### レイヤーグループ
 
-    レイヤーパネルでレイヤーグループを選択すると、各子をエクスポートするように指定できます。
+<img src="./img/2025-07-14-13-20-09.png" width="600" class="popup-image">
 
-  - Cancel
+  - 非マージ
 
-    マージ解除をキャンセルします。
+    レイヤーパネルでレイヤーグループを選択し、各子をエクスポートするように指定できます
 
-  - Refresh
+  - キャンセル
 
-    App/book/assets/images/pageにレイヤーグループと同じ名前のサブフォルダがある場合、マージ解除がトリガーされます。したがって、そこにサブフォルダを手動で作成できます。そのような場合は、更新ボタンを使用できます。
+    非マージをキャンセルします
 
-    <img src="./img/2025-03-23-21-05-35.png" width="300" class="popup-image">
+  - 更新
+
+    App/book/assets/images/pageにレイヤーグループと同じ名前のサブフォルダがある場合、非マージがトリガーされます。そのため、手動でサブフォルダを作成することができます。そのような場合は、更新ボタンを使用できます。
 
 ---
 
-オンラインドキュメントで詳細情報を参照してください。
+詳細については、オンラインドキュメント（WIP）を参照してください。
 
 - https://kwiksher.github.io/kwik5docs/get_started/index.html
 
 ---
 
-## Solar2D/main.lua
+## Step3 - Solar2D Simulator > main.lua
 
-mode変数を「editing」または「production」のいずれかに設定してください。
-
-> 「production」は、plugin.kwikがSolar2D公式プラグインに登録されていないため、Solar2Dフォルダにプラグインフォルダを作成します。自動的に統合されません。
-
->「production」から「editing」に戻すと、productionモードで作成されたプラグインフォルダは自動的に削除され、Application Support/Corona/Pluginsフォルダ内のplugin.kwikを再び使用できるようになります。
-
-main .lua
-
-```lua
-local kwik = require "plugin.kwik"
-local lfs = require("lfs")
---
-system.setTapDelay(0.2)
-
---display.setDefault( "background", 0.2, 0.2, 0.2, 0.1 )
-kwik.useGradientBackground()
---
-local mode = "editing"
--- local mode = "production"
--- local mode = "dev"
---
-local props
---
-if mode == "editing" or mode == "dev" then
-  props = {
-    name = "book",
-    editor = true,
-    gotoPage = "landscape",
-    language = "", -- empty string "" is for a single language project
-    position = {x = 0, y = 0},
-    gotoLastBook = true,
-    unitTest = false,
-    httpServer = false,
-    showPageName = true
-  }
-elseif mode == "production" then
-  props = {
-    name = "book",
-    editor = false,
-    gotoPage = "landscape",
-    language = "", -- empty string "" is for a single language project
-    position = {x = 0, y = 0},
-    gotoLastBook = false,
-    unitTest = false,
-    httpServer = false,
-    showPageName = false
-  }
-end
-...
-```
+開発中は、main.luaを開発モードに設定し、config.luaをadaptiveに設定します。デバイスビルド用の本番環境では、モードをproductionに切り替え、config.luaをletterboxに設定する必要があります。本番環境ではkwik editorは不要なので、開発モードは使用しないでください。
 
 ### config.lua
 
-for the final build for device, you need to change the scale as "letterbox"
+デバイス用の最終ビルドでは、scaleを "letterbox" に変更する必要があります。
+
+scale = "adaptive" を "letterbox" に変更
 
 ```lua
 application = {
@@ -241,6 +221,96 @@ application = {
 		scale = "letterbox",
 		xAlign = "center",
 		yAlign = "center",
- ...
- ```
+```
 
+### main.lua
+
+env.mode = "development" を "production" に変更
+
+> productionモードではkwik editorはロードされません
+
+vscodeで編集して、ブックとページ名をあなたのブックとページ名に変更してください。
+
+> kwik editorがエラーを出す場合は、env.restore = trueを試してみてください。これは.bakファイルで回復を試みます。回復実行後は、再びfalseに戻してください。
+
+```lua
+local env = require("env")
+env.book   = "book"
+env.goPage = "landscape"
+env.lang   = ""
+--
+env.restore = false
+--
+env.mode = "development"
+-- env.mode = "production"
+-- env.mode = "debug" -- kwiksherのリポジトリからkwik5-pluginのsrcが必要です
+
+--
+if env.mode == "development" or env.mode == "debug" then
+  env.props = {
+    name = env.book,
+    editor = true,
+    gotoPage = env.goPage,
+    language = env.lang, -- 空文字列 "" は単一言語プロジェクト用です
+    position = {x = 0, y = 0},
+    gotoLastBook = false,
+    unitTest = false,
+    httpServer = false,
+    showPageName = true,
+    turnOffNativeVideo = true
+  }
+elseif env.mode == "production" then
+  env.props = {
+    name = env.book,
+    editor = false,
+    gotoPage = env.goPage,
+    language = env.lang, -- 空文字列 "" は単一言語プロジェクト用です
+    position = {x = 0, y = 0},
+    gotoLastBook = false,
+    unitTest = false,
+    httpServer = false,
+    showPageName = false,
+    turnOffNativeVideo = false
+  }
+end
+--
+--
+system.setTapDelay(0.2)
+--
+--
+if env.setPlugin(env.mode)  then
+  local kwik = require("kwiksher.kwik")
+  --
+  --display.setDefault( "background", 0.2, 0.2, 0.2, 0.1 )
+  kwik.useGradientBackground()
+  --
+
+  if env.restore and  kwik.restore() then
+    native.showAlert("kwik", "restored comment it out kwik.restore()")
+    return
+  end
+
+  kwik.setCustomModule(
+    "custom",
+    {
+      commands = {"myEvent"},
+      components = {
+        -- "align",
+        "myComponent",
+        "thumbnailNavigation",
+        "index"
+        -- "keyboardNavigation",
+      }
+    }
+  )
+  --
+  kwik.bootstrap(env.props)
+  --
+end
+```
+
+### kwikモジュールの更新
+
+install_plugin.sh (mac)、install_plugin.batは最新のリリースを取得し、Solar2Dのlua_modulesフォルダを上書きします。
+
+<img src="./img/2025-07-14-13-40-59.png" width="300" class="popup-image">

@@ -1,23 +1,12 @@
 # kwik5-project-template
 
+- step1 install kwik exporter
+- step2 setup kwik exporter with your project folder
+- step3 Solar2D simulator with published codes from kwik exporter
 
-- plugin kwik5 for Solar2D simulator
+## Step1 - Photoshop UXP .ccx
 
-  you may use install_plugin.sh in this repo to fetch it, the script installs the plugin to ~/Library/Application Support/Corona/Simulator/Plugins/plugin/ folder.
-
-    ```
-    source ./install_plugin.sh
-    ```
-
-  or manually download it
-
-  - https://github.com/kwiksher/kwik5-project-template/releases/latest/download/plugin.data.tgz
-
-    copy it to ~/Library/Application Support/Corona/Simulator/Plugins/plugin/
-
-      <img src="./img/2025-03-23-15-44-21.png" width="800" class="popup-image">
-
-- Photoshop UXP
+In the release of this repository, you can download the kwik expoert ccx for Photoshop.
 
   - https://github.com/kwiksher/kwik5-project-template/releases/latest/download/com.kwiksher.kwik5.exporter_PS.ccx
 
@@ -37,73 +26,96 @@
       <img src="./img/2025-03-23-15-49-01.png" width="600" class="popup-image">
 
 
--  kwik5-project-template
+### Source files of kwik5-project-template
 
-   Photoshop > book
+kwik exporter contains the same codebase of this repository, when you create a new project from settings tab in kwik exporter, it creates Photoshop and Solar2D folder below to your specified folder in your PC.
+
+  - BookServer (Work In Progress)
+  - **Photoshop** > book
     - landscape.psd
     - portrait.psd
 
-
       <img src="./img/2025-03-23-16-15-10.png" width="400" class="popup-image">
 
+  - Scripts(Work In Progress)
 
-   - Solar2D/main.lua
+  - **Solar2D**/main.lua
 
      open it Solar2D Simulator
 
       - kwikEditorLandscape.lua: this file should be created by install_plugin.sh or you can manually copy it to ~/Library/Application Support/Corona/Simulator/Skins folder
 
-   - install_plugin.sh
-
    - UXP/kwik-exporter
 
-       you may use Adobe UXP Developer Tools to open kwik-exporter instead of clicking com.kwiksher.kwik5.exporter_PS.ccx
+      gh action: Create Release, pack the files into com.kwiksher.kwik5.exporter_PS.ccx
 
-## Photoshop kwik-exporter
+## Step2 - Photoshop kwik-exporter
 
-  Plugins > Kwik Exporter to open it. Kwik Exporter needs to know where is a photoshop file, and where is Solar2D/App/book folder where Kwik Exporter publishes images and lua files of a psd file.
+  Plugins > Kwik Exporter to open it. Kwik Exporter needs to know where is a photoshop file,  where is Solar2D/App/book folder and where Kwik Exporter publishes images and lua files of a psd file.
+
+  1. Select **your project root directory for your project like ~/Documents/GitHub/kwik5-project-template/**
+
+  1. Select **Photoshop/{book}** folder which contains .psd files
+
+  1. Select **Solar2D/App/{book}** folder where kwik exporter publishes of images/lua files from .psd files
+
+
+  You can open kwik expoert from Plugins > Kwik Exporter in Photoshop menu
 
   <img src="./img/2025-03-23-15-59-19.png" width="600" class="popup-image">
 
-  1. Select **kwik5-project-template** folder
 
-      <img src="./img/2025-03-23-16-04-08.png" width="600" class="popup-image">
+1. Go Settings Tab
 
-  1. Select **Photoshop** folder
+    In New Project, you can set your project name and book name.
 
-  1. Select **Solar2D/App/book** folder
+    <img src="./img/2025-07-14-12-46-19.png" width="600" class="popup-image">
 
+    - Create button > New Kwik Project
 
-  You may change these settings by selecting Reset checkbox and then click Open to browse a new folder
+      <img src="./img/2025-07-14-12-44-43.png" width="600" class="popup-image">
 
-  - Settings Tab to change the root project folder
+   - Export to create your project
 
-    <img src="./img/2025-03-23-16-08-55.png" width="400" class="popup-image">
-
-  - Menu Tab for Photoshop and Solar2D
-
-    <img src="./img/2025-03-23-16-20-04.png" width="400" class="popup-image">
-
-  ### Open a psd file
-
-  You can click the name of psd file to open
-
-  <img src="./img/2025-03-23-16-27-21.png" width="1600" class="popup-image">
+      <img src="./img/2025-07-14-12-52-36.png" width="1200" class="popup-image">
 
 
-  - Guide Layout is created by Kwik_ATN actions. You may use your own guide layout
+1. Go Menu Tab - Photoshop Files
 
-    <img src="./img/2025-03-23-16-29-02.png" width="400" class="popup-image">
+    > Reset check box will change the button state to Open
+
+    - Open button to select a folder where .psd files exist
+
+      <img src="./img/2025-07-14-12-55-25.png" width="600" class="popup-image">
+
+    - You can click the name of psd file to open
+
+      <img src="./img/2025-07-14-13-00-25.png" width="600" class="popup-image">
+
+    - Guide Layout is created by Kwik_ATN actions. You may use your own guide layout
+
+      <img src="./img/2025-03-23-16-29-02.png" width="300" class="popup-image">
+
+    - Settings Tab > Tools
+
+      guide lines for safe area are available too
+
+      <img src="./img/2025-07-14-13-04-39.png" width="600" class="popup-image">
+
+1. Solar2D Project
+
+    select App/{book} folder where kwik exporter creates images and lua files
+
+    <img src="./img/2025-07-14-13-12-09.png" width="600" class="popup-image">
 
 
-  ### Publish
+### Publish
 
-  1. select the psd files to be published. you may use the **all** checkbox, then click Publish button
+1. select the psd files to be published. you may use the **all** checkbox, then click Publish button. The psd files with check marks will be published as default.
 
-      <img src="./img/2025-03-23-16-33-02.png" width="400" class="popup-image">
+  <img src="./img/2025-07-14-13-15-49.png" width="600" class="popup-image">
 
-
-  1. it shows a publish dialog
+  1. Publish dialog
 
       <img src="./img/2025-03-23-16-34-23.png" width="400" class="popup-image">
 
@@ -128,8 +140,10 @@
 
  1. Load Simulator
 
+    <img src="./img/2025-07-14-13-18-08.png" width="600" class="popup-image">
 
-    <img src="./img/2025-03-23-20-29-59.png" width="600" class="popup-image">
+
+    <img src="./img/2025-03-23-20-29-59.png" width="800" class="popup-image">
 
 
     Kwik Edito Landscape is selected which has been installed by install_plugin.sh
@@ -137,6 +151,8 @@
     <img src="./img/2025-03-23-20-47-38.png" width="600" class="popup-image">
 
  ### Active Document
+
+<img src="./img/2025-07-14-13-19-35.png" width="600" class="popup-image">
 
   - Validate Name & Opacity
 
@@ -160,11 +176,10 @@
 
     - layer names with starting "-" (hyphen) are ignored when exporting code & images
 
-
-    <img src="./img/2025-03-23-20-55-50.png" width="600" class="popup-image">
-
-
  ### Layer Groups
+
+<img src="./img/2025-07-14-13-20-09.png" width="600" class="popup-image">
+
   - Unmerge
 
     select a layer group in Layer panel, and you can specify exportting each child
@@ -177,72 +192,23 @@
 
     if there is a sub folder as same name as layer group in App/book/assets/images/page, then Unmerge is triggered. So you can manually create sub folders there, such case you can use Refresh button
 
-    <img src="./img/2025-03-23-21-05-35.png" width="300" class="popup-image">
-
 ---
 
-See more detail information in the online document
+See more detail information in the online document(WIP)
 
 - https://kwiksher.github.io/kwik5docs/get_started/index.html
 
 ---
 
-## Solar2D/main.lua
+## Step3 - Solar2D Simulator > main.lua
 
-Please set the mode variable either "editing" or "production"
-
-> "production" creates the plugin folder in Solar2D folder because plugin.kwik has not been registered in Solar2D official plugins, it won't be integreted automatically.
-
-> setting back to "production" to "editing", the plugin folder created in production mode will be deleted automatically, and you can go back to use plugin.kwik in Application Support/Corona/Plugins folder
-
-main .lua
-
-```lua
-local kwik = require "plugin.kwik"
-local lfs = require("lfs")
---
-system.setTapDelay(0.2)
-
---display.setDefault( "background", 0.2, 0.2, 0.2, 0.1 )
-kwik.useGradientBackground()
---
-local mode = "editing"
--- local mode = "production"
--- local mode = "dev"
---
-local props
---
-if mode == "editing" or mode == "dev" then
-  props = {
-    name = "book",
-    editor = true,
-    gotoPage = "landscape",
-    language = "", -- empty string "" is for a single language project
-    position = {x = 0, y = 0},
-    gotoLastBook = true,
-    unitTest = false,
-    httpServer = false,
-    showPageName = true
-  }
-elseif mode == "production" then
-  props = {
-    name = "book",
-    editor = false,
-    gotoPage = "landscape",
-    language = "", -- empty string "" is for a single language project
-    position = {x = 0, y = 0},
-    gotoLastBook = false,
-    unitTest = false,
-    httpServer = false,
-    showPageName = false
-  }
-end
-...
-```
+For development,you set main.lua in develoment mode and config.lua with adaptive, and for device build as production, you need to switch the mode to production and the config.lua with letterbox. For prodction, you don't need kwik editor, so don't use the developmenet mode.
 
 ### config.lua
 
 for the final build for device, you need to change the scale as "letterbox"
+
+scale = "adaptive" to "letterbox"
 
 ```lua
 application = {
@@ -255,6 +221,97 @@ application = {
 		scale = "letterbox",
 		xAlign = "center",
 		yAlign = "center",
- ...
- ```
+```
+
+### main.lua
+
+env.mode = "developmenet" to "production"
+
+> production mode does not load kwik editor
+
+please edit in vscode to change the book and the page name tos your book and page name.
+
+> if kwik editor makes an error, you may try env.restore = true which tries to recover with .bak files. Set it back to false again after the recover execution.
+
+```lua
+local env = require("env")
+env.book   = "book"
+env.goPage = "landscape"
+env.lang   = ""
+--
+env.restore = false
+--
+env.mode = "development"
+-- env.mode = "production"
+-- env.mode = "debug" -- need kwik5-plugin src from kwiksher's repo
+
+--
+if env.mode == "development" or env.mode == "debug" then
+  env.props = {
+    name = env.book,
+    editor = true,
+    gotoPage = env.goPage,
+    language = env.lang, -- empty string "" is for a single language project
+    position = {x = 0, y = 0},
+    gotoLastBook = false,
+    unitTest = false,
+    httpServer = false,
+    showPageName = true,
+    turnOffNativeVideo = true
+  }
+elseif env.mode == "production" then
+  env.props = {
+    name = env.book,
+    editor = false,
+    gotoPage = env.goPage,
+    language = env.lang, -- empty string "" is for a single language project
+    position = {x = 0, y = 0},
+    gotoLastBook = false,
+    unitTest = false,
+    httpServer = false,
+    showPageName = false,
+    turnOffNativeVideo = false
+  }
+end
+--
+--
+system.setTapDelay(0.2)
+--
+--
+if env.setPlugin(env.mode)  then
+  local kwik = require("kwiksher.kwik")
+  --
+  --display.setDefault( "background", 0.2, 0.2, 0.2, 0.1 )
+  kwik.useGradientBackground()
+  --
+
+  if env.restore and  kwik.restore() then
+    native.showAlert("kwik", "restored comment it out kwik.restore()")
+    return
+  end
+
+  kwik.setCustomModule(
+    "custom",
+    {
+      commands = {"myEvent"},
+      components = {
+        -- "align",
+        "myComponent",
+        "thumbnailNavigation",
+        "index"
+        -- "keyboardNavigation",
+      }
+    }
+  )
+  --
+  kwik.bootstrap(env.props)
+  --
+end
+```
+
+### Upate kwik modules
+
+install_plugin.sh (mac) , install_plugin.bat will fetch the latest release and overwrite the lua_moduels folder in Solar2D
+
+<img src="./img/2025-07-14-13-40-59.png" width="300" class="popup-image">
 
