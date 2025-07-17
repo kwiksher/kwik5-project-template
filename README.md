@@ -2,6 +2,7 @@
 
 - step1 install kwik exporter
 - step2 setup kwik exporter with your project folder
+  - step2-1 setup with install_plugin script
 - step3 Solar2D simulator with published codes from kwik exporter
 
 ## Step1 - Photoshop UXP .ccx
@@ -75,10 +76,46 @@ kwik exporter contains the same codebase of this repository, when you create a n
 
       <img src="./img/2025-07-14-12-44-43.png" width="600" class="popup-image">
 
-   - Export to create your project
+      Browse button to select your destincation folder, and Export button to make a new project
+
+   - Open your project folder in Finder(mac) or File Explore(win)
+
+      <img src="./img/2025-07-17-11-19-50.png" width="600" class="popup-image">
+
+      For the first time, clicking Show Folder button shows
+
+      <img src="./img/2025-07-17-11-28-47.png" width="400" class="popup-image">
 
       <img src="./img/2025-07-14-12-52-36.png" width="1200" class="popup-image">
 
+      ### Step2-1 Insall Solar2D modules
+        In the created kwik5 Proj, you find install_plugin.sh(mac), install_plugin.bat(win).
+
+        <img src="./img/2025-07-17-11-30-01.png" width="250" class="popup-image">
+
+        #### Windows
+
+        when the install plugin bat is running, you are asked to install solar2d protocol or not. This is an experimental featrue that Solar2D simulator can be opened with solar2d://
+
+        ```
+        Do you want to install the Solar2D protocol handler? (y/n):
+        ```
+
+        - solar2d.reg will set the url scheme, select **Yes** to set the solar2d protocol
+
+        <img src="./img/2025-07-17-11-17-22.png" width="400" class="popup-image">
+
+        <img src="./img/2025-07-17-11-36-25.png" width="600" class="popup-image">
+
+        [Solar2D URL scheme](https://github.com/kwiksher/kwik5-project-template/blob/main/Scripts/readme.md)
+
+       you can enter the url like below in the browser in Windows
+      ```
+      solar2d://open?url=file://C:/Users/ymmtny/Documents/Solar2D/kwik-visual-code/develop/Solar2D/kwik5-project-template/Solar2D/main.lua&skin=KwikEditorLandscape
+      ```
+
+
+###
 
 1. Go Menu Tab - Photoshop Files
 
@@ -140,15 +177,28 @@ kwik exporter contains the same codebase of this repository, when you create a n
 
  1. Load Simulator
 
+    you can open Solar2D simulator with **Load Simulator** button.
+
     <img src="./img/2025-07-14-13-18-08.png" width="600" class="popup-image">
 
+    the request for permission dialog appears, select Allow.
 
-    <img src="./img/2025-03-23-20-29-59.png" width="800" class="popup-image">
+    <img src="./img/2025-03-23-20-29-59.png" width="400" class="popup-image">
+
+    #### Windows
+
+      the root folder is opened in File explorer, double click **startStar2D.bat** to run Solar2D simulator
+
+      > Kwik exporter(UXP extension) in Windows can not open Solar2D.exe automatically
+
+      <img src="./img/2025-07-17-16-22-04.png" width="600" class="popup-image">
 
 
-    Kwik Edito Landscape is selected which has been installed by install_plugin.sh
+    When Solar2D Simulator opens, Window > View As to change the skin for Kwik Editor Landscape or portrait skin.
 
     <img src="./img/2025-03-23-20-47-38.png" width="600" class="popup-image">
+
+---
 
  ### Active Document
 
