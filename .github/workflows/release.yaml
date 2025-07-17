@@ -43,7 +43,7 @@ jobs:
         cp install_plugin.bat UXP/kwik-exporter/kwik/base-proj
         cp -rf Solar2D UXP/kwik-exporter/kwik/base-proj
         cp -rf Photoshop UXP/kwik-exporter/kwik/base-proj
-        cp Scripts/solar2d.reg UXP/kwik-exporter/kwik/base-proj
+        cp Scripts/startSolar2D.bat UXP/kwik-exporter/kwik/base-proj
         cp Scripts/uninstall_solar2d.reg UXP/kwik-exporter/kwik/base-proj
 
     - name: Rename for ccx
