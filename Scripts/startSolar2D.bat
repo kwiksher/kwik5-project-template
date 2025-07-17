@@ -9,6 +9,14 @@ for /f %%i in ('tasklist 2^>^&1') do (
 :ENDLOOP
 setlocal EnableDelayedExpansion
 
+:: If no URI is passed, launch the default project directly
+if "%~1"=="" (
+    echo No URI provided. Launching default project...
+    set "filePath=%~dp0..\Kwik5 Proj\Solar2D\main.lua"
+    set "skin=kwikEditorLandscape"
+    goto :start_simulator
+)
+
 :: Save input to debug file for inspection
 echo Input: %1 > "%~dp0\debug_input.txt"
 
@@ -52,9 +60,13 @@ set "filePath=!filePath:%%5C=\!"
 :: Replace forward slashes with backslashes
 set "filePath=!filePath:/=\!"
 
+:: Unescape %20 to space
+set "filePath=!filePath:%%20= !"
+
 :: Save the parsed parameters for debugging
 echo filePath=!filePath! >> "%~dp0\tmp.txt"
 echo skin=!skin! >> "%~dp0\tmp.txt"
 
+:start_simulator
 :: Start the Solar2D Simulator with the parsed arguments
 start "" "C:\Program Files (x86)\Corona Labs\Corona\Corona Simulator.exe" "!filePath!" /skin="!skin!"

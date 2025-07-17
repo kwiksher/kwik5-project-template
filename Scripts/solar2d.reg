@@ -5,4 +5,4 @@ Windows Registry Editor Version 5.00
 "URL Protocol"=""
 
 [HKEY_CLASSES_ROOT\solar2d\shell\open\command]
-@="\"%APPDATA%\\Corona Labs\\Corona Simulator\\startSolar2D.bat\" \"%1\""
+@="\"C:\\Users\\ymmtny\\AppData\\Roaming\\Corona Labs\\Corona Simulator\\startSolar2D.bat\" \"%1\""

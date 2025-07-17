@@ -1,6 +1,12 @@
 @echo off
 setlocal enabledelayedexpansion
 
+REM Check for --regonly argument
+if /i "%1"=="--regonly" (
+    call :install_registry_only
+    exit /b
+)
+
 REM Variables
 set "REPO=kwiksher/kwik5-project-template"
 set "SOLAR2D_DIR=.\Solar2D"
@@ -24,6 +30,7 @@ echo https://api.github.com/repos/%REPO%/releases/latest
 powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (Invoke-WebRequest -Uri 'https://api.github.com/repos/%REPO%/releases/latest' -UseBasicParsing).Content}" > "%DOWNLOADS_DIR%\release_info.json"
 if %errorlevel% neq 0 (
     echo Failed to connect to GitHub API. Please check your internet connection.
+    pause
     exit /b 1
 )
 
@@ -43,11 +50,13 @@ REM Download the plugin-kwik.tgz file
 echo Downloading plugin from !PLUGIN_URL!...
 if "!PLUGIN_URL!"=="" (
     echo Could not find plugin-kwik.tgz in the latest release.
+    pause
     exit /b 1
 )
 powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '!PLUGIN_URL!' -OutFile '%TEMP_PLUGIN_FILE%' -UseBasicParsing}"
 if %errorlevel% neq 0 (
     echo Failed to download the plugin. Please check your internet connection.
+    pause
     exit /b 1
 )
 echo Download complete.
@@ -60,10 +69,17 @@ echo Old files removed.
 
 REM Extract the plugin-kwik.tgz file
 echo Installing plugin to %PLUGIN_DIR%...
-powershell -Command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory('%TEMP_PLUGIN_FILE%', '%PLUGIN_DIR%')}"
-if %errorlevel% neq 0 (
-    echo Failed to extract the plugin. The file may be corrupted.
-    exit /b 1
+tar -xzf "%TEMP_PLUGIN_FILE%" -C "%PLUGIN_DIR%"
+if %errorlevel% equ 0 (
+    echo Plugin extracted successfully using tar.
+) else (
+    echo tar command failed or is not available. Trying PowerShell...
+    powershell -Command "& { try { Expand-Archive -Path '%TEMP_PLUGIN_FILE%' -DestinationPath '%PLUGIN_DIR%' -Force } catch { Write-Host 'PowerShell Expand-Archive failed.'; exit 1 } }"
+    if %errorlevel% neq 0 (
+        echo Failed to extract plugin using all available methods.
+        pause
+        exit /b 1
+    )
 )
 echo Plugin installed successfully!
 
@@ -72,6 +88,7 @@ echo Downloading source code from !SRC_URL!...
 powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '!SRC_URL!' -OutFile '%TEMP_SRC_FILE%' -UseBasicParsing}"
 if %errorlevel% neq 0 (
     echo Failed to download the source code. Please check your internet connection.
+    pause
     exit /b 1
 )
 echo Source code download complete.
@@ -96,16 +113,27 @@ if exist "%LUA_MODULES_TARGET%" (
 REM Extract the tarball
 echo Extracting source code...
 if not exist "%EXTRACT_DIR%" mkdir "%EXTRACT_DIR%"
-REM Convert Windows paths to Unix-style paths for tar
-set "UNIX_TEMP_SRC_FILE=%TEMP_SRC_FILE:\=/%"
-set "UNIX_TEMP_SRC_FILE=%UNIX_TEMP_SRC_FILE:C:=/c%"
-set "UNIX_EXTRACT_DIR=%EXTRACT_DIR:\=/%"
-set "UNIX_EXTRACT_DIR=%UNIX_EXTRACT_DIR:C:=/c%"
-echo Extracting with tar: !UNIX_TEMP_SRC_FILE! to !UNIX_EXTRACT_DIR!
-tar -xzf "!UNIX_TEMP_SRC_FILE!" -C "!UNIX_EXTRACT_DIR!"
-if %errorlevel% neq 0 (
-    echo tar command failed, trying PowerShell approach...
-    powershell -Command "& {Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory('%TEMP_SRC_FILE%', '%EXTRACT_DIR%')}"
+
+REM Attempt to use tar.exe first, as it's most reliable
+tar -xzf "%TEMP_SRC_FILE%" -C "%EXTRACT_DIR%"
+if %errorlevel% equ 0 (
+    echo Source code extracted successfully using tar.
+) else (
+    echo tar command failed or is not available. Trying PowerShell...
+    powershell -Command "& {
+        try {
+            Expand-Archive -Path '%TEMP_SRC_FILE%' -DestinationPath '%EXTRACT_DIR%' -Force
+        } catch {
+            Write-Host 'PowerShell Expand-Archive failed. This may require the Microsoft.PowerShell.Archive module.'
+            Write-Host 'Please ensure you are running Windows 10+ or have PowerShell 5.1+ with the module installed.'
+            exit 1
+        }
+    }"
+    if %errorlevel% neq 0 (
+        echo Failed to extract source code using all available methods.
+        pause
+        exit /b 1
+    )
 )
 
 REM Find the extracted folder (it will be named kwiksher-kwik5-project-template-*)
@@ -128,20 +156,24 @@ echo --- END DEBUG INFO ---
 
 if not defined EXTRACTED_SUBDIR (
     echo Failed to find extracted source directory.
+    pause
     exit /b 1
 )
 
 REM Copy lua_modules to the target location
 echo Copying lua_modules to %LUA_MODULES_TARGET%...
 if exist "!EXTRACTED_SUBDIR!\Solar2D\lua_modules" (
-    xcopy /E /I /Y /Q "!EXTRACTED_SUBDIR!\Solar2D\lua_modules" "%LUA_MODULES_TARGET%\"
+    echo Copying lua_modules, excluding kwiksher...
+    robocopy "!EXTRACTED_SUBDIR!\Solar2D\lua_modules" "%LUA_MODULES_TARGET%" /E /XD kwiksher
 ) else (
     echo lua_modules not found in source tarball, copying from ..\kwik5-project-template\Solar2D...
     if exist "..\kwik5-project-template\Solar2D\lua_modules" (
-        xcopy /E /I /Y /Q "..\kwik5-project-template\Solar2D\lua_modules" "%LUA_MODULES_TARGET%\"
+        echo Copying lua_modules from local ..\kwik5-project-template\Solar2D, excluding kwiksher...
+        robocopy "..\kwik5-project-template\Solar2D\lua_modules" "%LUA_MODULES_TARGET%" /E /XD kwiksher
         echo Copied lua_modules from local ..\kwik5-project-template\Solar2D.
     ) else (
         echo lua_modules not found in ..\kwik5-project-template\Solar2D. Aborting.
+        pause
         exit /b 1
     )
 )
@@ -196,11 +228,13 @@ echo   screenHeight = 590,
 echo   deviceImage = nil,
 echo   displayManufacturer = "",
 echo   displayName = "Kwik Portrait",
-echo   supportsScreenRotation = false,
+echo   supportsScreenRotation = true,
 echo   windowTitleBarName = "Kwik Portrait Editor"
 echo }
 ) > "%SKINS_DIR%\kwikEditorPortrait.lua"
 echo Kwik Editor Portrait skin file created.
+
+call :install_registry_only
 
 REM Clean up
 echo Cleaning up temp files...
@@ -218,4 +252,64 @@ echo Installation complete. Plugin version: !RELEASE_TAG!
 echo You can now use the plugin in the Solar2D Simulator.
 echo Kwik Editor Landscape skin is available in the Simulator.
 
+pause
 endlocal
+exit /b
+
+:install_registry_only
+    REM Create solar2d.reg with dynamic user path
+    echo Creating solar2d.reg with dynamic user path...
+    set "SOLAR2D_REG_FILE=%~dp0solar2d.reg"
+
+    echo --- DEBUG: Registry File Path ---
+    echo Attempting to create file at: %SOLAR2D_REG_FILE%
+    echo Current directory is: %cd%
+    echo Script directory is: %~dp0
+    echo --- END DEBUG ---
+
+    set "ESCAPED_APPDATA=%APPDATA:\=\\%"
+    (
+    echo Windows Registry Editor Version 5.00
+    echo.
+    echo [HKEY_CLASSES_ROOT\solar2d]
+    echo @="URL:solar2d Protocol"
+    echo "URL Protocol"=""
+    echo.
+    echo [HKEY_CLASSES_ROOT\solar2d\shell\open\command]
+    echo @="\"!ESCAPED_APPDATA!\\Corona Labs\\Corona Simulator\\startSolar2D.bat\" \"%%1\""
+    ) > "%SOLAR2D_REG_FILE%"
+
+    REM --- DEBUG: Check file creation ---
+    if exist "%SOLAR2D_REG_FILE%" (
+        echo SUCCESS: solar2d.reg was created successfully.
+    ) else (
+        echo ERROR: Failed to create solar2d.reg.
+        echo Please check write permissions for the directory: %~dp0
+        pause
+        goto :eof
+    )
+    REM --- END DEBUG ---
+
+    echo solar2d.reg created at %SOLAR2D_REG_FILE%
+
+    REM Optionally install the registry entry
+    echo.
+    set /p "INSTALL_REGISTRY=Do you want to install the Solar2D protocol handler? (y/n): "
+    if /i "!INSTALL_REGISTRY!"=="y" (
+        echo Installing Solar2D protocol handler...
+        regedit /s "%SOLAR2D_REG_FILE%" 2>nul
+        if !errorlevel! equ 0 (
+            echo Solar2D protocol handler installed successfully.
+            echo You can now use URLs like: solar2d://open?url=file://path/to/main.lua
+        ) else (
+            echo Failed to install registry entry. Please run as Administrator and try:
+            echo   regedit /s "%SOLAR2D_REG_FILE%"
+            pause
+        )
+    ) else (
+        echo Skipped registry installation.
+        echo To install later, run as Administrator:
+        echo   regedit /s "%SOLAR2D_REG_FILE%"
+    )
+    echo.
+goto :eof
