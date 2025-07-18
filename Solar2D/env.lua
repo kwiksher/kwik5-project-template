@@ -49,7 +49,7 @@ function M.setPlugin(mode)
   -- print(current_path)
   if current_path == nil or not lfs.chdir(current_path) then
     print("###")
-    print("### Please use install_plugin.sh(mac) or install_plugin.bat(win) to set up kwik")
+    print("### Please use update_kwik.sh(mac) or update_kwik.bat(win) to set up kwik")
     print("###")
     if mode == "debug" then
       createSymbolicLink()
@@ -67,9 +67,9 @@ function M.setPlugin(mode)
 
       if path then
         print("Found installer file:", path)
-        local cmd = 'cd "'.. path.. '"; source install_plugin.sh'
+        local cmd = 'cd "'.. path.. '"; source update_kwik.sh'
         if isWindows then
-           cmd = 'start cmd /k "cd "' .. path .. '" && install_plugin.bat"'
+           cmd = 'start cmd /k "cd "' .. path .. '" && update_kwik.bat"'
         end
         print(cmd)
         os.execute(cmd)

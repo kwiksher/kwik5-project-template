@@ -2,7 +2,7 @@
 
 - step1 install kwik exporter
 - step2 setup kwik exporter with your project folder
-  - step2-1 setup with install_plugin script
+  - step2-1 setup with update_kwik script
 - step3 Solar2D simulator with published codes from kwik exporter
 
 ## Step1 - Photoshop UXP .ccx
@@ -44,7 +44,7 @@ kwik exporter contains the same codebase of this repository, when you create a n
 
      open it Solar2D Simulator
 
-      - kwikEditorLandscape.lua: this file should be created by install_plugin.sh or you can manually copy it to ~/Library/Application Support/Corona/Simulator/Skins folder
+      - kwikEditorLandscape.lua: this file should be created by update_kwik.sh or you can manually copy it to ~/Library/Application Support/Corona/Simulator/Skins folder
 
    - UXP/kwik-exporter
 
@@ -89,7 +89,7 @@ kwik exporter contains the same codebase of this repository, when you create a n
       <img src="./img/2025-07-14-12-52-36.png" width="1200" class="popup-image">
 
       ### Step2-1 Insall Solar2D modules
-        In the created kwik5 Proj, you find install_plugin.sh(mac), install_plugin.bat(win).
+        In the created kwik5 Proj, you find update_kwik.sh(mac), update_kwik.bat(win).
 
         <img src="./img/2025-07-17-11-30-01.png" width="250" class="popup-image">
 
@@ -361,7 +361,7 @@ end
 
 ### Upate kwik modules
 
-install_plugin.sh (mac) , install_plugin.bat will fetch the latest release and overwrite the lua_moduels folder in Solar2D
+update_kwik.sh (mac) , update_kwik.bat will fetch the latest release and overwrite the lua_moduels folder in Solar2D
 
 <img src="./img/2025-07-14-13-40-59.png" width="300" class="popup-image">
 

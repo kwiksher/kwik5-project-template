@@ -146,7 +146,7 @@ kwik exporterにはこのリポジトリと同じコードベースが含まれ�
     <img src="./img/2025-03-23-20-29-59.png" width="800" class="popup-image">
 
 
-    install_plugin.shによってインストールされたKwik Editor Landscapeが選択されています。
+    update_kwik.shによってインストールされたKwik Editor Landscapeが選択されています。
 
     <img src="./img/2025-03-23-20-47-38.png" width="600" class="popup-image">
 
@@ -311,6 +311,6 @@ end
 
 ### kwikモジュールの更新
 
-install_plugin.sh (mac)、install_plugin.batは最新のリリースを取得し、Solar2Dのlua_modulesフォルダを上書きします。
+update_kwik.sh (mac)、update_kwik.batは最新のリリースを取得し、Solar2Dのlua_modulesフォルダを上書きします。
 
 <img src="./img/2025-07-14-13-40-59.png" width="300" class="popup-image">
