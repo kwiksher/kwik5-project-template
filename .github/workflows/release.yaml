@@ -39,12 +39,12 @@ jobs:
     - name: copy install shell
       run : |
         mkdir -p UXP/kwik-exporter/kwik/base-proj
-        cp install_plugin.sh UXP/kwik-exporter/kwik/base-proj
-        cp install_plugin.bat UXP/kwik-exporter/kwik/base-proj
+        cp update_kwik.sh UXP/kwik-exporter/kwik/base-proj
+        cp update_kwik.bat UXP/kwik-exporter/kwik/base-proj
         cp -rf Solar2D UXP/kwik-exporter/kwik/base-proj
         cp -rf Photoshop UXP/kwik-exporter/kwik/base-proj
-
-
+        cp Scripts/startSolar2D.bat UXP/kwik-exporter/kwik/base-proj
+        cp Scripts/uninstall_solar2d.reg UXP/kwik-exporter/kwik/base-proj
 
     - name: Rename for ccx
       run: |
