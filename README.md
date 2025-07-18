@@ -88,14 +88,15 @@ kwik exporter contains the same codebase of this repository, when you create a n
 
       <img src="./img/2025-07-14-12-52-36.png" width="1200" class="popup-image">
 
-      ### Step2-1 Insall Solar2D modules
-        In the created kwik5 Proj, you find update_kwik.sh(mac), update_kwik.bat(win).
+      ### (Optional) update kwik script
 
-        <img src="./img/2025-07-17-11-30-01.png" width="250" class="popup-image">
+        In the created kwik5 Proj, you find update_kwik.sh(mac), update_kwik.bat(win). These scripts will be exectued automatically if lua_moduels/kwiksher/kwik is not found when the simulator runs. You may manually run it if you like.
+
+        <img src="./img/2025-07-18-10-27-19.png" width="600" class="popup-image">
 
         #### Windows
 
-        when the install plugin bat is running, you are asked to install solar2d protocol or not. This is an experimental featrue that Solar2D simulator can be opened with solar2d://
+        when the update_kwik.bat is executed, you are asked to install solar2d protocol or not. This is an experimental featrue that Solar2D simulator can be opened with solar2d://
 
         ```
         Do you want to install the Solar2D protocol handler? (y/n):
@@ -110,10 +111,12 @@ kwik exporter contains the same codebase of this repository, when you create a n
         [Solar2D URL scheme](https://github.com/kwiksher/kwik5-project-template/blob/main/Scripts/readme.md)
 
        you can enter the url like below in the browser in Windows
+
       ```
       solar2d://open?url=file://C:/Users/ymmtny/Documents/Solar2D/kwik-visual-code/develop/Solar2D/kwik5-project-template/Solar2D/main.lua&skin=KwikEditorLandscape
       ```
 
+      > You can create a web page that embeds Solar2D’s URL scheme, allowing users to launch the Solar2D simulator directly from their browser.
 
 ###
 
@@ -279,9 +282,11 @@ env.mode = "developmenet" to "production"
 
 > production mode does not load kwik editor
 
-please edit in vscode to change the book and the page name tos your book and page name.
+Please edit the env.props to update the book and page names to match your book and page.
 
 > if kwik editor makes an error, you may try env.restore = true which tries to recover with .bak files. Set it back to false again after the recover execution.
+
+By default for developmemnt, the `turnOffNativeVideo` flag is set to `true`, which means videos won’t play. If you want to enable video playback, set it to `false`.
 
 ```lua
 local env = require("env")
