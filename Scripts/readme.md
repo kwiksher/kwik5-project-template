@@ -9,7 +9,7 @@ solar2d://open?url=file://C:/Users/ymmtny/Documents/GitHub/kwik5-project-templat
 ### Windows
 
 - solar2d.reg will set the url schema with startSolar2D.bat
-- startSolar2D.bat is installed with install_plugin.bat
+- startSolar2D.bat is installed with update_kwik.bat
 
 ### Mac
 
