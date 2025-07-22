@@ -12,7 +12,7 @@ setlocal EnableDelayedExpansion
 :: If no URI is passed, launch the default project directly
 if "%~1"=="" (
     echo No URI provided. Launching default project...
-    set "filePath=%~dp0..\Kwik5 Proj\Solar2D\main.lua"
+    set "filePath=%~dp0\Solar2D\main.lua"
     set "skin=kwikEditorLandscape"
     goto :start_simulator
 )
