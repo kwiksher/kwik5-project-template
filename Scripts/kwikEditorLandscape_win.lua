@@ -1,6 +1,6 @@
 simulator =
 {
-	device = "win32",
+	device = "android",
 	screenOriginX = 0,
 	screenOriginY = 0,
 	screenWidth = 590,

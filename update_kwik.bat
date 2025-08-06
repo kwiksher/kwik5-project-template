@@ -200,7 +200,7 @@ echo Creating Kwik Editor Landscape skin file...
 (
 echo simulator =
 echo {
-echo   device = "desktop-1920x1080",
+echo   device = "android",
 echo   screenOriginX = 0,
 echo   screenOriginY = 0,
 echo   screenWidth = 590,
@@ -220,7 +220,7 @@ echo Creating Kwik Editor Portrait skin file...
 (
 echo simulator =
 echo {
-echo   device = "desktop-1920x1080",
+echo   device = "android",
 echo   screenOriginX = 0,
 echo   screenOriginY = 0,
 echo   screenWidth = 960,
