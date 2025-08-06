@@ -1,4 +1,5 @@
-local M = {}
+local parent,root, M = newModule(...)
+local layerMod = require(M.layerMod)
 --
 local infinity = require("components.kwik.layer_image_infinity")
 --
@@ -52,8 +53,18 @@ M.properties = {
   {{/imagePath}}
   {{/properties}}
 }
+
+M.properties.imagePath   =layerMod.psdPage.."/".. M.properties.name ..".png"
+
 --
 function M:init(UI)
+  -- overwrite layerMod properties by M.properties one by one if not nil
+  for k, v in pairs(self.properties) do
+    if v ~= nil and v ~= "" then
+      layerMod[k] = v
+    end
+  end 
+
 end
 --
 function M:create(UI)
@@ -67,9 +78,13 @@ function M:create(UI)
   -- obj.y         = props.y/4
   -- obj.height    = props.height/4
   -- obj.width     = props.width/4
-  obj.alpha     = props.alpha
+  if props.alpha then
+    obj.alpha     = props.alpha
+  end         
   -- obj.oldAlpha  = props.oriAlpha
-  obj.blendMode = props.blendMode
+  if props.blendMode~="" then
+    obj.blendMode = props.blendMode
+  end
   --
   obj.layerAsBg = props.layerAsBg
   obj.isSharedAsset = props.isSharedAsset
@@ -111,24 +126,24 @@ function M:create(UI)
 
   --
   if props.layerAsBg then
-    sceneGroup:insert( 1, obj)
+    UI.sceneGroup:insert( 1, obj)
   else
-    sceneGroup:insert( obj)
+    UI.sceneGroup:insert( obj)
   end
   --
-  if self.properties.infinity then
+  if self.properties.infinity and self.properties.infinity.enabled then
     infinity.createInfinityImage(UI, self.obj, self.properties.infinity)
   end
 end
 --
 function M:didShow(UI)
-  if self.properties.infinity.enabled then
+  if  self.properties.infinity and self.properties.infinity.enabled then
     infinity.addEventListener(self.obj)
   end
 end
 --
 function M:didHide(UI)
-  if self.properties.infinity.enabled then
+  if  self.properties.infinity and self.properties.infinity.enabled then
     infinity.removeEventListener(self.obj)
   end
 end

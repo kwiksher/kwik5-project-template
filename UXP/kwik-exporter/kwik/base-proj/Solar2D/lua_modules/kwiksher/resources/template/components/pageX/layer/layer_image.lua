@@ -8,7 +8,7 @@ local layerProps = {
   blendMode = "{{blendMode}}",
   height    =  {{bounds.bottom}} - {{bounds.top}},
   width     = {{bounds.right}} - {{bounds.left}} ,
-  kind      = {{kind}},
+  kind      = "{{kind}}",
   name      = "{{parent}}{{name}}",
   type      = "png",
   x         = {{bounds.right}} + ({{bounds.left}} -{{bounds.right}})/2,
@@ -33,6 +33,7 @@ local layerProps = {
   color    =  { {{red}}, {{green}}, {{blue}}, 1 },
   {{/color}}
   orientation = "{{orientation}}",
+  psdPage     = "{{page}}"
 }
 
 M.align       = "{{align}}"
