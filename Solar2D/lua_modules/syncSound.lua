@@ -208,9 +208,7 @@ function M.saySentence(params)
       --run trigger action
       print(line[i].name, line[i].action, line[i].trigger)
       if line[i].trigger ~= nil then
-        print("@@@@@@")
         M.timerStash["syncSoundTrigger" .. i] = timer.performWithDelay(line[i].start, function()
-          print("######")
           line[i]:trigger()
         end)
         table.insert(activeRead2me.syncSoundTrigger, M.timerStash["syncSoundTrigger" .. i])
