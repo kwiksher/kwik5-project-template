@@ -206,7 +206,7 @@ function M.saySentence(params)
       table.insert(activeRead2me.texts, transition.to(words[i].activeText, {delay = delay1, alpha = 1, time = trans1}))
       table.insert(activeRead2me.texts, transition.to(words[i].activeText, {delay = delay2, alpha = 0, time = trans2}))
       --run trigger action
-      print(line[i].name, line[i].action, line[i].trigger)
+      -- print(line[i].name, line[i].action, line[i].trigger)
       if line[i].trigger ~= nil then
         M.timerStash["syncSoundTrigger" .. i] = timer.performWithDelay(line[i].start, function()
           line[i]:trigger()

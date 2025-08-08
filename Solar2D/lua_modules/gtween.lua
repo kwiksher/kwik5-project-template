@@ -616,6 +616,12 @@ function new(target, duration, values, props)
       yPos = target.y + (target.height / 2)
     end
 
+    if application.content.scale == "adaptive" then -- this means config is letterbox
+        local editorWidth, editorHeight = (display.contentWidth - 480)/2, (display.contentHeight-320)/2
+        -- xPos = xPos - editorWidth
+        -- yPos = yPos - editorHeight
+    end
+
     --Set color
     if (self.breadColor[1] == "rand") then
       c1 = math.random(255) / 255
@@ -629,27 +635,31 @@ function new(target, duration, values, props)
 
     local obj
     if (numCrumbs == 1) then
+      --[[
       if (self.breadShape == "circle") then
         obj = display.newCircle(target.x, target.y, bW)
       else
         obj = display.newRect(target.x, target.y, bW, bH)
       end
-      obj:setFillColor(c1, c2, c3)
-      obj.alpha = alpha
-      obj.x = xPos + display.contentCenterX
-      obj.y = yPos + display.contentCenterY
-      obj.xScale = target.xScale
-      obj.yScale = target.yScale
-      crumbGroup:insert(obj)
-      crumbs[numCrumbs] = obj
+        obj:setFillColor(c1, c2, c3)
+        obj.alpha = alpha
+        -- obj.x = xPos + display.contentCenterX
+        -- obj.y = yPos + display.contentCenterY
+        obj.x = xPos
+        obj.y = yPos
+        obj.xScale = target.xScale
+        obj.yScale = target.yScale
+        crumbGroup:insert(obj)
+        crumbs[numCrumbs] = obj
 
-      -- fade after x seconds
-      local function dispCrumb(obj)
-        obj:removeSelf()
-      end
-      if (btime ~= nil) then
-        transition.to(obj, {time = btime, alpha = 0, onComplete = dispCrumb})
-      end
+        -- fade after x seconds
+        local function dispCrumb(obj)
+          obj:removeSelf()
+        end
+        if (btime ~= nil) then
+          transition.to(obj, {time = btime, alpha = 0, onComplete = dispCrumb})
+        end
+        --]]
     elseif ((numCrumbs) % bI == 0) then -- this is the INTERVAL
       if (display.contentWidth >= xPos and display.contentHeight >= yPos) then
         if (self.breadShape == "circle") then
@@ -659,8 +669,10 @@ function new(target, duration, values, props)
         end
         obj:setFillColor(c1, c2, c3)
         obj.alpha = alpha
-        obj.x = xPos + display.contentCenterX
-        obj.y = yPos + display.contentCenterY
+        -- obj.x = xPos + display.contentCenterX
+        -- obj.y = yPos + display.contentCenterY
+        obj.x = xPos
+        obj.y = yPos
         obj.xScale = target.xScale
         obj.yScale = target.yScale
 
