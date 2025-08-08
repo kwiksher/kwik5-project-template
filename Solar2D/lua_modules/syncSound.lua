@@ -173,6 +173,9 @@ function M.saySentence(params)
   local soundLength = 0
   local filename = params.filename or "unknown"
   --
+  talkButton_oriAlpha = button.alpha
+  button.alpha = 0
+  ---
   local syncClosure = function()
     audio.rewind(sentence)
     audio.setVolume(_volume, {channel = channel})
@@ -203,8 +206,13 @@ function M.saySentence(params)
       table.insert(activeRead2me.texts, transition.to(words[i].activeText, {delay = delay1, alpha = 1, time = trans1}))
       table.insert(activeRead2me.texts, transition.to(words[i].activeText, {delay = delay2, alpha = 0, time = trans2}))
       --run trigger action
-      if words[i].trigger ~= nil then
-        M.timerStash["syncSoundTrigger" .. i] = timer.performWithDelay(line[i].start, function() words[i].trigger(line[i]) end)
+      print(line[i].name, line[i].action, line[i].trigger)
+      if line[i].trigger ~= nil then
+        print("@@@@@@")
+        M.timerStash["syncSoundTrigger" .. i] = timer.performWithDelay(line[i].start, function()
+          print("######")
+          line[i]:trigger()
+        end)
         table.insert(activeRead2me.syncSoundTrigger, M.timerStash["syncSoundTrigger" .. i])
       end
     end
@@ -320,11 +328,11 @@ function M.addSentence(params)
   local font                = params.font or "Arial" -- default to Arial
   local fontColor           = params.fontColor or {0, 0, 0} -- default to black font
   local fontSize            = params.fontSize or 24 -- default size is 24
-  local fontColorHi         = params.fontColorHi or {255, 0, 0} -- default to red highlighting font color
+  local fontColorHi         = params.fontColorHi or {1, 0, 0} -- default to red highlighting font color
   local padding             = params.padding or 20
   local fontOffset          = params.fontOffset or 0
   local backgroundRectAlpha = params.backgroundRectAlpha or 0
-  local backgroundRectColor = params.backgroundRectColor or {255, 255, 255}
+  local backgroundRectColor = params.backgroundRectColor or {1, 1, 1}
   local readDir             = params.readDir or "leftToRight"
   --
   local transTime = 1 --1000  -- version 3.8
@@ -332,7 +340,7 @@ function M.addSentence(params)
     transTime = params.fadeDuration / 1000 -- version 3.8
   end
   --
-  local talkButton = params.button
+  local talkButton = params.button or {}
   local talkButtonAnimation = false
   if params.talkButtonAnimation and talkButton.numChildren then
     talkButton.animation = params.talkButtonAnimation
@@ -367,8 +375,8 @@ function M.addSentence(params)
     line = params.line,
     sentence = params.sentence,
     sentenceDir = params.sentenceDir,
-    x = params.x + padding + leftPadding,
-    y = params.y + padding + fontOffset,
+    x = params.x + leftPadding,
+    y = params.y + fontOffset,
     font = font,
     fontColor = fontColor,
     fontSize = fontSize,
@@ -384,10 +392,11 @@ function M.addSentence(params)
   talkButton.transIn = {}
   talkButton.transOut = {}
 
+  local backgroundRect
   if backgroundRectAlpha > 0 then
-    local backgroundRect = display.newRoundedRect(
-      params.x,
-      params.y,
+     backgroundRect = display.newRoundedRect(
+      params.x + textGroup.width/2,
+      params.y + textGroup.height/2,
       textGroup.width + padding * 2 + leftPadding,
       textGroup.height + padding * 2,
       12
@@ -400,7 +409,9 @@ function M.addSentence(params)
   if buttonInclude then
     textGroup:insert(talkButton, true)
     talkButton.x = params.x + 10
-    talkButton.y = params.y + backgroundRect.height / 2
+    if backgroundRect then
+      talkButton.y = params.y + backgroundRect.height / 2
+    end
   end
 
   textGroup.alpha = 0
@@ -421,7 +432,7 @@ function M.addSentence(params)
   -- kwik4
   textGroup.x = params.x + textGroup.width / 2
   textGroup.y = params.y + textGroup.height / 2
-  return talkButton, textGroup
+  return textGroup
 end
 
 return M
