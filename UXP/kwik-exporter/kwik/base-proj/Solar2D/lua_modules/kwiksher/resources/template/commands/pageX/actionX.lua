@@ -10,7 +10,7 @@ function ActionCommand:new()
         local UI         = params.UI
         local sceneGroup = UI.sceneGroup
         local layers      = UI.layers
-    local event      = params.event
+    local event      = params.event or {}
     local obj        = event.target
     --
     -- local alert = native.showAlert("Alert", "Hello", { "OK" } )

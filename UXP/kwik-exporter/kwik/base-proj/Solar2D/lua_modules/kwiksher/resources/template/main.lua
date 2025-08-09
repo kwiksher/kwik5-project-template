@@ -4,6 +4,7 @@ env.goPage = "{{page}}"
 env.lang   = "{{lang}}"
 --
 env.restore = false
+--env.initAssets()
 --
 env.mode = "development"
 -- env.mode = "production"

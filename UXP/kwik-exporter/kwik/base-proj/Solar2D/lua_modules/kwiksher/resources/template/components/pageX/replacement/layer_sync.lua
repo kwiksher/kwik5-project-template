@@ -9,9 +9,13 @@ local M = {
     {{#properties}}
     target       = "{{target}}",
     autoPlay     = {{autoPlay}},
+    backgroundRectAlpha = {{backgroundRectAlpha}},
+    backgroundRectColor = {{backgroundRectColor}},
     delay        = {{delay}},
     fadeDuration = {{fadeDuration}},
+    langClassDelegate = {{langClassDelegate}},
     speakerIcon = {{speakerIcon}},
+    speakerIconColor = {{speakerIconColor}},
     wordTouch   = {{wordTouch}},
     {{/properties}}
   },
@@ -24,6 +28,7 @@ local M = {
   },
   textProps = {
     {{#textProps}}
+    filename    = "{{filename}}",
     folder       = nil,
     font         = "{{font}}",
     fontColor   = { {{fontColor}} },
@@ -47,7 +52,8 @@ M.line = {
     start = {{start}},
     file = "{{file}}",
     action = "{{action}}",
-    dur = {{dur}}
+    dur = {{dur}},
+    newline = {{newline}}
   },
   {{/line}}
 }

@@ -14,6 +14,11 @@ if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
   lldebugger.start()
 end
 
+local archInfo = system.getInfo("architectureInfo")
+      local isWindows = archInfo == "x86" or archInfo == "x64" or
+                       archInfo == "IA64" or archInfo == "ARM"
+
+
 local  function createSymbolicLink()
   -- Check if the file exists using absolute path
   local file_path = resourcePath .. "/lua_modules/kwiksher/kwik.lua"
@@ -24,20 +29,19 @@ local  function createSymbolicLink()
       return true
   else
     print("File NOT found:", file_path)
-    local scripts
     if isWindows then
       print("You may need to run as administrator",
             'runas /user:Administrator "cmd /c mklink /D lua_modules\\kwiksher ..\\..\\kwik5-plugin"')
     else
-      scripts = {
+      local scripts = {
         'cd ' .. resourcePath ..'/lua_modules && ln -s ../../../kwik5-plugin kwiksher',
       }
+      for i, v in next, scripts do
+        print(v)
+        os.execute(v)
+      end
     end
     --print(system.getInfo("architectureInfo"))
-    for i, v in next, scripts do
-      print(v)
-      os.execute(v)
-    end
     return false
   end
 end
@@ -49,16 +53,13 @@ function M.setPlugin(mode)
   -- print(current_path)
   if current_path == nil or not lfs.chdir(current_path) then
     print("###")
-    print("### Please use update_kwik.sh(mac) or update_kwik.bat(win) to set up kwik")
+    print("### Please use installer.sh(mac) or installer.bat(win) to set up kwik")
     print("###")
     if mode == "debug" then
       createSymbolicLink()
     else
       -- Check for installer files
-      local archInfo = system.getInfo("architectureInfo")
-      local isWindows = archInfo == "x86" or archInfo == "x64" or
-                       archInfo == "IA64" or archInfo == "ARM"
-
+      
       local path
       path = system.pathForFile("", system.ResourceDirectory).."/../"
       if isWindows then
@@ -69,7 +70,7 @@ function M.setPlugin(mode)
         print("Found installer file:", path)
         local cmd = 'cd "'.. path.. '"; source update_kwik.sh'
         if isWindows then
-           cmd = 'start cmd /k "cd "' .. path .. '" && update_kwik.bat"'
+           cmd = "cd .. & start cmd /k call update_kwik.bat"
         end
         print(cmd)
         os.execute(cmd)
@@ -149,5 +150,64 @@ function M.setPlugin(mode)
   return true
 end
 
+function M.initAssets()
+  local resourcePath = system.pathForFile("", system.ResourceDirectory)
+  local appPath = resourcePath .. "/App"
+  
+  -- Check if App directory exists
+  local appDir = lfs.chdir(appPath)
+  if not appDir then
+    print("App directory not found:", appPath)
+    return false
+  end
+  
+  -- Get list of folders under App
+  for entry in lfs.dir(appPath) do
+    if entry ~= "." and entry ~= ".." then
+      local folderPath = appPath .. "/" .. entry
+      local attr = lfs.attributes(folderPath)
+      
+      if attr and attr.mode == "directory" then
+        local assetsPath = folderPath .. "/assets"
+        local assetsAttr = lfs.attributes(assetsPath)
+        
+        if assetsAttr and assetsAttr.mode == "directory" then
+          print("Creating asset directories for:", entry)
+          
+          -- Change to assets directory
+          lfs.chdir(assetsPath)
+          
+          -- Create asset subdirectories
+          local directories = {
+            "audios/long",
+            "audios/short", 
+            "audios/sync",
+            "images",
+            "particles",
+            "sprites",
+            "thumbnails",
+            "videos",
+            "www"
+          }
+          
+          for _, dir in ipairs(directories) do
+            local cmd
+            if isWindows then
+              cmd = 'mkdir "' .. dir:gsub("/", "\\") .. '" 2>nul'
+            else
+              cmd = 'mkdir -p "' .. dir .. '"'
+            end
+            print("Creating:", dir)
+            os.execute(cmd)
+          end
+        end
+      end
+    end
+  end
+  
+  -- Return to original directory
+  lfs.chdir(resourcePath)
+  return true
+end
 
 return M

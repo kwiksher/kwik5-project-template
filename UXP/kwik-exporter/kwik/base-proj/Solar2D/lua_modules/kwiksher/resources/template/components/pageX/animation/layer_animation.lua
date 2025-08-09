@@ -97,19 +97,20 @@ M.to = {
 M.actions = { onComplete = "{{actionName}}" }
 
 
-{{#breadcrumb}}
+{{#breadcrumbs}}
 M.breadcrumbs = {
+    enable  = {{enable}},
     dispose  = {{dispose}},
-    shape    = {{shape}},
+    shape    = "{{shape}}",
     {{#color}}
     color    =  { {{r}}, {{g}}, {{b}}, {{a}} },
     {{/color}}
-    interval = {{bInterval}},
+    interval = {{interval}},
     time     = {{time}},
     width  = {{width}},
     height = {{height}},
 }
-{{/breadcrumb}}
+{{/breadcrumbs}}
 
 {{#path}}
 if M.animation.Class == "path" then
