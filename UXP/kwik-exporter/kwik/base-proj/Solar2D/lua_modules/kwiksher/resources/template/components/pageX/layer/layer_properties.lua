@@ -63,7 +63,7 @@ function M:init(UI)
     if v ~= nil and v ~= "" then
       layerMod[k] = v
     end
-  end 
+  end
 
 end
 --
@@ -80,7 +80,7 @@ function M:create(UI)
   -- obj.width     = props.width/4
   if props.alpha then
     obj.alpha     = props.alpha
-  end         
+  end
   -- obj.oldAlpha  = props.oriAlpha
   if props.blendMode~="" then
     obj.blendMode = props.blendMode
@@ -98,19 +98,19 @@ function M:create(UI)
   -- obj.kind        = props.layerProps.kind
 
   --
-  if props.randXStart and props.randXStart > 0 then
+  if type(props.randXStart) == "number" and props.randXStart > 0 then
      obj.x = math.random( props.randXStart, props.randXEnd)
   end
-  if props.randYStart and props.randYStart > 0  then
+  if type(props.randYStart) == "number" and props.randYStart > 0  then
      obj.y = math.random( props.randYStart, props.randYEnd)
   end
-  if props.xScale then
+  if type(props.xScale) == "number" then
     obj.xScale = props.xScale
   end
-  if props.yScale then
+  if type(props.yScale) == "number" then
     obj.yScale = props.yScale
   end
-  if props.rotation then
+  if type(props.rotation) == "number" then
     obj:rotate( props.rotation )
   end
   --

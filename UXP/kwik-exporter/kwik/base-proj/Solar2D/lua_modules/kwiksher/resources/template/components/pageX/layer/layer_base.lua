@@ -15,7 +15,7 @@ local layerProps = {
   alpha     = {{opacity}}/100,
 }
 
-M.align       = "{{align}}"
+M.attachToEdge       = "{{attachToEdge}}"
 M.randXStart  = {{randXStart}}
 M.randXEnd    = {{randXEnd}}
 M.randYStart  = {{randYStart}}

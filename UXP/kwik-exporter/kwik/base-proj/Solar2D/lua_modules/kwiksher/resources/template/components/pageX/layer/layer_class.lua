@@ -6,7 +6,7 @@ local M = require("components.common.{{className}}").new()
 function M:setProps(layerProps)
   self.imageWidth  = layerProps.width/4
   self.imageHeight = layerProps.height/4
-  self.mX, self.mY   = app.getPosition(layerProps.x, layerProps.y, self.align)
+  self.mX, self.mY   = app.getPosition(layerProps.x, layerProps.y, self.attachToEdge)
   --
   self.randXStart  = app.getPosition(self.randXStart)
   self.randXEnd    = app.getPosition(self.randXEnd)
@@ -34,7 +34,7 @@ local layerProps = {
   alpha     = {{opacity}}/100,
 }
 
-M.align       = "{{align}}"
+M.attachToEdge      = "{{attachToEdge}}"
 M.randXStart  = {{randXStart}}
 M.randXEnd    = {{randXEnd}}
 M.randYStart  = {{randYStart}}

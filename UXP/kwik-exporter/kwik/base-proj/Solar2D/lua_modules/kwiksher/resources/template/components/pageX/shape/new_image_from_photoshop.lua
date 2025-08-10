@@ -20,7 +20,7 @@ local layerProps = {
   randYEnd    = {{randYEnd}},
 }
 
-M.align       = "{{align}}"
+M.attachToEdge       = "{{attachToEdge}}"
 --
 M.xScale     = {{scaleW}}
 M.yScale     = {{scaleH}}
