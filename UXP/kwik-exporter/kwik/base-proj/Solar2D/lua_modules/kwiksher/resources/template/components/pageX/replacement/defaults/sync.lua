@@ -5,13 +5,13 @@ local M = {
   properties = {
     target = NIL,
     autoPlay     = true,
-    backgroundRectAlpha = 0.4,
-    backgroundRectColor = {1, 1, 1},
+    -- backgroundRectAlpha = 0.4,
+    backgroundRectColor = {1, 1, 1, 0.4},
     delay        = 0,
     fadeDuration = 1000,
     langClassDelegate = false,
     speakerIcon  = true,
-    speakerIconColor = {0,0,1},
+    speakerIconColor = {0,0,1,1},
     wordTouch    = false
   },
   actions = {onComplete = ""},

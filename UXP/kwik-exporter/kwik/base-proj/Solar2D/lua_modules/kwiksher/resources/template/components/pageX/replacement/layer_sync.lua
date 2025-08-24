@@ -9,13 +9,16 @@ local M = {
     {{#properties}}
     target       = "{{target}}",
     autoPlay     = {{autoPlay}},
-    backgroundRectAlpha = {{backgroundRectAlpha}},
-    backgroundRectColor = {{backgroundRectColor}},
+    {{#backgroundRectColor}}
+    backgroundRectColor = { {{r}}, {{g}}, {{b}}, {{a}} },
+    {{/backgroundRectColor}}
     delay        = {{delay}},
     fadeDuration = {{fadeDuration}},
     langClassDelegate = {{langClassDelegate}},
     speakerIcon = {{speakerIcon}},
-    speakerIconColor = {{speakerIconColor}},
+    {{#speakerIconColor}}
+    speakerIconColor =  { {{r}}, {{g}}, {{b}}, {{a}} },
+    {{/speakerIconColor}}
     wordTouch   = {{wordTouch}},
     {{/properties}}
   },
@@ -31,8 +34,12 @@ local M = {
     filename    = "{{filename}}",
     folder       = nil,
     font         = "{{font}}",
-    fontColor   = { {{fontColor}} },
-    fontColorHi = { {{fontColorHi}} },
+    {{#fontColor}}
+    fontColor   =  { {{r}}, {{g}}, {{b}}, {{a}} },
+    {{/fontColor}}
+    {{#fontColorHi}}
+    fontColorHi =  { {{r}}, {{g}}, {{b}}, {{a}} },
+    {{/fontColorHi}}
     fontSize    = {{fontSize}},
     language    = "{{language}}",
     padding     = {{padding}},
