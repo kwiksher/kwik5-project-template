@@ -336,6 +336,7 @@ function new(target, duration, values, props)
   --tween.breadAnchor = nil
   local numCrumbs = 0
   local crumbGroup = display.newGroup()
+  tween.crumbGroup = crumbGroup
 
   --crumbGroup:insert(target)
 
