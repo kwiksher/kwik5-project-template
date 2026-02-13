@@ -1,3 +1,4 @@
+```lua
 local sceneName = ...
 --
 local model = {
@@ -5,16 +6,28 @@ local model = {
   components = {
     layers = {
       {
+        background = {
+        }
+      },
+      {
         bg = {
         }
       },
       {
-        rect_0 = {
-          class={ "body", }  }
+        copyright = {
+        }
       },
       {
-        rect_1 = {
-          class={ "body", }  }
+        GroupA = {
+        }
+      },
+      {
+        star = {
+           }
+      },
+      {
+        hello = {
+        }
       },
     },
     audios = {
@@ -23,12 +36,14 @@ local model = {
     },
     timers = {  },
     variables = {  },
-    joints    = {  "rect_0_rect_1_pivot",  },
-    page = { "physics",  }
+    joints    = {  },
+    page = {  }
   },
   commands = {  },
-  onInit = function(scene) print("onInit") end
+  onInit = function(scene)  end
 }
 local scene = require('controller.scene').new(sceneName, model)
 --
 return scene
+
+```

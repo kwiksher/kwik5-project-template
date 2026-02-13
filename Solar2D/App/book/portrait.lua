@@ -1,3 +1,4 @@
+```lua
 local sceneName = ...
 --
 local model = {
@@ -61,3 +62,5 @@ local model = {
 local scene = require('controller.scene').new(sceneName, model)
 --
 return scene
+
+```
