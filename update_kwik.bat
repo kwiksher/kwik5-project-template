@@ -1,6 +1,50 @@
 @echo off
 setlocal enabledelayedexpansion
 
+REM --version: print local and remote version, then exit
+if /i "%1"=="--version" (
+    REM local version
+    set "LOCAL_VERSION=not-installed"
+    if exist "%PLUGIN_DIR%\version.txt" (
+        set /p LOCAL_VERSION=<"%PLUGIN_DIR%\version.txt"
+    )
+
+    REM fetch release info
+    powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (Invoke-WebRequest -Uri 'https://api.github.com/repos/%REPO%/releases/latest' -UseBasicParsing).Content}" > "%DOWNLOADS_DIR%\release_info.json"
+    if %errorlevel% neq 0 (
+        echo Failed to connect to GitHub API. Please check your internet connection.
+        exit /b 1
+    )
+
+    for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOADS_DIR%\release_info.json' | ConvertFrom-Json; $json.tag_name}"') do (
+        set "REMOTE_TAG=%%a"
+    )
+
+    set "NEW_VERSION=%REMOTE_TAG%"
+
+    for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOADS_DIR%\release_info.json' | ConvertFrom-Json; $asset = $json.assets | Where-Object { $_.name -like '*version.txt' }; if($asset){ $asset.browser_download_url }}"') do (
+        set "VERSION_ASSET_URL=%%a"
+    )
+
+    if defined VERSION_ASSET_URL (
+        powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%VERSION_ASSET_URL%' -OutFile '%DOWNLOADS_DIR%\version.txt' -UseBasicParsing }"
+        if exist "%DOWNLOADS_DIR%\version.txt" (
+            set /p "NEW_VERSION"=<"%DOWNLOADS_DIR%\version.txt"
+            if exist "%PLUGIN_DIR%\version.txt" (
+                set /p "OLD_VERSION"=<"%PLUGIN_DIR%\version.txt"
+            ) else (
+                set "OLD_VERSION=not-installed"
+            )
+            copy /Y "%DOWNLOADS_DIR%\version.txt" "%PLUGIN_DIR%\version.txt" >nul 2>&1 || echo Failed to copy version.txt to %PLUGIN_DIR%
+            del /q "%DOWNLOADS_DIR%\version.txt"
+        )
+    )
+
+    echo Local version:  %LOCAL_VERSION%
+    echo Remote version: %NEW_VERSION%
+    exit /b 0
+)
+
 REM Check for --regonly argument
 if /i "%1"=="--regonly" (
     call :install_registry_only
@@ -32,6 +76,30 @@ if %errorlevel% neq 0 (
     echo Failed to connect to GitHub API. Please check your internet connection.
     pause
     exit /b 1
+)
+
+REM --- New: fetch version.txt asset and compare with local version ---
+set "TEMP_VERSION_FILE=%DOWNLOADS_DIR%\kwik_version.txt"
+for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOADS_DIR%\release_info.json' | ConvertFrom-Json; $asset = $json.assets | Where-Object { $_.name -like '*version.txt' }; if($asset){ $asset.browser_download_url }}"') do (
+    set "VERSION_ASSET_URL=%%a"
+)
+if defined VERSION_ASSET_URL (
+    echo Downloading version.txt from release asset...
+    powershell -Command "& {[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri '%VERSION_ASSET_URL%' -OutFile '%TEMP_VERSION_FILE%' -UseBasicParsing }"
+    if exist "%TEMP_VERSION_FILE%" (
+        set /p "NEW_VERSION"=<"%TEMP_VERSION_FILE%"
+        if exist "%PLUGIN_DIR%\version.txt" (
+            set /p "OLD_VERSION"=<"%PLUGIN_DIR%\version.txt"
+        ) else (
+            set "OLD_VERSION=not-installed"
+        )
+        echo Old version: %OLD_VERSION%
+        echo New version: %NEW_VERSION%
+        copy /Y "%TEMP_VERSION_FILE%" "%PLUGIN_DIR%\version.txt" >nul 2>&1 || echo Failed to copy version.txt to %PLUGIN_DIR%
+        del /q "%TEMP_VERSION_FILE%"
+    ) else (
+        echo Failed to download version.txt from release assets. Skipping version update.
+    )
 )
 
 REM Extract the download URL for plugin-kwik.tgz

@@ -351,22 +351,29 @@ if env.setPlugin(env.mode)  then
 end
 ```
 
+---
+
 ### Update Kwik modules
 
 `update_kwik.sh` (Mac) and `update_kwik.bat` (Windows) fetch the latest release and overwrite the `lua_modules` folder in Solar2D.
 
-<img src="./img/2025-07-14-13-40-59.png" width="300" class="popup-image">
-      }
-    }
-  )
-  --
-  kwik.bootstrap(env.props)
-  --
-end
-```
+<img src="./img/2025-07-18-10-27-19.png" width="600" class="popup-image">
 
-### Upate kwik modules
+- https://github.com/kwiksher/kwik5-project-template/releases
 
-update_kwik.sh (mac) , update_kwik.bat will fetch the latest release and overwrite the lua_moduels folder in Solar2D
 
-<img src="./img/2025-07-14-13-40-59.png" width="300" class="popup-image">
+you may check the current version by
+
+- Mac
+
+  ```
+  bash ./update_kwik.sh --version
+  ```
+
+- Win
+
+  ```
+  ./update_kwik.bat --version
+  ```
+
+Without --version arg, it will fetch the latest version and set it to `./lua_modules/kwiksher`.

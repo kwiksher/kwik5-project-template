@@ -67,6 +67,10 @@ jobs:
         git tag -a "${{ env.CURRENT_DATETIME }}" -m "Release ${{ env.CURRENT_DATETIME }}"
         git push origin "${{ env.CURRENT_DATETIME }}"
 
+    - name: Create version.txt
+      run: |
+        echo "${{ env.CURRENT_DATETIME }}" > version.txt
+
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v2
@@ -77,4 +81,5 @@ jobs:
         prerelease: false
         files: |
           UXP/*.ccx
+          version.txt
 

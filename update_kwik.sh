@@ -18,17 +18,59 @@ mkdir -p "$PLUGIN_DIR"
 # Create the skins directory if it doesn't exist
 mkdir -p "$SKINS_DIR"
 
-# Fetch the latest release information
-echo "Fetching information about the latest release..."
-echo "https://api.github.com/repos/$REPO/releases/latest"
-RELEASE_INFO=$(curl -s "https://api.github.com/repos/$REPO/releases/latest")
-if [ $? -ne 0 ]; then
+# Helper: fetch latest release info
+fetch_release_info() {
+  echo "https://api.github.com/repos/$REPO/releases/latest"
+  RELEASE_INFO=$(curl -s "https://api.github.com/repos/$REPO/releases/latest")
+  if [ $? -ne 0 ] || [ -z "$RELEASE_INFO" ]; then
     echo "Failed to connect to GitHub API. Please check your internet connection."
-    exit 1
+    return 1
+  fi
+  return 0
+}
+
+# If called with --version, print local and latest remote versions and exit
+if [ "$1" = "--version" ]; then
+  # local version
+  LOCAL_VERSION="not-installed"
+  if [ -f "$PLUGIN_DIR/version.txt" ]; then
+    LOCAL_VERSION=$(cat "$PLUGIN_DIR/version.txt" 2>/dev/null || echo "unknown")
+  fi
+
+  if fetch_release_info; then
+    REMOTE_TAG=$(echo "$RELEASE_INFO" | grep -o '"tag_name": "[^"]*' | cut -d'"' -f4)
+    # try to prefer an explicit version.txt asset
+    REMOTE_VERSION="${REMOTE_TAG:-unknown}"
+    ASSET_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": "[^"]*version.txt' | cut -d'"' -f4)
+    if [ -n "$ASSET_URL" ]; then
+      TMPV=$(mktemp)
+      if curl -sSfL -o "$TMPV" "$ASSET_URL"; then
+        REMOTE_VERSION=$(cat "$TMPV" 2>/dev/null || echo "$REMOTE_VERSION")
+      fi
+      rm -f "$TMPV"
+    fi
+  else
+    REMOTE_VERSION="unknown"
+  fi
+
+  echo "Local version:  $LOCAL_VERSION"
+  echo "Remote version: $REMOTE_VERSION"
+  exit 0
+fi
+
+# Ensure we have release info available
+if ! fetch_release_info; then
+  echo "Unable to retrieve release information. Aborting."
+  exit 1
 fi
 
 # Extract the download URL for plugin-kwik.tgz
-PLUGIN_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": ".*plugin-kwik.tgz"' | cut -d'"' -f4)
+PLUGIN_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": "[^"]*"' | cut -d'"' -f4 | grep -m1 'plugin-kwik.tgz' || true)
+if [ -z "$PLUGIN_URL" ]; then
+  echo "Could not find plugin-kwik.tgz in release assets. RELEASE_INFO summary:"
+  echo "$RELEASE_INFO" | sed -n '1,200p'
+  exit 1
+fi
 
 # Extract the download URL for Source code (tar.gz)
 SRC_URL=$(echo "$RELEASE_INFO" | grep -o '"tarball_url": "[^"]*' | cut -d'"' -f4)
@@ -40,6 +82,31 @@ if curl -L -o "$TEMP_PLUGIN_FILE" "$PLUGIN_URL"; then
 else
     echo "Failed to download the plugin. Please check your internet connection."
     exit 1
+fi
+
+# --- New: fetch version.txt asset and compare with local version ---
+TEMP_VERSION_FILE="/tmp/kwik_version.txt"
+VERSION_ASSET_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": "[^"]*version.txt' | cut -d'"' -f4)
+if [ -n "$VERSION_ASSET_URL" ]; then
+  echo "Downloading version.txt from release asset..."
+  if curl -sSfL -o "$TEMP_VERSION_FILE" "$VERSION_ASSET_URL"; then
+    NEW_VERSION=$(cat "$TEMP_VERSION_FILE" 2>/dev/null || echo "")
+    if [ -f "$PLUGIN_DIR/version.txt" ]; then
+      OLD_VERSION=$(cat "$PLUGIN_DIR/version.txt" 2>/dev/null || echo "")
+    else
+      OLD_VERSION="not-installed"
+    fi
+    echo "Old version: ${OLD_VERSION:-unknown}"
+    echo "New version: ${NEW_VERSION:-unknown}"
+
+    # copy version.txt into plugin dir
+    cp "$TEMP_VERSION_FILE" "$PLUGIN_DIR/version.txt" || echo "Failed to copy version.txt to $PLUGIN_DIR"
+    rm -f "$TEMP_VERSION_FILE"
+  else
+    echo "Failed to download version.txt from release assets. Skipping version update."
+  fi
+else
+  echo "No version.txt asset found in release. Skipping version sync."
 fi
 
 # Remove old plugin files before extraction
