@@ -54,7 +54,19 @@ M.properties = {
   {{/properties}}
 }
 
-M.properties.imagePath   =layerMod.psdPage.."/".. M.properties.name ..".png"
+if M.properties.name:find("/") > 0 then -- pageX/bg.png for shared asset
+  if M.properties.kind:len() > 0 then -- use if to jpg
+        M.properties.imagePath   = M.properties.name .."."..M.properties.kind
+  else
+    M.properties.imagePath   = M.properties.name ..".png"
+  end
+else
+  if M.properties.kind:len() > 0 then -- use if to jpg
+    M.properties.imagePath   =layerMod.psdPage.."/".. M.properties.name .."."..M.properties.kind
+  else
+    M.properties.imagePath   =layerMod.psdPage.."/".. M.properties.name ..".png"
+  end
+end
 
 --
 function M:init(UI)
