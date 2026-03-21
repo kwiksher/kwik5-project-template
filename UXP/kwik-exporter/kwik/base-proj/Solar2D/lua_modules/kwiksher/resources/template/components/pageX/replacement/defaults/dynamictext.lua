@@ -9,7 +9,7 @@ local M = {
     paddingY = 4,
     color    = { 0, 0, 0, 1},
     fontSize = 24,
-    font = "",
+    font = "native.systemFont",
     align = "left",
   }
 }

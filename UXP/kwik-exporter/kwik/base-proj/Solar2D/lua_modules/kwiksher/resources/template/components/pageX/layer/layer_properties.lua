@@ -33,7 +33,7 @@ M.properties = {
   {{/color}}
   {{#text}}
   text = {{text}},
-  font = {{font}},
+  font = "{{font}}",
   fontSize = {{fontSize}},
   {{/text}}
   ---
@@ -47,14 +47,15 @@ M.properties = {
   {{/infinity}}
   ---
   {{#imagePath}}
-  imagePath   = {{imagePath}},
+  imagePath   = "{{imagePath}}",
   imageHeight = {{imageHeight}},
   imageWidth  = {{imageWidth}}
   {{/imagePath}}
   {{/properties}}
 }
 
-if M.properties.name:find("/") > 0 then -- pageX/bg.png for shared asset
+local slash_pos = M.properties.name:find("/")
+if slash_pos and slash_pos > 0 then -- pageX/bg.png for shared asset
   if M.properties.kind:len() > 0 then -- use if to jpg
         M.properties.imagePath   = M.properties.name .."."..M.properties.kind
   else
@@ -72,7 +73,7 @@ end
 function M:init(UI)
   -- overwrite layerMod properties by M.properties one by one if not nil
   for k, v in pairs(self.properties) do
-    if v ~= nil and v ~= "" then
+    if v ~= nil and v ~= "" and v ~= NIL then
       layerMod[k] = v
     end
   end
@@ -82,12 +83,38 @@ end
 function M:create(UI)
   local obj = UI.sceneGroup[self.properties.name]
   self.obj = obj
+  print("###", self.properties.name)
+  for k, v in pairs(UI.sceneGroup) do print(k ,v) end
   --
   --
   -- obj.imagePath = self.imagePath
   local props = self.properties
-  -- obj.x         = props.x/4
-  -- obj.y         = props.y/4
+  if type(props.x) == "number" or type(props.y) == "number" then
+    local catObj = UI.sceneGroup and UI.sceneGroup.cat
+    local baseCenterX, baseCenterY = 480, 320
+    if display.contentHeight > display.contentWidth then
+      baseCenterX, baseCenterY = 320, 480
+    end
+    local scaleX = display.contentCenterX / baseCenterX
+    local scaleY = display.contentCenterY / baseCenterY
+    if catObj and scaleX > 0 and scaleY > 0 then
+      local catBaseX = catObj.x / scaleX
+      local catBaseY = catObj.y / scaleY
+      if type(props.x) == "number" then
+        obj.x = catObj.x + (props.x - catBaseX)
+      end
+      if type(props.y) == "number" then
+        obj.y = catObj.y + (props.y - catBaseY)
+      end
+    else
+      if type(props.x) == "number" then
+        obj.x = props.x
+      end
+      if type(props.y) == "number" then
+        obj.y = props.y
+      end
+    end
+  end
   -- obj.height    = props.height/4
   -- obj.width     = props.width/4
   if props.alpha then
@@ -108,13 +135,12 @@ function M:create(UI)
   obj.randYEnd    = props.randYEnd
   -- obj.type        = props.layerProps.type
   -- obj.kind        = props.layerProps.kind
-
   --
   if type(props.randXStart) == "number" and props.randXStart > 0 then
-     obj.x = math.random( props.randXStart, props.randXEnd)
+    obj.x = math.random( props.randXStart, props.randXEnd)
   end
   if type(props.randYStart) == "number" and props.randYStart > 0  then
-     obj.y = math.random( props.randYStart, props.randYEnd)
+    obj.y = math.random( props.randYStart, props.randYEnd)
   end
   if type(props.xScale) == "number" then
     obj.xScale = props.xScale
@@ -135,9 +161,8 @@ function M:create(UI)
   --
   -- sceneGroup[self.name] = obj
   -- print("@@@@", self.name, obj)
-
   --
-  if props.layerAsBg then
+  if props.layerAsBg == true then
     UI.sceneGroup:insert( 1, obj)
   else
     UI.sceneGroup:insert( obj)
@@ -162,6 +187,5 @@ end
 --
 function  M:destroy(UI)
 end
-
 --
 return M

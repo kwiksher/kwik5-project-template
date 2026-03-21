@@ -18,7 +18,7 @@ local M = {
     dropArea = "",
     dropAreaMargin = 10,
     --
-    boundaries = {xMin=0, xMax=1920, yMin=0, yMax=1080},
+    boundaries = {xMin=0, xMax=1920/4, yMin=0, yMax=1080/4},
     --
     rockingEnable = 1 ,-- 0,
     backToOrigin = true,

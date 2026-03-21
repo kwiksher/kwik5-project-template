@@ -6,7 +6,7 @@ local M = {
   properties = {
     {{#properties}}
     contents =  "{{contents}}",
-    font =  {{font}}, -- "HiraMaruProN-W4",
+    font =  "{{font}}", -- "HiraMaruProN-W4",
     fontSize =  {{fontSize}},
     alignment =  "{{alignment}}",
     {{#color}}

@@ -4,11 +4,13 @@ local M = {
   type = "short",
   properties = {
     autoPlay=false,
-    channel = 0,
+    channel = 1,
     delay=0,
     file = "",
+    fadein = false,
     folder="",
     loops = 0,
+    volume = 8
   }
 }
 

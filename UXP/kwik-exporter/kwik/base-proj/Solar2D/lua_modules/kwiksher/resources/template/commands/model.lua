@@ -294,7 +294,7 @@ M.commands = {
   },
 
   syncAudioText = {
-    play = {_target = "", language = "", type = "", channel = ""},
+    play = {_target = ""}, --  language = "", type = "", channel = ""
   },
 
   timer = {
@@ -318,7 +318,7 @@ M.commands = {
 
   variable = {
     restartTrackVars = {},
-    editVar = {_target="", value="", type=""} -- string is "{{value}}" otherwise {{value}} is rendered
+    editVar = {_target="", value="", valueType=""} -- string is "{{value}}" otherwise {{value}} is rendered
   },
 
   video = {

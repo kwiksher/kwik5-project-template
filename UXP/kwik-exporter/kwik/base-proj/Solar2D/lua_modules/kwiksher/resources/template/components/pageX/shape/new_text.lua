@@ -19,7 +19,7 @@ local layerProps = {
   {{/fill}}
   text     = "{{text}}",
   -- width    = nil, -- {{width}},
-  font     = {{font}},
+  font     = "{{font}}",
   fontSize = {{size}}, -- {{fontSize}}
   align    = "{{align}}",  -- Alignment parameter
   shapedWith    = "new_text"
@@ -33,8 +33,7 @@ end
 --
 function M:create(UI)
   local layerProps = self.layerProps
-  -- layerProps.x, layerProps.y = app.getCenter(layerProps.x, layerProps.y)
-
+  layerProps.x, layerProps.y = app.getPosition(layerProps.x, layerProps.y)
   local  obj = display.newText(layerProps)
 
   obj.name = layerProps.name

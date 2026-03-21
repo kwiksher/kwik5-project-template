@@ -1,6 +1,6 @@
 local env = require("env")
 env.book   = "{{book}}"
-env.goPage = "{{page}}"
+env.page = "{{page}}"
 env.lang   = "{{lang}}"
 --
 env.restore = false
@@ -15,7 +15,7 @@ if env.mode == "development" or env.mode == "debug" then
   env.props = {
     name = env.book,
     editor = true,
-    gotoPage = env.goPage,
+    gotoPage = env.page,
     language = env.lang, -- empty string "" is for a single language project
     position = {x = 0, y = 0},
     gotoLastBook = true,
@@ -28,7 +28,7 @@ elseif env.mode == "production" then
   env.props = {
     name = env.book,
     editor = false,
-    gotoPage = env.goPage,
+    gotoPage = env.page,
     language = env.lang, -- empty string "" is for a single language project
     position = {x = 0, y = 0},
     gotoLastBook = false,

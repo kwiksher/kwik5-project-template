@@ -12,7 +12,7 @@ local _layerProps = {
   {{/color}}
   text     = "{{text}}",
   width    = nil, -- {{width}},
-  font     = {{font}},
+  font     = "{{font}}",
   fontSize = {{fontSize}},
   align    = "{{align}}"  -- Alignment parameter
 }

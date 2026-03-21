@@ -4,9 +4,9 @@ local props = {
     {{#properties}}
     isAfter  = {{isAfter}},
     isLocal  = {{isLocal}}, -- or local
-    type     = "{{type}}", -- table
     isSave   = {{isSave}},
-    value    = {{value}}
+    value    = {{value}},
+    valueType     = "{{valueType}}", -- table
     {{/properties}}
   }
 }

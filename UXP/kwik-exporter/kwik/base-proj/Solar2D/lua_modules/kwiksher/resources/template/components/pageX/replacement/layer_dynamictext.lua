@@ -16,7 +16,7 @@ local M = {
     color    = { {{r}}, {{g}}, {{b}}, {{a}} },
     {{/color}}
     fontSize = {{fontSize}},
-    font = {{font}},
+    font = "{{font}}",
     align = "{{align}}",
     {{/properties}}
   },

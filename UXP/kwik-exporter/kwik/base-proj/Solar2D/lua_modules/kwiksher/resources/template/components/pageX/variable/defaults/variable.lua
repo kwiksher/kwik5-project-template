@@ -3,9 +3,9 @@ local M = {
   properties = {
     isAfter  = false,
     isLocal  = true, -- or local
-    type     = "string", -- table
     isSave   = true,
-    value    = ""
+    value    = "",
+    valueType     = "string", -- table
   }
 }
 

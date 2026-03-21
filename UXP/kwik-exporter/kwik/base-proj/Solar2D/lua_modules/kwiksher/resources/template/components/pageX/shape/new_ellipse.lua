@@ -37,8 +37,13 @@ function M:create(UI)
   self.imagePath = layerProps.name.."." .. (layerProps.type or ".png")
   local path = UI.props.imgDir..self.imagePath
   -- local path = system.pathForFile(UI.props.imgDir..self.imagePath, system.ResourceDirectory)
-  -- local x, y = app.getCenter(layerProps.x, layerProps.y)
-  local x, y = layerProps.x, layerProps.y
+  -- NOTE: layerProps.x/y are PAGE/DESIGN coords (scale-invariant).
+  -- app.getPosition() is called inside shape.createCircle to convert to
+  -- sceneGroup-local coords. Do NOT call it here.
+  local width = tonumber(layerProps.width) or 0
+  local height = tonumber(layerProps.height) or 0
+  local fallbackRadius = math.min(width, height) * 0.5
+  layerProps.radius = tonumber(layerProps.radius) or fallbackRadius
   --
   local obj = shape.createCircle(layerProps)
   --

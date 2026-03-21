@@ -32,9 +32,10 @@ end
 --
 function M:create(UI)
   local layerProps = self.layerProps
+  -- NOTE: layerProps.x/y are PAGE/DESIGN coords (scale-invariant).
+  -- app.getPosition() is called inside shape.createRectangle to convert to
+  -- sceneGroup-local coords. Do NOT call it here.
   -- local x, y = app.getCenter(layerProps.x, layerProps.y)
-  local x, y = layerProps.x, layerProps.y
-  --
   local obj = shape.createRectangle(layerProps)
   --
   obj.layerIndex = #UI.layers+1

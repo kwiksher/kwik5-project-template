@@ -8,7 +8,7 @@ local M = {
     {{#properties}}
     text =  "{{text}}",
     inputType = "{{inputType}}",
-    font =  {{font}}, -- "HiraMaruProN-W4",
+    font =  "{{font}}", -- "HiraMaruProN-W4",
     fontSize =  {{fontSize}},
     -- alignment =  "{{alignment}}",
     {{#color}}

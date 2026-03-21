@@ -397,9 +397,9 @@ function ActionCommand:new()
       AC.Var:restartTrackVars()
       {{/restartTrackVar}}
       {{#editVar}}
-        if "{{type}}" == "function" then
+        if "{{valueType}}" == "function" then
           AC.Var:editVar(UI, "{{target}}", function(value) return {{value}} end)
-        elseif "{{type}}" == "string" then
+        elseif "{{valueType}}" == "string" then
           AC.Var:editVar(UI, "{{target}}", "{{value}}")
         else
           AC.Var:editVar(UI, "{{target}}", tonumber({{value}}))
