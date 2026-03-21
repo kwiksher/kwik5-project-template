@@ -228,6 +228,15 @@ if not defined EXTRACTED_SUBDIR (
     exit /b 1
 )
 
+REM Copy Simulator skin files from the extracted source tree instead of embedding
+REM their contents directly in this installer.
+set "SOURCE_SKINS_DIR=!EXTRACTED_SUBDIR!\Scripts"
+if not exist "!SOURCE_SKINS_DIR!" (
+    echo Scripts directory not found in extracted source tree. Aborting.
+    pause
+    exit /b 1
+)
+
 REM Copy lua_modules to the target location
 echo Copying lua_modules to %LUA_MODULES_TARGET%...
 if exist "!EXTRACTED_SUBDIR!\Solar2D\lua_modules" (
@@ -263,44 +272,10 @@ if exist "!EXTRACTED_SUBDIR!\Scripts\startSolar2D.bat" (
     )
 )
 
-REM Create the kwikEditorLandscape.lua skin file
-echo Creating Kwik Editor Landscape skin file...
-(
-echo simulator =
-echo {
-echo   device = "android",
-echo   screenOriginX = 0,
-echo   screenOriginY = 0,
-echo   screenWidth = 590,
-echo   screenHeight = 960,
-echo   iosPointWidth = 590,
-echo   iosPointHeight = 960,
-echo   deviceImage = nil,
-echo   displayManufacturer = "Kwiksher",
-echo   displayName = "Kwik Landscape",
-echo   windowTitleBarName = "Kwik Editor Landscape"
-echo }
-) > "%SKINS_DIR%\kwikEditorLandscape.lua"
-echo Kwik Editor Landscape skin file created.
-
-REM Create the kwikEditorPortrait.lua skin file
-echo Creating Kwik Editor Portrait skin file...
-(
-echo simulator =
-echo {
-echo   device = "android",
-echo   screenOriginX = 0,
-echo   screenOriginY = 0,
-echo   screenWidth = 960,
-echo   screenHeight = 590,
-echo   deviceImage = nil,
-echo   displayManufacturer = "",
-echo   displayName = "Kwik Portrait",
-echo   supportsScreenRotation = true,
-echo   windowTitleBarName = "Kwik Portrait Editor"
-echo }
-) > "%SKINS_DIR%\kwikEditorPortrait.lua"
-echo Kwik Editor Portrait skin file created.
+call :install_skin_file "kwikEditorLandscape_mac.lua" "kwikEditorLandscape.lua"
+call :install_skin_file "kwikEditorLandscape2x_mac.lua" "kwikEditorLandscape2x.lua"
+call :install_skin_file "kwikEditorPortrait_mac.lua" "kwikEditorPortrait.lua"
+call :install_skin_file "kwikEditorPortrait2x_mac.lua" "kwikEditorPortrait2x.lua"
 
 call :install_registry_only
 
@@ -318,7 +293,7 @@ for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOA
 REM Final message
 echo Installation complete. Plugin version: !RELEASE_TAG!
 echo You can now use the plugin in the Solar2D Simulator.
-echo Kwik Editor Landscape skin is available in the Simulator.
+echo Kwik Editor Landscape, Landscape 2x, Portrait, and Portrait 2x skins are available in the Simulator.
 
 pause
 endlocal
@@ -381,3 +356,23 @@ exit /b
     )
     echo.
 goto :eof
+
+:install_skin_file
+    set "SOURCE_FILE=%~1"
+    set "DEST_FILE=%~2"
+
+    if not exist "!SOURCE_SKINS_DIR!\!SOURCE_FILE!" (
+        echo Missing skin template: !SOURCE_SKINS_DIR!\!SOURCE_FILE!
+        pause
+        exit /b 1
+    )
+
+    copy /Y "!SOURCE_SKINS_DIR!\!SOURCE_FILE!" "%SKINS_DIR%\!DEST_FILE!" >nul
+    if errorlevel 1 (
+        echo Failed to install !DEST_FILE! from !SOURCE_FILE!
+        pause
+        exit /b 1
+    ) else (
+        echo Installed !DEST_FILE! from !SOURCE_FILE!
+    )
+    goto :eof

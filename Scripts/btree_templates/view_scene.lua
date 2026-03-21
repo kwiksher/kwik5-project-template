@@ -1,14 +1,14 @@
 -------------------------------------------------------------------------------
 -- {{SCENE_TITLE}} Scene View - BTree Scaffold
 -------------------------------------------------------------------------------
-local BaseScene = require("views.baseScene")
-local common = require("utils.common_helpers")
-local displayManager = require("views.display_manager")
+local BaseScene = require("Behavior.baseScene")
+local common = require("behaivor.common_helpers")
+local displayManager = require("Behavior.display_manager")
 
 local scene = BaseScene:new("{{SCENE}}")
 
-local actionController = require("actions.{{SCENE}}.{{SCENE}}_controller")
-local conditionController = require("conditions.{{SCENE}}.{{SCENE}}_condition_controller")
+local actionController = require("Behavior.{{BOOK}}.actions.{{SCENE}}.{{SCENE}}_controller")
+local conditionController = require("Behavior.{{BOOK}}.conditions.{{SCENE}}.{{SCENE}}_condition_controller")
 
 local conditionNames = {
 {{CONDITION_LIST}}
@@ -29,7 +29,7 @@ function scene:create(event)
     actionController.initialize(self.objs)
     conditionController.initialize(self.objs)
 
-    self.behaviorTree = common.loadBehaviorTree("App/{{BOOK}}/behaviorTree/{{TREE_FILE}}", actionController, nil)
+    self.behaviorTree = common.loadBehaviorTree("Behavior/{{BOOK}}/{{TREE_FILE}}", actionController, nil)
 
     print("{{SCENE_TITLE}} Scene: Created successfully")
 end

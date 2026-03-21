@@ -3,8 +3,8 @@
 -- Generic scene transition actions
 -- Parses scene name from action and transitions using composer
 -------------------------------------------------------------------------------
-local bt = require("utils.btree")
-local BaseSceneAction = require("actions.base_scene_action")
+local bt = require("behaivor.btree")
+local BaseSceneAction = require("Behavior.base_scene_action")
 local composer = require("composer")
 
 -- Scene objects reference
@@ -28,7 +28,7 @@ local function gotoScene(sceneName)
     if useComponentPaths then
         targetScene = "App.{{BOOK}}.components." .. baseName .. ".index"
     else
-        targetScene = "views." .. baseName .. "." .. sceneName
+        targetScene = "Behavior.{{BOOK}}.views." .. baseName .. "." .. sceneName
     end
 
     print("[ACTION] goto " .. targetScene)
@@ -83,7 +83,7 @@ local function nextScene()
         }
     end
 
-    composer.gotoScene("App.{{BOOK}}.behaviorTree.views.emptyScene", {
+    composer.gotoScene("Behavior.{{BOOK}}.views.emptyScene", {
         effect = "slideLeft",
         time = 300,
         params = params

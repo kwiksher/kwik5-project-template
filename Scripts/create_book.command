@@ -51,8 +51,7 @@ for page in $pages; do
 
     cp $SCRIPT_DIR/background.lua components/$page/layers/background.lua
 
-    cd components/$page
-    cat << EOF > index.lua
+    cat << EOF > $page.lua
 local sceneName = ...
 --
 local scene = require('controller.scene').new(sceneName, {
@@ -70,13 +69,12 @@ local scene = require('controller.scene').new(sceneName, {
 --
 return scene
 EOF
-    cd ..
-    cd ..
 done
 
 echo $tmp
 
-cd $dst/App/$book
+pwd
+
 cat << EOF > index.lua
 local scenes = {
 $tmp
@@ -84,7 +82,7 @@ $tmp
 return scenes
 EOF
 
-cd $dst/App/$book/assets
+cd assets
 cat << EOF > model.lua
 local M = {
   audios = {}, sprites = {}, videos = {}

@@ -18,59 +18,17 @@ mkdir -p "$PLUGIN_DIR"
 # Create the skins directory if it doesn't exist
 mkdir -p "$SKINS_DIR"
 
-# Helper: fetch latest release info
-fetch_release_info() {
-  echo "https://api.github.com/repos/$REPO/releases/latest"
-  RELEASE_INFO=$(curl -s "https://api.github.com/repos/$REPO/releases/latest")
-  if [ $? -ne 0 ] || [ -z "$RELEASE_INFO" ]; then
+# Fetch the latest release information
+echo "Fetching information about the latest release..."
+echo "https://api.github.com/repos/$REPO/releases/latest"
+RELEASE_INFO=$(curl -s "https://api.github.com/repos/$REPO/releases/latest")
+if [ $? -ne 0 ]; then
     echo "Failed to connect to GitHub API. Please check your internet connection."
-    return 1
-  fi
-  return 0
-}
-
-# If called with --version, print local and latest remote versions and exit
-if [ "$1" = "--version" ]; then
-  # local version
-  LOCAL_VERSION="not-installed"
-  if [ -f "$PLUGIN_DIR/version.txt" ]; then
-    LOCAL_VERSION=$(cat "$PLUGIN_DIR/version.txt" 2>/dev/null || echo "unknown")
-  fi
-
-  if fetch_release_info; then
-    REMOTE_TAG=$(echo "$RELEASE_INFO" | grep -o '"tag_name": "[^"]*' | cut -d'"' -f4)
-    # try to prefer an explicit version.txt asset
-    REMOTE_VERSION="${REMOTE_TAG:-unknown}"
-    ASSET_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": "[^"]*version.txt' | cut -d'"' -f4)
-    if [ -n "$ASSET_URL" ]; then
-      TMPV=$(mktemp)
-      if curl -sSfL -o "$TMPV" "$ASSET_URL"; then
-        REMOTE_VERSION=$(cat "$TMPV" 2>/dev/null || echo "$REMOTE_VERSION")
-      fi
-      rm -f "$TMPV"
-    fi
-  else
-    REMOTE_VERSION="unknown"
-  fi
-
-  echo "Local version:  $LOCAL_VERSION"
-  echo "Remote version: $REMOTE_VERSION"
-  exit 0
-fi
-
-# Ensure we have release info available
-if ! fetch_release_info; then
-  echo "Unable to retrieve release information. Aborting."
-  exit 1
+    exit 1
 fi
 
 # Extract the download URL for plugin-kwik.tgz
-PLUGIN_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": "[^"]*"' | cut -d'"' -f4 | grep -m1 'plugin-kwik.tgz' || true)
-if [ -z "$PLUGIN_URL" ]; then
-  echo "Could not find plugin-kwik.tgz in release assets. RELEASE_INFO summary:"
-  echo "$RELEASE_INFO" | sed -n '1,200p'
-  exit 1
-fi
+PLUGIN_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": ".*plugin-kwik.tgz"' | cut -d'"' -f4)
 
 # Extract the download URL for Source code (tar.gz)
 SRC_URL=$(echo "$RELEASE_INFO" | grep -o '"tarball_url": "[^"]*' | cut -d'"' -f4)
@@ -82,31 +40,6 @@ if curl -L -o "$TEMP_PLUGIN_FILE" "$PLUGIN_URL"; then
 else
     echo "Failed to download the plugin. Please check your internet connection."
     exit 1
-fi
-
-# --- New: fetch version.txt asset and compare with local version ---
-TEMP_VERSION_FILE="/tmp/kwik_version.txt"
-VERSION_ASSET_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": "[^"]*version.txt' | cut -d'"' -f4)
-if [ -n "$VERSION_ASSET_URL" ]; then
-  echo "Downloading version.txt from release asset..."
-  if curl -sSfL -o "$TEMP_VERSION_FILE" "$VERSION_ASSET_URL"; then
-    NEW_VERSION=$(cat "$TEMP_VERSION_FILE" 2>/dev/null || echo "")
-    if [ -f "$PLUGIN_DIR/version.txt" ]; then
-      OLD_VERSION=$(cat "$PLUGIN_DIR/version.txt" 2>/dev/null || echo "")
-    else
-      OLD_VERSION="not-installed"
-    fi
-    echo "Old version: ${OLD_VERSION:-unknown}"
-    echo "New version: ${NEW_VERSION:-unknown}"
-
-    # copy version.txt into plugin dir
-    cp "$TEMP_VERSION_FILE" "$PLUGIN_DIR/version.txt" || echo "Failed to copy version.txt to $PLUGIN_DIR"
-    rm -f "$TEMP_VERSION_FILE"
-  else
-    echo "Failed to download version.txt from release assets. Skipping version update."
-  fi
-else
-  echo "No version.txt asset found in release. Skipping version sync."
 fi
 
 # Remove old plugin files before extraction
@@ -166,6 +99,27 @@ if [ -z "$EXTRACTED_SUBDIR" ]; then
     exit 1
 fi
 
+# Copy Simulator skin files from the extracted source tree instead of embedding
+# their contents directly in this installer.
+SOURCE_SKINS_DIR="$EXTRACTED_SUBDIR/Scripts"
+if [ ! -d "$SOURCE_SKINS_DIR" ]; then
+  echo "Scripts directory not found in extracted source tree. Aborting."
+  exit 1
+fi
+
+install_skin_file() {
+  local source_file="$1"
+  local destination_file="$2"
+
+  if [ ! -f "$SOURCE_SKINS_DIR/$source_file" ]; then
+    echo "Missing skin template: $SOURCE_SKINS_DIR/$source_file"
+    exit 1
+  fi
+
+  cp "$SOURCE_SKINS_DIR/$source_file" "$SKINS_DIR/$destination_file"
+  echo "Installed $destination_file from $source_file"
+}
+
 # Copy lua_modules to the target location
 echo "Copying lua_modules to $LUA_MODULES_TARGET..."
 if [ -d "$EXTRACTED_SUBDIR/Solar2D/lua_modules" ]; then
@@ -181,45 +135,12 @@ else
   fi
 fi
 
-# Create the kwikEditorLandscape.lua skin file
-echo "Creating Kwik Editor Landscape skin file..."
-cat > "$SKINS_DIR/kwikEditorLandscape.lua" << 'EOF'
-simulator =
-{
-  device = "desktop-1920x1080",
-  screenOriginX = 0,
-  screenOriginY = 0,
-  screenWidth = 590,
-  screenHeight = 960,
-	iosPointWidth = 590,
-	iosPointHeight = 960,
-  deviceImage = nil,
-  displayManufacturer = "Kwiksher",
-  displayName = "Kwik Landscape",
-  windowTitleBarName = "Kwik Editor Landscape"
-}
-EOF
-echo "Kwik Editor Landscape skin file created."
-
-
-# Create the kwikEditorPortrait.lua skin file
-echo "Creating Kwik Editor Portrait skin file..."
-cat > "$SKINS_DIR/kwikEditorPortrait.lua" << 'EOF'
-simulator =
-{
-	device = "desktop-1920x1080",
-	screenOriginX = 0,
-	screenOriginY = 0,
-	screenWidth = 960,
-	screenHeight = 590,
-	deviceImage = nil,
-	displayManufacturer = "",
-	displayName = "Kwik Portrait",
-	supportsScreenRotation = false,
-	windowTitleBarName = "Kwik Portrait Editor"
-}
-EOF
-echo "Kwik Editor Portrait skin file created."
+echo "Installing Simulator skin files from source templates..."
+install_skin_file "kwikEditorLandscape_mac.lua" "kwikEditorLandscape.lua"
+install_skin_file "kwikEditorLandscape2x_mac.lua" "kwikEditorLandscape2x.lua"
+install_skin_file "kwikEditorPortrait_mac.lua" "kwikEditorPortrait.lua"
+install_skin_file "kwikEditorPortrait2x_mac.lua" "kwikEditorPortrait2x.lua"
+echo "Simulator skin files installed."
 
 # Clean up
 echo "Cleaning up temp files..."
@@ -229,4 +150,4 @@ rm -rf "$TEMP_PLUGIN_FILE" "$TEMP_SRC_FILE" "$EXTRACT_DIR"
 RELEASE_TAG=$(echo "$RELEASE_INFO" | grep -o '"tag_name": "[^"]*' | cut -d'"' -f4)
 echo "Installation complete. Plugin version: $RELEASE_TAG"
 echo "You can now use the plugin in the Solar2D Simulator."
-echo "Kwik Editor Landscape skin is available in the Simulator."
+echo "Kwik Editor Landscape, Landscape 2x, Portrait, and Portrait 2x skins are available in the Simulator."

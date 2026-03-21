@@ -2,8 +2,8 @@
 -- {{SCENE_TITLE}} Conditions
 -- Auto-generated scaffold
 -------------------------------------------------------------------------------
-local bt = require("utils.btree")
-local actionHelper = require("utils.action_helper")
+local bt = require("behaivor.btree")
+local actionHelper = require("behaivor.action_helper")
 
 local M = actionHelper.createModule()
 
@@ -16,10 +16,10 @@ function M.initialize(objects)
 end
 
 M.CONDITIONS = {
-{{CONDITIONS_TABLE}}
+{{{CONDITIONS_TABLE}}}
 }
 
-{{CONDITIONS_FUNCTIONS}}
+{{{CONDITIONS_FUNCTIONS}}}
 
 function M.evaluate(conditionName)
     local condition = M.CONDITIONS[conditionName]

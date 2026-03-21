@@ -2,7 +2,7 @@
 -- Base Scene Action
 -- Base class for scene actions that handle scene transitions
 -------------------------------------------------------------------------------
-local bt = require("utils.btree")
+local bt = require("behaivor.btree")
 
 local BaseSceneAction = {}
 

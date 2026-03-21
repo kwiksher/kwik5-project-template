@@ -95,7 +95,7 @@ local template_dir = script_dir .. "/btree_templates"
 add_lustache_paths(script_dir)
 local lustache = require("lustache")
 
-local behaviorDir = dst .. "/App/" .. book .. "/behaviorTree"
+local behaviorDir = dst .. "/Behavior/" .. book
 local actionsDir = behaviorDir .. "/actions"
 local conditionsDir = behaviorDir .. "/conditions"
 local viewsDir = behaviorDir .. "/views"

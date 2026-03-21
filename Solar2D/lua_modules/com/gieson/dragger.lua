@@ -23,8 +23,19 @@ function retObj:newDragger(params)
   local editorWidth = params.editorWidth or 0
   local editorHeight = params.editorHeight or 0
 
+	local function getPopupPosition(touchData)
+		if dragTarget and dragTarget.localToContent then
+			local x, y = dragTarget:localToContent(0, 0)
+			if x and y then
+				return x, y
+			end
+		end
+		return touchData.x, touchData.y
+	end
+
 	local function doPopup(touchData)
-		popup:pos(touchData.x, touchData.y)
+		local popupX, popupY = getPopupPosition(touchData)
+		popup:pos(popupX, popupY)
 		popup:text("x: " .. tools:round(xPosReport-editorWidth, 2) .. "\n" .. "y: " .. tools:round(yPosReport-editorHeight, 2))
 	end
 
@@ -44,7 +55,8 @@ function retObj:newDragger(params)
 		xPosReport = imgStartPosX + touchData.x - myStartPosX
 		yPosReport = imgStartPosY + touchData.y - myStartPosY
 
-		popup:on(myStartPosX, myStartPosY, true)
+		local popupStartX, popupStartY = getPopupPosition(touchData)
+		popup:on(popupStartX, popupStartY, true)
 		doPopup(touchData)
 
 		self.touched = true

@@ -2,8 +2,8 @@
 -- {{SCENE_TITLE}} Actions
 -- Auto-generated scaffold
 -------------------------------------------------------------------------------
-local bt = require("utils.btree")
-local actionHelper = require("utils.action_helper")
+local bt = require("behaivor.btree")
+local actionHelper = require("behaivor.action_helper")
 
 local M = actionHelper.createModule()
 
@@ -19,9 +19,9 @@ function M.initialize(objects)
 end
 
 M.ACTIONS = {
-{{ACTIONS_TABLE}}
+{{{ACTIONS_TABLE}}}
 }
 
-{{ACTIONS_FUNCTIONS}}
+{{{ACTIONS_FUNCTIONS}}}
 
 return M
