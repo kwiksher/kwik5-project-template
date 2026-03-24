@@ -14,6 +14,11 @@ if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
   lldebugger.start()
 end
 
+local archInfo = system.getInfo("architectureInfo")
+      local isWindows = archInfo == "x86" or archInfo == "x64" or
+                       archInfo == "IA64" or archInfo == "ARM"
+
+
 local  function createSymbolicLink()
   -- Check if the file exists using absolute path
   local file_path = resourcePath .. "/lua_modules/kwiksher/kwik.lua"
@@ -24,20 +29,19 @@ local  function createSymbolicLink()
       return true
   else
     print("File NOT found:", file_path)
-    local scripts
     if isWindows then
       print("You may need to run as administrator",
             'runas /user:Administrator "cmd /c mklink /D lua_modules\\kwiksher ..\\..\\kwik5-plugin"')
     else
-      scripts = {
-        'cd ' .. resourcePath ..'/lua_modules && ln -s ../../../kwik5-plugin kwiksher',
+      local scripts = {
+        'mkdir -p '..resourcePath ..'/lua_modules && cd ' .. resourcePath ..'/lua_modules && ln -s ../../../kwik5-plugin kwiksher',
       }
+      for i, v in next, scripts do
+        print(v)
+        os.execute(v)
+      end
     end
     --print(system.getInfo("architectureInfo"))
-    for i, v in next, scripts do
-      print(v)
-      os.execute(v)
-    end
     return false
   end
 end
@@ -49,15 +53,12 @@ function M.setPlugin(mode)
   -- print(current_path)
   if current_path == nil or not lfs.chdir(current_path) then
     print("###")
-    print("### Please use update_kwik.sh(mac) or update_kwik.bat(win) to set up kwik")
+    print("### Please use installer.sh(mac) or installer.bat(win) to set up kwik")
     print("###")
     if mode == "debug" then
       createSymbolicLink()
     else
       -- Check for installer files
-      local archInfo = system.getInfo("architectureInfo")
-      local isWindows = archInfo == "x86" or archInfo == "x64" or
-                       archInfo == "IA64" or archInfo == "ARM"
 
       local path
       path = system.pathForFile("", system.ResourceDirectory).."/../"
@@ -69,7 +70,7 @@ function M.setPlugin(mode)
         print("Found installer file:", path)
         local cmd = 'cd "'.. path.. '"; source update_kwik.sh'
         if isWindows then
-           cmd = 'start cmd /k "cd "' .. path .. '" && update_kwik.bat"'
+           cmd = "cd .. & start cmd /k call update_kwik.bat"
         end
         print(cmd)
         os.execute(cmd)
@@ -148,6 +149,5 @@ function M.setPlugin(mode)
   end
   return true
 end
-
 
 return M
