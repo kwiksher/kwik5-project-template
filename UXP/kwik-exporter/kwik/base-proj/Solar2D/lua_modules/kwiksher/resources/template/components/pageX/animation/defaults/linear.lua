@@ -15,7 +15,7 @@ local M = {
     alpha = 1,
     xScale = 1,
     yScale = 1,
-    rotation = 90
+    rotation = 0
   },
   properties = {
     target = NIL,
