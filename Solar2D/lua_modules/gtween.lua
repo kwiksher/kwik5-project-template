@@ -402,7 +402,7 @@ function new(target, duration, values, props)
     end
   end
 
-  local useShortDuration = false
+  local useShortDuration = (duration ~= nil and duration < 1.0)
   function tween:setPosition(value)
     if useShortDuration then
       -- Calculate the percentage complete (0-1) and ensure at least 10 steps

@@ -1,9 +1,10 @@
 #!/bin/bash
 # start_simulator.command
-# Usage: ./start_simulator.command [-scale 1x|2x] [--singleton]
+# Usage: ./start_simulator.command [-scale 1x|2x] [--singleton] [--refresh-on|--refresh-off]
 
 SCALE_ARG="1x"
 SINGLETON=0
+REFRESH_OFF=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -scale|--scale)
@@ -14,8 +15,16 @@ while [[ $# -gt 0 ]]; do
       SINGLETON=1
       shift
       ;;
+    --refresh-off)
+      REFRESH_OFF=1
+      shift
+      ;;
+    --refresh-on)
+      REFRESH_OFF=0
+      shift
+      ;;
     -h|--help)
-      echo "Usage: $0 [-scale 1x|2x] [--singleton]"
+      echo "Usage: $0 [-scale 1x|2x] [--singleton] [--refresh-on|--refresh-off]"
       exit 0
       ;;
     *)
@@ -23,6 +32,14 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+if [[ "$REFRESH_OFF" -eq 1 ]]; then
+  defaults write com.coronalabs.Corona_Simulator "relaunchSimulatorOptionForResourceChangeNotification" -int 2
+  echo "Set Corona Simulator relaunchSimulatorOptionForResourceChangeNotification=2"
+else
+  defaults write com.coronalabs.Corona_Simulator relaunchSimulatorOptionForResourceChangeNotification -int 1
+  echo "Set Corona Simulator relaunchSimulatorOptionForResourceChangeNotification=1"
+fi
 
 case "$SCALE_ARG" in
   1x|1)
@@ -69,4 +86,6 @@ fi
 
 (cd "$MAIN_DIR" && "$SIMULATOR_BIN" -no-console YES -skin "$SKIN" main.lua > "../$LOG" 2>&1 &)
 sleep 0.5
+osascript -e 'tell application "Corona Simulator" to activate' >/dev/null 2>&1 || \
+osascript -e 'tell application "Solar2D Simulator" to activate' >/dev/null 2>&1 || true
 code "$LOG"
