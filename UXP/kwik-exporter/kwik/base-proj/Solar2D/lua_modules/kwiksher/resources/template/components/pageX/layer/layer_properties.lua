@@ -1,5 +1,6 @@
 local parent,root, M = newModule(...)
 local layerMod = require(M.layerMod)
+local layerProps = layerMod.layerProps or {}
 --
 local infinity = require("components.kwik.layer_image_infinity")
 --
@@ -71,49 +72,41 @@ end
 
 --
 function M:init(UI)
-  -- overwrite layerMod properties by M.properties one by one if not nil
+  -- overwrite layerProps from the base image layer with local property overrides
   for k, v in pairs(self.properties) do
     if v ~= nil and v ~= "" and v ~= NIL then
-      layerMod[k] = v
+      layerProps[k] = v
     end
+  end
+
+  if type(layerMod.setProps) == "function" then
+    layerMod:setProps(layerProps)
   end
 
 end
 --
 function M:create(UI)
-  local obj = UI.sceneGroup[self.properties.name]
+  local props = layerMod.layerProps or self.properties
+  local obj = UI.sceneGroup[props.name]
+  if obj == nil then
+    return
+  end
+
   self.obj = obj
-  print("###", self.properties.name)
+  print("###", props.name)
   for k, v in pairs(UI.sceneGroup) do print(k ,v) end
   --
   --
   -- obj.imagePath = self.imagePath
-  local props = self.properties
-  if type(props.x) == "number" or type(props.y) == "number" then
-    local catObj = UI.sceneGroup and UI.sceneGroup.cat
-    local baseCenterX, baseCenterY = 480, 320
-    if display.contentHeight > display.contentWidth then
-      baseCenterX, baseCenterY = 320, 480
-    end
-    local scaleX = display.contentCenterX / baseCenterX
-    local scaleY = display.contentCenterY / baseCenterY
-    if catObj and scaleX > 0 and scaleY > 0 then
-      local catBaseX = catObj.x / scaleX
-      local catBaseY = catObj.y / scaleY
-      if type(props.x) == "number" then
-        obj.x = catObj.x + (props.x - catBaseX)
-      end
-      if type(props.y) == "number" then
-        obj.y = catObj.y + (props.y - catBaseY)
-      end
-    else
-      if type(props.x) == "number" then
-        obj.x = props.x
-      end
-      if type(props.y) == "number" then
-        obj.y = props.y
-      end
-    end
+  if type(layerMod.mX) == "number" then
+    obj.x = layerMod.mX
+  elseif type(props.x) == "number" then
+    obj.x = props.x
+  end
+  if type(layerMod.mY) == "number" then
+    obj.y = layerMod.mY
+  elseif type(props.y) == "number" then
+    obj.y = props.y
   end
   -- obj.height    = props.height/4
   -- obj.width     = props.width/4
@@ -133,14 +126,14 @@ function M:create(UI)
   obj.randXEnd    = props.randXEnd
   obj.randYStart  = props.randYStart
   obj.randYEnd    = props.randYEnd
-  -- obj.type        = props.layerProps.type
-  -- obj.kind        = props.layerProps.kind
+  obj.type        = props.type
+  obj.kind        = props.kind
   --
-  if type(props.randXStart) == "number" and props.randXStart > 0 then
-    obj.x = math.random( props.randXStart, props.randXEnd)
+  if type(layerMod.randXStart) == "number" and layerMod.randXStart > 0 then
+    obj.x = math.random(layerMod.randXStart, layerMod.randXEnd)
   end
-  if type(props.randYStart) == "number" and props.randYStart > 0  then
-    obj.y = math.random( props.randYStart, props.randYEnd)
+  if type(layerMod.randYStart) == "number" and layerMod.randYStart > 0  then
+    obj.y = math.random(layerMod.randYStart, layerMod.randYEnd)
   end
   if type(props.xScale) == "number" then
     obj.xScale = props.xScale
@@ -168,19 +161,21 @@ function M:create(UI)
     UI.sceneGroup:insert( obj)
   end
   --
-  if self.properties.infinity and self.properties.infinity.enabled then
-    infinity.createInfinityImage(UI, self.obj, self.properties.infinity)
+  if props.infinity and props.infinity.enabled then
+    infinity.createInfinityImage(UI, self.obj, props.infinity)
   end
 end
 --
 function M:didShow(UI)
-  if  self.properties.infinity and self.properties.infinity.enabled then
+  local props = layerMod.layerProps or self.properties
+  if  props.infinity and props.infinity.enabled then
     infinity.addEventListener(self.obj)
   end
 end
 --
 function M:didHide(UI)
-  if  self.properties.infinity and self.properties.infinity.enabled then
+  local props = layerMod.layerProps or self.properties
+  if  props.infinity and props.infinity.enabled then
     infinity.removeEventListener(self.obj)
   end
 end

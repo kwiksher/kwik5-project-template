@@ -227,6 +227,7 @@ M.commands = {
       delay = 0
     },
     frontBack = {
+      _target = "",
       front = true
     }
   },
