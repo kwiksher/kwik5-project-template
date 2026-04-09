@@ -70,10 +70,35 @@ function M.setPlugin(mode)
         print("Found installer file:", path)
         local cmd = 'cd "'.. path.. '"; source update_kwik.sh'
         if isWindows then
-           cmd = "cd .. & start cmd /k call update_kwik.bat"
+           cmd = 'cd "' ..path..'" & start cmd /k call update_kwik.bat'
         end
-        print(cmd)
-        os.execute(cmd)
+        -- Let the user decide whether to run setup automatically or manually.
+        local function runInstaller(choice)
+          if choice == "auto" then
+            os.execute(cmd)
+          else
+            print("Manual setup selected. Run this command in your terminal:")
+            print(cmd)
+          end
+        end
+
+        if native and native.showAlert then
+          native.showAlert(
+            "Kwik Setup",
+            "Installer command is ready. Run automatically now?",
+            { "Run Automatically", "Manual" },
+            function(event)
+              if event.action == "clicked" and event.index == 1 then
+                runInstaller("auto")
+              else
+                runInstaller("manual")
+              end
+            end
+          )
+        else
+          print("Dialog is unavailable in this environment. Running installer automatically.")
+          runInstaller("auto")
+        end
       else
         print("No installer found. Please download and run the appropriate installer:")
         print("https://github.com/kwiksher/kwik5-project-template/tree/develop")
@@ -149,5 +174,6 @@ function M.setPlugin(mode)
   end
   return true
 end
+
 
 return M
