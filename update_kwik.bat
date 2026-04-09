@@ -104,7 +104,7 @@ if defined VERSION_ASSET_URL (
 
 REM Extract the download URL for plugin-kwik.tgz
 echo Extracting download URL for plugin-kwik.tgz...
-for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOADS_DIR%\release_info.json' | ConvertFrom-Json; $asset = $json.assets | Where-Object { $_.name -like '*plugin-kwik.tgz' }; $asset.browser_download_url}"') do (
+for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOADS_DIR%\release_info.json' | ConvertFrom-Json; $asset = $json.assets | Where-Object { $_.name -like '*kwik*.tgz' }; if($asset){ $asset.browser_download_url }}"') do (
     set "PLUGIN_URL=%%a"
 )
 
@@ -117,7 +117,7 @@ for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOA
 REM Download the plugin-kwik.tgz file
 echo Downloading plugin from !PLUGIN_URL!...
 if "!PLUGIN_URL!"=="" (
-    echo Could not find plugin-kwik.tgz in the latest release.
+    echo Could not find a matching .tgz plugin asset in the latest release.
     pause
     exit /b 1
 )
@@ -129,6 +129,19 @@ if %errorlevel% neq 0 (
 )
 echo Download complete.
 
+REM Verify plugin file exists and is non-empty
+if not exist "%TEMP_PLUGIN_FILE%" (
+    echo Downloaded plugin file not found: %TEMP_PLUGIN_FILE%
+    pause
+    exit /b 1
+)
+for %%I in ("%TEMP_PLUGIN_FILE%") do set "PLUGIN_SIZE=%%~zI"
+if "%PLUGIN_SIZE%"=="0" (
+    echo Downloaded plugin file is empty or truncated: %TEMP_PLUGIN_FILE%
+    pause
+    exit /b 1
+)
+
 REM Remove old plugin files before extraction
 echo Removing old plugin files...
 if exist "%PLUGIN_DIR%\kwik.lua" del /q "%PLUGIN_DIR%\kwik.lua"
@@ -137,7 +150,7 @@ echo Old files removed.
 
 REM Extract the plugin-kwik.tgz file
 echo Installing plugin to %PLUGIN_DIR%...
-tar -xzf "%TEMP_PLUGIN_FILE%" -C "%PLUGIN_DIR%"
+tar --force-local -xzf "%TEMP_PLUGIN_FILE%" -C "%PLUGIN_DIR%"
 if %errorlevel% equ 0 (
     echo Plugin extracted successfully using tar.
 ) else (
@@ -183,7 +196,7 @@ echo Extracting source code...
 if not exist "%EXTRACT_DIR%" mkdir "%EXTRACT_DIR%"
 
 REM Attempt to use tar.exe first, as it's most reliable
-tar -xzf "%TEMP_SRC_FILE%" -C "%EXTRACT_DIR%"
+tar --force-local -xzf "%TEMP_SRC_FILE%" -C "%EXTRACT_DIR%"
 if %errorlevel% equ 0 (
     echo Source code extracted successfully using tar.
 ) else (
