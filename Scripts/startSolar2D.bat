@@ -8,15 +8,15 @@ set "SINGLETON=0"
 
 :parse_args
 if "%~1"=="" goto args_parsed
-if "%~1"=="-scale"  (
+if "%~1"=="-scale" (
     shift
-    set "SCALE_ARG=%~1"
+    call set "SCALE_ARG=%%~1"
     shift
     goto parse_args
 )
 if "%~1"=="--scale" (
     shift
-    set "SCALE_ARG=%~1"
+    call set "SCALE_ARG=%%~1"
     shift
     goto parse_args
 )
@@ -76,5 +76,8 @@ if exist "%MAIN_FILE%" (
     powershell -NoProfile -Command "(Get-Content '%MAIN_FILE%') -replace '(scale\s*=\s*)\d+', '${1}%SCALE_ARG:~0,1%' | Set-Content '%MAIN_FILE%'"
 )
 
+rem ---------- set simulator device in registry ----------
+reg add "HKCU\Software\Ansca Corona\Corona Simulator\Preferences" /v "Device" /t REG_SZ /d "%SKIN%" /f >nul
+
 rem ---------- start simulator ----------
-start "" "C:\Program Files (x86)\Corona Labs\Corona\Corona Simulator.exe" "%filePath%" /skin="%SKIN%"
+start "" "C:\Program Files (x86)\Corona Labs\Corona\Corona Simulator.exe" "%filePath%"
