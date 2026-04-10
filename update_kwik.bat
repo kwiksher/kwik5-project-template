@@ -315,7 +315,7 @@ exit /b
 :install_registry_only
     REM Create solar2d.reg with dynamic user path
     echo Creating solar2d.reg with dynamic user path...
-    set "SOLAR2D_REG_FILE=%~dp0solar2d.reg"
+    set "SOLAR2D_REG_FILE=%~dp0Scripts\solar2d.reg"
 
     echo --- DEBUG: Registry File Path ---
     echo Attempting to create file at: %SOLAR2D_REG_FILE%
