@@ -34,7 +34,7 @@ local  function createSymbolicLink()
             'runas /user:Administrator "cmd /c mklink /D lua_modules\\kwiksher ..\\..\\kwik5-plugin"')
     else
       local scripts = {
-        'cd ' .. resourcePath ..'/lua_modules && ln -s ../../../kwik5-plugin kwiksher',
+        'mkdir -p '..resourcePath ..'/lua_modules && cd ' .. resourcePath ..'/lua_modules && ln -s ../../../kwik5-plugin kwiksher',
       }
       for i, v in next, scripts do
         print(v)
@@ -59,7 +59,7 @@ function M.setPlugin(mode)
       createSymbolicLink()
     else
       -- Check for installer files
-      
+
       local path
       path = system.pathForFile("", system.ResourceDirectory).."/../"
       if isWindows then
@@ -70,10 +70,35 @@ function M.setPlugin(mode)
         print("Found installer file:", path)
         local cmd = 'cd "'.. path.. '"; source update_kwik.sh'
         if isWindows then
-           cmd = "cd .. & start cmd /k call update_kwik.bat"
+           cmd = 'cd "' ..path..'" & start cmd /k call update_kwik.bat'
         end
-        print(cmd)
-        os.execute(cmd)
+        -- Let the user decide whether to run setup automatically or manually.
+        local function runInstaller(choice)
+          if choice == "auto" then
+            os.execute(cmd)
+          else
+            print("Manual setup selected. Run this command in your terminal:")
+            print(cmd)
+          end
+        end
+
+        if native and native.showAlert then
+          native.showAlert(
+            "Kwik Setup",
+            "Installer command is ready. Run automatically now?",
+            { "Run Automatically", "Manual" },
+            function(event)
+              if event.action == "clicked" and event.index == 1 then
+                runInstaller("auto")
+              else
+                runInstaller("manual")
+              end
+            end
+          )
+        else
+          print("Dialog is unavailable in this environment. Running installer automatically.")
+          runInstaller("auto")
+        end
       else
         print("No installer found. Please download and run the appropriate installer:")
         print("https://github.com/kwiksher/kwik5-project-template/tree/develop")
@@ -150,64 +175,5 @@ function M.setPlugin(mode)
   return true
 end
 
-function M.initAssets()
-  local resourcePath = system.pathForFile("", system.ResourceDirectory)
-  local appPath = resourcePath .. "/App"
-  
-  -- Check if App directory exists
-  local appDir = lfs.chdir(appPath)
-  if not appDir then
-    print("App directory not found:", appPath)
-    return false
-  end
-  
-  -- Get list of folders under App
-  for entry in lfs.dir(appPath) do
-    if entry ~= "." and entry ~= ".." then
-      local folderPath = appPath .. "/" .. entry
-      local attr = lfs.attributes(folderPath)
-      
-      if attr and attr.mode == "directory" then
-        local assetsPath = folderPath .. "/assets"
-        local assetsAttr = lfs.attributes(assetsPath)
-        
-        if assetsAttr and assetsAttr.mode == "directory" then
-          print("Creating asset directories for:", entry)
-          
-          -- Change to assets directory
-          lfs.chdir(assetsPath)
-          
-          -- Create asset subdirectories
-          local directories = {
-            "audios/long",
-            "audios/short", 
-            "audios/sync",
-            "images",
-            "particles",
-            "sprites",
-            "thumbnails",
-            "videos",
-            "www"
-          }
-          
-          for _, dir in ipairs(directories) do
-            local cmd
-            if isWindows then
-              cmd = 'mkdir "' .. dir:gsub("/", "\\") .. '" 2>nul'
-            else
-              cmd = 'mkdir -p "' .. dir .. '"'
-            end
-            print("Creating:", dir)
-            os.execute(cmd)
-          end
-        end
-      end
-    end
-  end
-  
-  -- Return to original directory
-  lfs.chdir(resourcePath)
-  return true
-end
 
 return M
