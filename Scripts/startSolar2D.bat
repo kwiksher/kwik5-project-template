@@ -79,5 +79,5 @@ if exist "%MAIN_FILE%" (
 rem ---------- set simulator device in registry ----------
 reg add "HKCU\Software\Ansca Corona\Corona Simulator\Preferences" /v "Device" /t REG_SZ /d "%SKIN%" /f >nul
 
-rem ---------- start simulator ----------
-start "" "C:\Program Files (x86)\Corona Labs\Corona\Corona Simulator.exe" "%filePath%"
+rem ---------- start simulator (capture stdout/stderr to tmp.log) ----------
+"C:\Program Files (x86)\Corona Labs\Corona\Corona Simulator.exe" "%filePath%" /no-console > "%CD%\tmp.log" 2>&1

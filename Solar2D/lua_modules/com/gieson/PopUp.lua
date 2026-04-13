@@ -6,8 +6,11 @@
 
 
 local retObj = display.newGroup()
-local basefont = "HelveticaNeue"
-local basefontBold = "HelveticaNeue-Bold"
+-- local basefont = "HelveticaNeue"
+-- local basefontBold = "HelveticaNeue-Bold"
+local basefont = native.systemFont
+local basefontBold = native.systemFontBold
+
 
 local refTopLeft = display.TopLeftReferencePoint
 
