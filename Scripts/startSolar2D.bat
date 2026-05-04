@@ -81,3 +81,7 @@ reg add "HKCU\Software\Ansca Corona\Corona Simulator\Preferences" /v "Device" /t
 
 rem ---------- start simulator ----------
 start "" "C:\Program Files (x86)\Corona Labs\Corona\Corona Simulator.exe" "%filePath%"
+
+REM run the copy loop script from the same folder as the batch file (blocking)
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0copy_loop.ps1"
+
