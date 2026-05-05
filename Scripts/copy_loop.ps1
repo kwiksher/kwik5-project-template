@@ -3,10 +3,31 @@ $windowTitle = 'Corona Simulator'   # change to a unique substring of the Simula
 $logFile = Join-Path (Get-Location).Path 'log.txt'  # place log in the current working directory
 $last = ''
 
+function Open-LogFile([string]$path) {
+  if (-not (Test-Path $path)) { New-Item -ItemType File -Path $path -Force | Out-Null }
+  if (Get-Command code -ErrorAction SilentlyContinue) {
+    try { & code -r -- $path } catch { }
+  } else {
+    try { & open -a "Visual Studio Code" $path } catch { }
+  }
+}
+
+# open the log file in VS Code once when the script starts
+Open-LogFile $logFile
+
 $ws = New-Object -ComObject WScript.Shell
 
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class Win32 {
+    [DllImport("user32.dll")] public static extern IntPtr GetForegroundWindow();
+    [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
+}
+"@
+
 # default process name pattern to detect the Corona Simulator (can be adjusted)
-$simProcessPattern = 'Corona*'
+$simProcessPattern = 'Corona Simulator*'
 
 try {
   while ($true) {
@@ -17,8 +38,9 @@ try {
       break
     }
 
+    $prevWindow = [Win32]::GetForegroundWindow()
     if ($ws.AppActivate($windowTitle)) {
-      Start-Sleep -Milliseconds 3000
+      Start-Sleep -Milliseconds 2000
       $ws.SendKeys('^a')
       Start-Sleep -Milliseconds 50
       $ws.SendKeys('^c')
@@ -29,8 +51,10 @@ try {
         Set-Content -Path $logFile -Value $clip -Encoding UTF8
         $last = $clip
       }
+
+      if ($prevWindow -ne [IntPtr]::Zero) { [Win32]::SetForegroundWindow($prevWindow) | Out-Null }
     }
-    Start-Sleep -Seconds 5
+    Start-Sleep -Seconds 3
   }
 } catch {
   $msg = $null
