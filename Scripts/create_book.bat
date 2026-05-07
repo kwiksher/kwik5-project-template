@@ -30,7 +30,8 @@ set tmp=
 
 REM Create the book directory structure
 mkdir "%dst%\App\%book%" 2>nul
-cd /d "%dst%\App\%book%" || exit /b 1
+set "BOOK_DIR=%CD%\%dst%\App\%book%"
+cd /d "%BOOK_DIR%" || exit /b 1
 
 for %%p in (%pages%) do (
     set page=%%p
@@ -73,9 +74,9 @@ for %%p in (%pages%) do (
     echo return scene >> "%%p.lua"
 )
 
-echo !tmp!
+REM echo !tmp!
 
-cd /d "%dst%\App\%book%"
+cd /d "%BOOK_DIR%"
 
 REM Create index.lua file using individual echo commands
 echo local scenes = { > index.lua
@@ -83,7 +84,7 @@ echo !tmp! >> index.lua
 echo } >> index.lua
 echo return scenes >> index.lua
 
-cd /d "%dst%\App\%book%\assets"
+cd /d "%BOOK_DIR%\assets"
 
 REM Create model.lua file using individual echo commands
 echo local M = { > model.lua
