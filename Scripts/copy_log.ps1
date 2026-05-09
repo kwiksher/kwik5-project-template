@@ -1,5 +1,6 @@
 # copy_loop.ps1
-$windowTitle = 'Corona Simulator'   # change to a unique substring of the Simulator window title
+$consoleTitle = 'Corona Simulator Console'   # title of the console window to send Ctrl+A/Ctrl+C to
+$simulatorTitle = 'Solar2D - Solar2D Simulator'  # title of the simulator window to restore focus to
 $logFile = Join-Path (Get-Location).Path 'log.txt'  # place log in the current working directory
 $last = ''
 
@@ -29,10 +30,9 @@ public class Win32 {
 "@
 
 # default process name pattern to detect the Corona Simulator (can be adjusted)
-$simProcessPattern = 'Corona Simulator*'
+$simProcessPattern = '*Solar2D Simulator*'
 
 try {
-  while ($true) {
     # exit if Corona Simulator process is not present (safe check using pattern)
     $sim = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like $simProcessPattern -or $_.ProcessName -like '*Corona*' -or $_.ProcessName -like '*Simulator*' }
     if (-not $sim) {
@@ -40,9 +40,12 @@ try {
       break
     }
 
-    $prevWindow = [Win32]::GetForegroundWindow()
-    if ($ws.AppActivate($windowTitle)) {
-      Start-Sleep -Milliseconds 2000
+    # get the Solar2D Simulator window handle to restore focus after copying
+    $simProc = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -like "*$simulatorTitle*" }
+    $simHwnd = if ($simProc) { [IntPtr]$simProc[0].MainWindowHandle } else { [IntPtr]::Zero }
+    $prevWindow = if ($simHwnd -ne [IntPtr]::Zero) { $simHwnd } else { [Win32]::GetForegroundWindow() }
+    if ($ws.AppActivate($consoleTitle)) {
+      Start-Sleep -Milliseconds 200
       $ws.SendKeys('^a')
       Start-Sleep -Milliseconds 50
       $ws.SendKeys('^c')
@@ -56,12 +59,10 @@ try {
 
       if ($prevWindow -ne [IntPtr]::Zero) { [Win32]::SetForegroundWindow($prevWindow) | Out-Null }
     }
-    Start-Sleep -Seconds 3
-  }
 } catch {
   $msg = $null
   if ($PSItem -and $PSItem.Exception) { $msg = $PSItem.Exception.Message }
   if ([string]::IsNullOrEmpty($msg)) { $msg = ($PSItem | Out-String).Trim() }
   if ([string]::IsNullOrEmpty($msg)) { $msg = 'Unknown error' }
-  Write-Error ("copy_loop.ps1 error: " + $msg)
+  Write-Error ("copy_log.ps1 error: " + $msg)
 }
