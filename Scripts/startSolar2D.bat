@@ -45,9 +45,23 @@ echo Invalid scale: %SCALE_ARG%. Use 1x or 2x
 exit /b 1
 :_scale_ok
 
-if "%SINGLETON%"=="1" echo Stopping existing Corona Simulator instance(s)...
-if "%SINGLETON%"=="1" for /f "tokens=2" %%i in ('tasklist /fi "imagename eq Corona Simulator.exe" /fo csv /nh') do taskkill /pid %%~i /f >nul 2>&1
-if "%SINGLETON%"=="1" for /f "tokens=2" %%i in ('tasklist /fi "imagename eq Corona.Console.exe" /fo csv /nh') do taskkill /pid %%~i /f >nul 2>&1
+if "%SINGLETON%"=="1" echo [debug] SINGLETON=1, attempting to stop Corona Simulator instance(s)...
+if "%SINGLETON%"=="0" echo [debug] SINGLETON=0, skipping taskkill
+if "%SINGLETON%"=="1" (
+    echo [debug] tasklist for Corona Simulator.exe:
+    tasklist /fi "imagename eq Corona Simulator.exe" /fo csv /nh
+    for /f "tokens=2 delims=," %%i in ('tasklist /fi "imagename eq Corona Simulator.exe" /fo csv /nh') do (
+        echo [debug] killing PID %%~i ^(Corona Simulator.exe^)
+        taskkill /pid %%~i /f
+    )
+    echo [debug] tasklist for Corona.Console.exe:
+    tasklist /fi "imagename eq Corona.Console.exe" /fo csv /nh
+    for /f "tokens=2 delims=," %%i in ('tasklist /fi "imagename eq Corona.Console.exe" /fo csv /nh') do (
+        echo [debug] killing PID %%~i ^(Corona.Console.exe^)
+        taskkill /pid %%~i /f
+    )
+    echo [debug] taskkill done
+)
 
 rem ---------- path and URI handling ----------
 if not defined URI (
@@ -81,3 +95,5 @@ reg add "HKCU\Software\Ansca Corona\Corona Simulator\Preferences" /v "Device" /t
 
 rem ---------- start simulator ----------
 start "" "C:\Program Files (x86)\Corona Labs\Corona\Corona Simulator.exe" "%filePath%"
+
+
