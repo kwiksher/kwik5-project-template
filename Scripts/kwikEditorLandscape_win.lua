@@ -1,0 +1,22 @@
+simulator =
+{
+	device = "android",
+	screenOriginX = 0,
+	screenOriginY = 0,
+	screenWidth = 590,
+	screenHeight = 960,
+	iosPointWidth = 590,
+	iosPointHeight = 960,
+	deviceImage = nil,
+--	safeLandscapeScreenInsetStatusBar = 20,
+--	safeScreenInsetStatusBar = 20,
+	displayManufacturer = "Kwiksher",
+	displayName = "Kwik Editor Landscape",
+	-- statusBarDefault = "iPadMiniStatusBarBlack.png", 
+	-- statusBarTranslucent = "iPadMiniStatusBarWhite.png", 
+	-- statusBarBlack = "iPadMiniStatusBarBlack.png", 
+	-- statusBarLightTransparent = "iPadMiniStatusBarWhite.png",
+	-- statusBarDarkTransparent = "iPadMiniStatusBarBlack.png",
+	windowTitleBarName = "Kwik Editor Landscape",
+	--defaultFontSize = 17,
+}

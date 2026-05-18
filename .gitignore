@@ -1,0 +1,11 @@
+.DS_Store
+Solar2D/backup/
+*.bak
+Solar2D/models
+.env
+CoronaSampleCode/
+com.kwiksher.kwik5.exporter-ps_PS.ccx
+kwik-history.json
+tmp.log
+KEY_EVENT_REFACTORING.md
+/Solar2D/lua_modules

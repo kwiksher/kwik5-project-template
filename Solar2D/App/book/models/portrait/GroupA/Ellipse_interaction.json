@@ -1,0 +1,1 @@
+{"type":[],"name":"GroupA/Ellipse","properties":{"type":"","over":"NIL","isActive":"true","target":"GroupA/Ellipse","mask":"NIL","eventType":"tap","btaps":1},"layer":"GroupA/Ellipse","actions":{"onTap":"testAction"},"class":"button"}
