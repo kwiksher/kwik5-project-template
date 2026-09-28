@@ -58,7 +58,7 @@ set "LUA_MODULES_TARGET=%SOLAR2D_DIR%\lua_modules"
 set "PLUGIN_DIR=%SOLAR2D_DIR%\lua_modules\kwiksher"
 set "SKINS_DIR=%APPDATA%\Corona Labs\Corona Simulator\Skins"
 set "DOWNLOADS_DIR=%USERPROFILE%\Downloads"
-set "TEMP_PLUGIN_FILE=%DOWNLOADS_DIR%\plugin-kwik.tgz"
+set "TEMP_PLUGIN_FILE=%DOWNLOADS_DIR%\kwik5-plugin.tgz"
 set "TEMP_SRC_FILE=%DOWNLOADS_DIR%\kwik5-project-template-src.tgz"
 set "EXTRACT_DIR=%DOWNLOADS_DIR%\kwik5-project-template-src"
 
@@ -102,8 +102,8 @@ if defined VERSION_ASSET_URL (
     )
 )
 
-REM Extract the download URL for plugin-kwik.tgz
-echo Extracting download URL for plugin-kwik.tgz...
+REM Extract the download URL for kwik5-plugin.tgz
+echo Extracting download URL for kwik5-plugin.tgz...
 for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOADS_DIR%\release_info.json' | ConvertFrom-Json; $asset = $json.assets | Where-Object { $_.name -like '*kwik*.tgz' }; if($asset){ $asset.browser_download_url }}"') do (
     set "PLUGIN_URL=%%a"
 )
@@ -114,7 +114,7 @@ for /f "tokens=*" %%a in ('powershell -Command "& {$json = Get-Content '%DOWNLOA
     set "SRC_URL=%%a"
 )
 
-REM Download the plugin-kwik.tgz file
+REM Download the kwik5-plugin.tgz file
 echo Downloading plugin from !PLUGIN_URL!...
 if "!PLUGIN_URL!"=="" (
     echo Could not find a matching .tgz plugin asset in the latest release.
@@ -148,7 +148,7 @@ if exist "%PLUGIN_DIR%\kwik.lua" del /q "%PLUGIN_DIR%\kwik.lua"
 if exist "%PLUGIN_DIR%\kwik" rmdir /s /q "%PLUGIN_DIR%\kwik"
 echo Old files removed.
 
-REM Extract the plugin-kwik.tgz file
+REM Extract the kwik5-plugin.tgz file
 echo Installing plugin to %PLUGIN_DIR%...
 tar --force-local -xzf "%TEMP_PLUGIN_FILE%" -C "%PLUGIN_DIR%"
 if %errorlevel% equ 0 (

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to download and install plugin-kwik.tgz and extract lua_modules from the latest release Source code (tar.gz)
+# Script to download and install kwik5-plugin.tgz and extract lua_modules from the latest release Source code (tar.gz)
 
 # Variables
 REPO="kwiksher/kwik5-project-template"
@@ -8,7 +8,7 @@ SOLAR2D_DIR="./Solar2D"
 LUA_MODULES_TARGET="$SOLAR2D_DIR/lua_modules"
 PLUGIN_DIR="$SOLAR2D_DIR/lua_modules/kwiksher"
 SKINS_DIR="$HOME/Library/Application Support/Corona/Simulator/Skins"
-TEMP_PLUGIN_FILE="/tmp/plugin-kwik.tgz"
+TEMP_PLUGIN_FILE="/tmp/kwik5-plugin.tgz"
 TEMP_SRC_FILE="/tmp/kwik5-project-template-src.tgz"
 EXTRACT_DIR="/tmp/kwik5-project-template-src"
 
@@ -27,13 +27,13 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Extract the download URL for plugin-kwik.tgz
-PLUGIN_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": ".*plugin-kwik.tgz"' | cut -d'"' -f4)
+# Extract the download URL for kwik5-plugin.tgz
+PLUGIN_URL=$(echo "$RELEASE_INFO" | grep -o '"browser_download_url": ".*kwik5-plugin.tgz"' | cut -d'"' -f4)
 
 # Extract the download URL for Source code (tar.gz)
 SRC_URL=$(echo "$RELEASE_INFO" | grep -o '"tarball_url": "[^"]*' | cut -d'"' -f4)
 
-# Download the plugin-kwik.tgz file
+# Download the kwik5-plugin.tgz file
 echo "Downloading plugin from $PLUGIN_URL..."
 if curl -L -o "$TEMP_PLUGIN_FILE" "$PLUGIN_URL"; then
     echo "Download complete."
@@ -48,7 +48,7 @@ rm -f "$PLUGIN_DIR/kwik.lua"
 rm -rf "$PLUGIN_DIR/kwik"
 echo "Old files removed."
 
-# Extract the plugin-kwik.tgz file
+# Extract the kwik5-plugin.tgz file
 echo "Installing plugin to $PLUGIN_DIR..."
 if tar -xzf "$TEMP_PLUGIN_FILE" -C "$PLUGIN_DIR"; then
     echo "Plugin installed successfully!"
