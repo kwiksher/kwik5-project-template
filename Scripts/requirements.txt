@@ -1,0 +1,7 @@
+# Page pipeline dependencies (python3 -m venv .venv && .venv/bin/pip install -r Scripts/requirements.txt)
+pyyaml>=6.0          # book.layers.yaml, page.layers.yaml, book.yaml (book_config.py)
+pillow>=10.0         # every image path: posters, plates, proofs, sheets
+numpy>=1.24          # chroma key, overscan/edge detection, identity check
+psd-tools>=1.9       # page.psd build + thumbnails (create_layered_psd.py)
+# optional: scipy speeds up the identity check's label pass; it falls back without it
+#scipy>=1.11

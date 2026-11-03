@@ -9,3 +9,9 @@ kwik-history.json
 tmp.log
 KEY_EVENT_REFACTORING.md
 /Solar2D/lua_modules
+
+# macOS AppleDouble sidecars and Python caches
+._*
+__pycache__/
+*.pyc
+.kwik/

@@ -1,0 +1,102 @@
+# The book's own data. Every pipeline script reads this; none of them carry a
+# cast, a placement or an art-direction clause of their own.
+#
+# Copy this file, rename the book, replace the cast and the placements, and the
+# pipeline builds your book. Nothing here is specific to any one story.
+#
+#   python3 Scripts/book_config.py        # what the pipeline sees
+#   BOOK_YAML=Scripts/book.other.yaml python3 Scripts/book.yaml   # a second book
+#
+# Paths derived from `book`:
+#   Photoshop/<book>/<page>/page.model.md        authored model
+#   Photoshop/<book>/<page>/page.layers.yaml     authored layers
+#   Photoshop/<book>/<page>/png/<layer>.png      processed layers
+#   Photoshop/<book>/<page>/page.psd             Photoshop document
+#   Photoshop/<book>/_sprites/<character>.png    keyed character sprites
+#   Solar2D/App/<book>/…                         emitted, installed app
+
+book: book
+
+# Render contract. `canvas` is the safe area every page composes into; `bg` is
+# the overscan background plate (wider than the canvas so a camera move can pan).
+canvas:
+  width: 1920
+  height: 1280
+  scale: 0.25
+bg:
+  width: 2776
+  height: 1440
+
+# App name for the design/asset-preview book (sprite sheets, contact sheets).
+# Defaults to `<book>_design`.
+design_book: book_design
+
+# The style clause appended to every image prompt. Keep it to medium, palette,
+# and the negative list — identity belongs in `cast`, not here.
+art_direction: >-
+  Hand-painted children's picture-book illustration in gouache and coloured
+  pencil on textured paper: muted earthy palette, simple flat shapes with
+  visible brush edges, gentle paper grain, warm afternoon light. No 3D render,
+  no photorealism, no glossy mascot look, no text, no lettering, no watermarks.
+
+# Identity lives here, not in prompts. A fountain tag (`@hero`) resolves through
+# this table, so one edit pins the character across every page and every model.
+#
+#   kind         character | environment
+#   subject_id   the LoRA/training subject id used by the video model
+#                (characters only — environments have no LoRA, so omit it)
+#   trigger      the LoRA trigger word (characters only)
+#   description  what the character *is* — reused verbatim in prompts
+#
+# Give each *place* its own environment entry (meadow, porch, doorstep, path,
+# kitchen, bedroom…). One environment shared by every page is the classic
+# mistake: every plate renders the same building, and interior beats get an
+# exterior. See docs/PIPELINE.md §5.
+cast:
+  hero:
+    name: Hero
+    subject_id: 1
+    trigger: hero_v1
+    kind: character
+    description: >-
+      a placeholder character — replace with your own cast: age, build, hair,
+      clothing, one or two identifying details. No proper nouns.
+  friend:
+    name: Friend
+    subject_id: 2
+    trigger: friend_v1
+    kind: character
+    description: >-
+      a second placeholder character, so the placement map below has something
+      to stack.
+  # Two places, so the example shows the point: a page's setting is chosen by the
+  # scene's tag, and each place gets its own description.
+  meadow:
+    name: Meadow
+    kind: environment
+    description: >-
+      a placeholder outdoor environment, e.g. a wide meadow on a slope with a narrow
+      path winding away, hills and sky beyond — no buildings in the foreground.
+  porch:
+    name: Porch
+    kind: environment
+    description: >-
+      a placeholder second location, e.g. the front of a building seen close, a door,
+      a step, potted plants and rough ground in the foreground.
+
+# page id -> [(cast tag, x, y, w, h), ...] in PSD pixels, centres inside the
+# safe area, ordered back to front. A page with no entry composes the background
+# alone; a layered page lists one row per character.
+placement:
+  p1:
+    - [hero, 1250, 640, 480, 900]
+  p2:
+    - [hero, 620, 660, 470, 880]
+    - [friend, 1250, 930, 430, 430]
+
+# page id -> {"top"|"bottom"|"left"|"right": fraction of the render to trim}.
+# Use it for a dead band a render leaves behind (a watermark, a trigger word
+# drawn as lettering) so the crop is reproducible instead of hand-edited.
+crops: {}
+#  cover:
+#    top: 0.17

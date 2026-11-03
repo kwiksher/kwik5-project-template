@@ -377,3 +377,55 @@ you may check the current version by
   ```
 
 Without --version arg, it will fetch the latest version and set it to `./lua_modules/kwiksher`.
+
+---
+
+## Book variants — what this template can build
+
+A project can hold several **books** under `Solar2D/App/<book>/`, selected at
+runtime by `env.book` in `Solar2D/main.lua`. See [`docs/BOOK-VARIANTS.md`](docs/BOOK-VARIANTS.md)
+for the decision table and the shared contracts, and one doc per variant:
+
+| variant | doc | what a page is |
+|---|---|---|
+| still (PSD) story book | [`docs/STILL-BOOK.md`](docs/STILL-BOOK.md) | composited still layers, no GPU |
+| video book | [`docs/VIDEO-BOOK.md`](docs/VIDEO-BOOK.md) | one flat-field clip per page, keyed at runtime |
+| cropped video book | [`docs/CROPPED-VIDEO-BOOK.md`](docs/CROPPED-VIDEO-BOOK.md) | a stack of per-character clips, each cropped to its character |
+| design book | [`docs/DESIGN-BOOK.md`](docs/DESIGN-BOOK.md) | a bench: one plugin mechanism per page, with evidence |
+
+Agents: read [`SKILL.md`](SKILL.md) — it carries the contracts, the
+non-obvious `plugin.movie` / ogv-class traps, the verify gates, and how to run a
+book in the Simulator.
+
+### How long a book takes
+
+Three different clocks, and only the middle one is predictable. Measured on the
+reference project, `biscuit-comes-home`
+(https://github.com/Kwik-Dev/biscuit-comes-home), on an Apple M5 Pro with MPS,
+using `wan22-14b-i2v`, 512×288, 25 frames, 4 steps, for a **10-page book**:
+
+| variant | deterministic build | GPU / render | wall clock, 10 pages |
+|---|---|---|---|
+| **still** (`<book>`) | `build_book.sh --check` **6.3 s**; full rebuild adds the PSD write pass | none to play back — art is generated once (~1 min per still, Z-Image Turbo 768×768 / 9 steps) | minutes of build; the art is the cost |
+| **video** (`<book>-video`) | `video_stories.py --check` **0.4 s**; `--app` emits 110 files in **0.3 s** | **1 clip per page**, measured **111 s median / 113 s mean / 121 s max** per clip, + ~2–6 s encode | **≈ 20 min** (10 × 113 s + encodes) |
+| **cropped video** (`<book>-video-cropped`) | same emit, **0.12 s** for the cropped book alone | **1 clip per character**: ~2.1 clips/page on the reference book → **21 clips ≈ 40 min** render + encodes | **≈ 45 min**; a 3-cast page alone is ~6 min |
+| **design** (`<book>_design`) | `design_build.sh --check` **4.1 s** | none — it is a plugin bench | **≈ 1 min** per rebuild |
+
+Per-clip figures are the real distribution from a 18-take batch (min 110 s,
+median 111 s, mean 113 s, max 121 s), so budget **~1.9 min per clip** and round up.
+
+Add, for every page you intend to claim done:
+
+* **Simulator verification ≈ 15 s per page** — relaunch, wait for the page to
+  settle, capture, read the console. A 10-page check is ~2.5 min.
+* **Re-renders.** A clip you dislike costs another 113 s; a prompt change that
+  affects a whole page's cast costs the whole page again. Budget one full pass of
+  redo per book and you will not be surprised.
+
+What does **not** drive the time: encoding (seconds), the Kwik book emission
+(under a second for 110 files), and the gates. If a build feels slow, it is the
+model, the art, or the human — not the pipeline.
+
+Caveats: these are local-MPS numbers. On a GPU host the delivery profile
+(`wan22-5b`, 1280×720, 97 frames, 30 steps) changes both the per-clip cost and
+the quality; measure once there before planning a schedule.
