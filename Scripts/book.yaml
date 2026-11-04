@@ -61,6 +61,18 @@ cast:
     description: >-
       a placeholder character — replace with your own cast: age, build, hair,
       clothing, one or two identifying details. No proper nouns.
+    # Optional. `identity` text is the `description` above; only the pose clause
+    # changes between stills, which is what keeps the face and clothes stable
+    # across a pose set. Render one with:  render_layered.py --poses hero:walking
+    # It lands at _sprites/hero/walking.png, and a page asks for it by naming that
+    # path in its own page.layers.yaml (image:).
+    poses:
+      walking: >-
+        Full body, walking forward at a slight angle mid-stride, both boots
+        visible, entire figure inside the frame with headroom
+      running: >-
+        Full body, running away from the viewer and looking back over one
+        shoulder, mid-stride with both feet off the ground
   friend:
     name: Friend
     subject_id: 2
@@ -69,6 +81,10 @@ cast:
     description: >-
       a second placeholder character, so the placement map below has something
       to stack.
+    poses:
+      sitting: >-
+        Full body, sitting still with the front legs straight and the back legs
+        tucked in, head up and tilted a little to one side
   # Two places, so the example shows the point: a page's setting is chosen by the
   # scene's tag, and each place gets its own description.
   meadow:
@@ -83,6 +99,16 @@ cast:
     description: >-
       a placeholder second location, e.g. the front of a building seen close, a door,
       a step, potted plants and rough ground in the foreground.
+  # An *interior* must say so, or the model keeps painting sky and roofs: name
+  # what closes the top and sides of the frame and state that the room is enclosed.
+  #   scullery:
+  #     name: Scullery
+  #     kind: environment
+  #     description: >-
+  #       an interior … seen from the doorway: a deep stone sink under a small
+  #       window set high in the wall, whitewashed walls, a low beamed ceiling
+  #       closing the top of the frame, light falling from the window — the room is
+  #       enclosed on every side, no sky, no daylight
 
 # page id -> [(cast tag, x, y, w, h), ...] in PSD pixels, centres inside the
 # safe area, ordered back to front. A page with no entry composes the background

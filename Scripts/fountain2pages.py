@@ -40,7 +40,9 @@ import yaml
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FOUNTAIN = os.path.join(REPO_ROOT, "Scripts", "book.fountain")
 sys.path.insert(0, os.path.join(REPO_ROOT, "Scripts"))
-from paths import COMPONENTS_DIR, AUDIOS_DIR, ASSETS_DIR, PAGES_DIR  # noqa: E402  — single source of truth for the page tree
+from paths import COMPONENTS_DIR, AUDIOS_DIR, ASSETS_DIR, PAGES_DIR, SPRITE_DIR as _SPRITE_DIR  # noqa: E402  — single source of truth for the page tree
+# repo-relative, because page.layers.yaml records paths relative to the checkout
+SPRITE_DIR = os.path.relpath(_SPRITE_DIR, REPO_ROOT)
 
 # --------------------------------------------------------------------------- #
 # The book's own data lives in Scripts/book.yaml, not here: cast, art direction,
@@ -360,24 +362,86 @@ def bg_layer(page: str) -> dict[str, Any]:
     return bg
 
 
+def placement_for(page: str) -> list[dict[str, Any]]:
+    """Where the cast sits on a page, in PSD px — read from the page's own YAML.
+
+    ``page.layers.yaml`` is where a page's geometry already lives: the PSD build
+    (``create_layered_psd.py``) and the Lua emitter (``layers2lua.py``) both read
+    it, so it is the source of truth for placement too. A layer whose name is a
+    cast character and whose image is under ``_sprites/`` makes the page
+    *layered*; a page with no such layer is *baked* (the cast is painted into the
+    plate by the image model).
+
+    The authored image path and ``flip`` are carried through rather than assumed:
+    a page may name a pose still (``_sprites/<name>/<pose>.png``) and mirror it,
+    and rewriting the path here would silently undo both.
+
+    ``book.yaml``'s ``placement`` is only the bootstrap for a page whose YAML does
+    not exist yet or lists no sprites.
+    """
+    yaml_path = os.path.join(PAGES_DIR, page, "page.layers.yaml")
+    if os.path.exists(yaml_path):
+        try:
+            with open(yaml_path, encoding="utf-8") as fh:
+                data = yaml.safe_load(fh) or {}
+        except (yaml.YAMLError, OSError):
+            data = {}
+        found: list[dict[str, Any]] = []
+        for layer in data.get("layers") or []:
+            name = str(layer.get("name") or "")
+            image = str(layer.get("image") or "")
+            if (CAST.get(name) or {}).get("kind") != "character":
+                continue
+            if "_sprites" not in image and "transparent_color" not in layer:
+                continue
+            try:
+                placed: dict[str, Any] = {
+                    "name": name,
+                    "image": image if "_sprites" in image else f"{SPRITE_DIR}/{name}.png",
+                    "x": int(layer["x"]),
+                    "y": int(layer["y"]),
+                    "width": int(layer["width"]),
+                    "height": int(layer["height"]),
+                }
+            except (KeyError, TypeError, ValueError):
+                continue
+            if layer.get("flip"):
+                placed["flip"] = str(layer["flip"])
+            found.append(placed)
+        if found:
+            return found
+    return [
+        {
+            "name": entry[0],
+            "image": f"{SPRITE_DIR}/{entry[0]}.png",
+            "x": entry[1],
+            "y": entry[2],
+            "width": entry[3],
+            "height": entry[4],
+        }
+        for entry in PLACEMENT.get(page, [])
+    ]
+
+
 def build_layers(page: str, caption: str, title: str) -> dict[str, Any]:
     _image, provenance = art_for(page)
     bg = bg_layer(page)
     layers: list[dict[str, Any]] = [bg]
-    for character, x, y, w, h in PLACEMENT.get(page, []):
-        layers.append(
-            {
-                "name": character,
-                "image": f"{SPRITE_DIR}/{character}.png",
-                "x": x,
-                "y": y,
-                "width": w,
-                "height": h,
-                "fit": "contain",
-                "transparent_color": "auto",
-                "transparent_tolerance": 40,
-            }
-        )
+    for placed in placement_for(page):
+        layer: dict[str, Any] = {
+            "name": placed["name"],
+            "image": placed["image"],
+            "x": placed["x"],
+            "y": placed["y"],
+            "width": placed["width"],
+            "height": placed["height"],
+            "fit": "contain",
+            "transparent_color": "auto",
+            "transparent_tolerance": 40,
+        }
+        if placed.get("flip"):
+            layer["flip"] = placed["flip"]
+        layers.append(layer)
     layers += caption_layers(page, caption, title)
     return {
         "canvas": dict(CANVAS),
@@ -444,7 +508,9 @@ def build_model(page: str, scene: dict[str, Any]) -> str:
     tags = scene["tags"]
     characters = [t for t in tags if CAST.get(t, {}).get("kind") == "character"]
     environments = [t for t in tags if CAST.get(t, {}).get("kind") == "environment"]
-    subject_ids = sorted(CAST[t]["subject_id"] for t in tags if t in CAST)
+    subject_ids = sorted(
+        CAST[t]["subject_id"] for t in tags if CAST.get(t, {}).get("subject_id")
+    )
     spread = meta.get("spread", page)
 
     out: list[str] = []
@@ -481,22 +547,23 @@ def build_model(page: str, scene: dict[str, Any]) -> str:
     )
     out.append("")
     out.append("## Characters")
-    placement = {name: (x, y, w, h) for name, x, y, w, h in PLACEMENT.get(page, [])}
+    placement = {p["name"]: p for p in placement_for(page)}
     if characters:
         for tag in characters:
             entry = CAST[tag]
             out.append(f"### {tag}")
             mode = "layered" if tag in placement else "baked"
             out.append(
-                f"- Cast: {entry['subject_id']} · Trigger: {entry['trigger']} · Mode: {mode}"
+                f"- Cast: {entry.get('subject_id', '—')} · Trigger: {entry.get('trigger', '—')} · Mode: {mode}"
             )
             out.append(f"- Description: {entry['description']}")
             out.append("- State: as briefed in the action line")
             if tag in placement:
-                x, y, w, h = placement[tag]
+                p = placement[tag]
+                mirror = f" · flip {p['flip']}" if p.get("flip") else ""
                 out.append(
-                    f"- Sprite: `{SPRITE_DIR}/{tag}.png` · Placement: centre ({x}, {y}), "
-                    f"{w}x{h} PSD px · chroma-key auto"
+                    f"- Sprite: `{p['image']}` · Placement: centre ({p['x']}, {p['y']}), "
+                    f"{p['width']}x{p['height']} PSD px · chroma-key auto{mirror}"
                 )
             else:
                 out.append("- Placement: baked into the bg plate")
@@ -511,8 +578,8 @@ def build_model(page: str, scene: dict[str, Any]) -> str:
         + ")"
     )
     out.extend(bg_provenance(page, bg_layer(page)))
-    for name in placement:
-        out.append(f"- {SPRITE_DIR}/{name}.png (character sprite, flat backdrop keyed out)")
+    for p in placement.values():
+        out.append(f"- {p['image']} (character sprite, flat backdrop keyed out)")
     out.append(f"- {PAGES_REL}/{page}/png/*.png (per-layer, from page.layers.yaml)")
     out.append(f"- {PAGES_REL}/{page}/page.psd")
     out.append(

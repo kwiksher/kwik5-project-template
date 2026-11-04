@@ -288,7 +288,13 @@ def build() -> dict[str, Any]:
             "spread": scene["meta"].get("spread", ""),
             "title": scene["meta"].get("title", ""),
             "tags": scene["tags"],
-            "subject_ids": [CAST[t_]["subject_id"] for t_ in scene["tags"] if t_ in CAST],
+            # Only character cast entries carry a LoRA id; an environment subject
+            # (meadow, porch, …) has none and must not crash the video track.
+            "subject_ids": [
+                CAST[t_]["subject_id"]
+                for t_ in scene["tags"]
+                if CAST.get(t_, {}).get("subject_id")
+            ],
             "action": scene["action"],
             "caption": caption,
             "duration_s": real_s,

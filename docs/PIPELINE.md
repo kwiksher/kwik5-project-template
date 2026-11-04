@@ -232,6 +232,61 @@ If a plate prompt ever seems ignored, that call is the answer: `parse_model()` f
 to the full cast-bearing `## Prompt` whenever the `## Plate Prompt` block does not match,
 and it does so **silently**.
 
+### 5.6 Staging: the page names its still
+
+A page's `page.layers.yaml` is the whole statement of what stands on it — the
+generator carries it through and **does not rewrite image paths**, so what you
+write is what gets composited:
+
+```yaml
+- name: hero                                  # must be a cast tag
+  image: Photoshop/<book>/_sprites/hero/running.png   # a named pose still
+  x: 1300        # centre, PSD px
+  y: 700
+  width: 480
+  height: 900
+  fit: contain
+  transparent_color: auto
+  transparent_tolerance: 40
+  flip: horizontal                            # optional: mirror at assembly
+```
+
+**Pose stills.** One still per character per pose, named in the cast table:
+
+```yaml
+cast:
+  hero:
+    description: …            # identity text
+    poses:
+      walking: Full body, walking forward at a slight angle mid-stride …
+      running: Full body, running away from the viewer, looking back …
+```
+
+```bash
+python3 Scripts/render_layered.py --poses hero:walking    # -> _sprites/hero/walking.png
+```
+
+Only the pose clause changes between stills of the same character — identity and art
+direction are shared — which is what keeps a face and a wardrobe stable across a
+pose set. A pose set is book data: do not invent a pose no page asks for.
+
+**`flip`** mirrors a still at assembly (`create_layered_psd.py`). Use it instead of
+a second render when a character has to face the other way — a second render drifts
+in the face; a mirror never does.
+
+**Interiors need to say they are enclosed.** An environment prompt that describes a
+room but leaves the frame open gets sky, roofs and distant hills painted over it.
+Name what closes the top and sides of the frame and say it outright:
+
+> an interior … seen from the doorway: a deep stone sink under a small window set
+> high in the wall, whitewashed walls, **a low beamed ceiling closing the top of the
+> frame**, light falling from the window — **the room is enclosed on every side, no
+> sky, no daylight**
+
+The same applies to who is in a plate: a cast-free plate still needs *"nobody in the
+room, no figure on the bed or on the floor"* spelled out, or the model stages
+somebody to fill the space.
+
 ## 6. Gates
 
 ```bash

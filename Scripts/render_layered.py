@@ -50,21 +50,34 @@ SPRITE_ART = (
 
 from book_config import BOOK, CAST as _CAST  # noqa: E402
 
-# Sprite prompts come from the book's cast table (Scripts/book.yaml); a character
-# may override the shared description with its own `sprite_prompt`.
+DEFAULT_POSE = (
+    "Full body, standing, facing the viewer, arms a little away from the body so "
+    "the silhouette is clear, entire figure inside the frame with headroom"
+)
+
+# Identity and pose are separate on purpose: only the pose clause changes between
+# stills of the same character, which is what keeps the face and clothes stable
+# across a pose set. Both come from the book's cast table (Scripts/book.yaml):
+#   description   the identity text
+#   sprite_pose   the default stance (optional)
+#   poses:        {pose name: pose clause} — one still per pose, per character
 CHARS: dict[str, dict[str, Any]] = {
     tag: {
         "id": entry.get("subject_id"),
-        "prompt": entry.get("sprite_prompt")
-        or (
-            entry.get("description", "")
-            + ". Full body, standing, facing the viewer, arms a little away from "
-            "the body so the silhouette is clear, entire figure inside the frame "
-            "with headroom"
-        ),
+        "identity": entry.get("sprite_identity") or entry.get("description", ""),
+        "pose": entry.get("sprite_pose") or DEFAULT_POSE,
     }
     for tag, entry in _CAST.items()
     if entry.get("kind", "character") == "character" and entry.get("subject_id")
+}
+
+#: character -> pose name -> pose clause. Pose sets are book data: a page names
+#: the still it wants (``image: _sprites/<character>/<pose>.png``), and nothing
+#: here should invent a pose no page asks for.
+POSES: dict[str, dict[str, str]] = {
+    tag: dict(entry.get("poses") or {})
+    for tag, entry in _CAST.items()
+    if entry.get("kind", "character") == "character"
 }
 
 # Plates must differ per scene, but the generated prompt's "Scene:" line is the
@@ -154,10 +167,22 @@ def render_one(prompt: str, subject_ids: list[int], width: int, height: int,
     return rp.first_image(data, server, batch)
 
 
+def sprite_prompt(character: str, pose: str | None = None) -> str:
+    """Art direction + identity + one pose clause."""
+    entry = CHARS[character]
+    clause = POSES[character][pose] if pose else entry["pose"]
+    return f"{SPRITE_ART}\n\nCharacter: {entry['identity']}.\n\nPose: {clause}."
+
+
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--plates", nargs="*", default=[], help="page ids, e.g. p1 p2 p3")
     parser.add_argument("--sprites", nargs="*", default=[], help="characters, e.g. hero friend")
+    parser.add_argument(
+        "--poses", nargs="*", default=[],
+        help="character:pose stills, e.g. hero:running friend:sitting "
+             "(poses: " + ", ".join(f"{c}:{p}" for c in POSES for p in POSES[c]) + ")",
+    )
     parser.add_argument("--all", action="store_true", help="p1 p2 p3 + all sprites")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--server", default=rp.DEFAULT_SERVER)
@@ -166,8 +191,31 @@ def main(argv: list[str]) -> int:
 
     plates = args.plates or (["p1", "p2", "p3"] if args.all else [])
     sprites = args.sprites or (list(CHARS) if args.all else [])
-    if not plates and not sprites:
-        die("nothing to do: pass --plates, --sprites or --all")
+    poses = args.poses or []
+    if not plates and not sprites and not poses:
+        die("nothing to do: pass --plates, --sprites, --poses or --all")
+
+    for spec in poses:
+        if ":" not in spec:
+            die(f"--poses wants character:pose, got {spec!r}")
+        character, pose = spec.split(":", 1)
+        if pose not in POSES.get(character, {}):
+            die(
+                f"{spec}: no such pose; known: "
+                + (", ".join(f"{c}:{p}" for c in POSES for p in POSES[c]) or "none")
+            )
+        dst = os.path.join(SPRITE_DIR, character, f"{pose}.png")
+        if os.path.exists(dst) and not args.force:
+            print(f"  pose {spec}: exists ({os.path.relpath(dst, REPO_ROOT)}), --force to re-render")
+            continue
+        src = render_one(
+            sprite_prompt(character, pose), [CHARS[character]["id"]],
+            768, 1024, args.server, args.timeout, f"pose {spec}",
+        )
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        with Image.open(src) as im:
+            im.convert("RGB").save(dst)
+        print(f"    -> {os.path.relpath(dst, REPO_ROOT)}")
 
     for character in sprites:
         dst = os.path.join(SPRITE_DIR, f"{character}.png")
@@ -175,7 +223,7 @@ def main(argv: list[str]) -> int:
             print(f"  sprite {character}: exists, --force to re-render")
             continue
         src = render_one(
-            SPRITE_ART + "\n\nCharacter: " + CHARS[character]["prompt"] + ".",
+            sprite_prompt(character),
             [CHARS[character]["id"]],
             768, 1024, args.server, args.timeout, f"sprite {character}",
         )

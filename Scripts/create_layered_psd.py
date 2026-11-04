@@ -33,6 +33,12 @@ Image-only keys::
     fit: cover | contain | stretch
     fit_to: layer | canvas                   # canvas = fit the page safe area, then
     extend: edge | mirror | transparent      #   extend the bleed (§H)
+    flip: horizontal | vertical              # mirror the still
+
+``flip`` exists because a still is painted facing one way and a page may need it
+facing the other (a character running after someone has to run the way they run).
+Mirroring at assembly keeps one image per pose instead of a second render that
+would drift in the face.
 
 Usage
 -----
@@ -448,6 +454,13 @@ def render_layer(layer: dict, base: str, canvas: dict | None = None) -> Image.Im
                 layer["transparent_color"],
                 int(layer.get("transparent_tolerance", 40)),
             )
+        flip = str(layer.get("flip", "")).lower()
+        if flip == "horizontal":
+            img = img.transpose(Image.FLIP_LEFT_RIGHT)
+        elif flip == "vertical":
+            img = img.transpose(Image.FLIP_TOP_BOTTOM)
+        elif flip:
+            die(f"layer {layer.get('name')!r}: unknown flip {flip!r} (horizontal|vertical)")
         img = fit_image(
             img,
             w,
@@ -555,6 +568,8 @@ def check_spec(spec: dict, base: str) -> list[str]:
             "transparent",
         ):
             problems.append(f"{name}: unknown extend {layer['extend']!r}")
+        if str(layer.get("flip", "")).lower() not in ("", "horizontal", "vertical"):
+            problems.append(f"{name}: unknown flip {layer['flip']!r}")
 
         if not any(k in layer for k in ("image", "text", "color")):
             problems.append(f"{name}: needs one of image:, text:, color:")
