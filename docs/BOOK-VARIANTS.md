@@ -17,6 +17,10 @@ emitters — a book picks one by name under `Solar2D/App/<book>/`:
 | **Cropped video book** | `<book>-video-cropped` | a *stack* of per-character videos, each cropped to its character |
 | **Design book** | `<book>_design` | a bench: one plugin mechanism per page, with evidence |
 
+Alongside them, [`SPRITE-BOOK.md`](SPRITE-BOOK.md) builds a `<book>_sprites`
+catalogue — one page per character showing every pose still, which is where art
+defects are actually visible.
+
 All four run in one project: the reference build is `biscuit-comes-home`
 (https://github.com/Kwik-Dev/biscuit-comes-home), which ships them side by side
 and is the example to read when a contract here is too terse.

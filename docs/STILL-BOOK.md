@@ -31,6 +31,10 @@ and diffs against the tree. Wire it into CI and into every "done" claim. In the
 reference project it reports e.g. `ok: 9/9 steps, sources and generated files
 agree`.
 
+**Still art has its own review bench**: `Scripts/build_sprites_book.sh` builds the
+`<book>_sprites` catalogue, every pose side by side over a panel — see
+[`SPRITE-BOOK.md`](SPRITE-BOOK.md).
+
 **Background art is not part of `build_book.sh`** — plates are rendered separately
 by `render_pages.py` (a GPU job), and the build only consumes `art/bg.png`. What
 the plate looks like is decided by three things — layered vs baked, the scene's

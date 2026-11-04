@@ -83,6 +83,9 @@ BOOK=other python3 Scripts/book_config.py
 | `psd_thumbnails.py` | embeds a thumbnail into a `page.psd` |
 | `upscale_plates.py` | deterministic 2× backdrop plate enlargement (lanczos / external engine) |
 | `frame_proof.py` | renders one page's composites to PNG for review |
+| `sprites_book.py` | authors the `<book>_sprites` catalogue pages from the sprite tree; `--check` for staleness |
+| `build_sprites_book.sh` | the catalogue gate: pages → PSD/PNG → Lua + installed assets → asset gate; `--check` |
+| `fix_sprite_holes.py` | closes the transparent pinholes a chroma key leaves inside a cut-out sprite |
 
 **Page tree → Solar2D**
 
@@ -269,6 +272,9 @@ python3 Scripts/render_layered.py --poses hero:walking    # -> _sprites/hero/wal
 Only the pose clause changes between stills of the same character — identity and art
 direction are shared — which is what keeps a face and a wardrobe stable across a
 pose set. A pose set is book data: do not invent a pose no page asks for.
+
+To review the whole pose library rather than the handful of stills the pages
+stage, build the catalogue: [`SPRITE-BOOK.md`](SPRITE-BOOK.md).
 
 **`flip`** mirrors a still at assembly (`create_layered_psd.py`). Use it instead of
 a second render when a character has to face the other way — a second render drifts

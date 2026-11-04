@@ -56,7 +56,15 @@ def _load() -> dict[str, Any]:
 CFG: dict[str, Any] = _load()
 
 #: Solar2D app name and Photoshop page-tree name, e.g. ``Photoshop/<book>/<page>``.
-BOOK: str = os.environ.get("BOOK") or str(CFG.get("book") or "book")
+#:
+#: ``KWIK_BOOK`` is the switch the multi-book builders use (the sprite catalogue sets
+#: it to ``<book>_sprites`` and runs the same generators), so it outranks both the
+#: YAML and ``BOOK``. ``BOOK`` is the one-off override, for trying another name.
+BOOK: str = (
+    os.environ.get("KWIK_BOOK")
+    or os.environ.get("BOOK")
+    or str(CFG.get("book") or "book")
+)
 
 CANVAS: dict[str, Any] = dict(CFG.get("canvas") or {"width": 1920, "height": 1280, "scale": 0.25})
 BG: dict[str, Any] = dict(CFG.get("bg") or {"width": 2776, "height": 1440})
