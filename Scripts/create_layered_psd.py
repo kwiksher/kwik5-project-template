@@ -59,6 +59,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import subprocess
 import sys
 from typing import Any
 
@@ -81,6 +82,16 @@ FONT_CANDIDATES = [
     "/System/Library/Fonts/Helvetica.ttc",
 ]
 
+# A declared font is a family name, not a path: resolve the same family through
+# fontconfig when the macOS candidate list misses (Windows, Linux, WSL).
+FONT_FAMILIES = {
+    "georgia": ["Georgia", "DejaVu Serif", "Liberation Serif", "serif"],
+    "baskerville": ["Baskerville", "Libre Baskerville", "DejaVu Serif", "serif"],
+    "times": ["Times New Roman", "Liberation Serif", "DejaVu Serif", "serif"],
+    "helvetica": ["Helvetica", "Liberation Sans", "DejaVu Sans", "sans-serif"],
+    "arial": ["Arial", "Liberation Sans", "DejaVu Sans", "sans-serif"],
+}
+
 
 # --------------------------------------------------------------------------- #
 # helpers
@@ -88,6 +99,23 @@ FONT_CANDIDATES = [
 def die(msg: str, code: int = 2):
     print(f"error: {msg}", file=sys.stderr)
     raise SystemExit(code)
+
+
+def fontconfig_lookup(families: list[str]) -> str | None:
+    """Ask fontconfig for a real font file for the first family it can match."""
+    for family in families:
+        try:
+            out = subprocess.run(
+                ["fc-match", "-f", "%{file}", family],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            ).stdout.strip()
+        except (OSError, subprocess.SubprocessError):
+            return None
+        if out and os.path.exists(out):
+            return out
+    return None
 
 
 def resolve(path: str, base: str) -> str:
@@ -312,19 +340,42 @@ def wrap_text(draw, text: str, font, max_width: int) -> list[str]:
 
 
 def load_font(layer: dict, size: int | None = None) -> ImageFont.FreeTypeFont:
+    """Resolve a scalable font for the layer, or fail loudly.
+
+    A missing font must never fall back to PIL's default bitmap face: it has no
+    scalable metrics, so a 132 px title comes out as an 8 px speck and a caption
+    renders tofu. Resolve in order: the declared path, the built-in candidates,
+    then the same family through fontconfig, then fail.
+    """
     size = int(size if size is not None else layer.get("font_size", 56))
     path = layer.get("font")
-    candidates = [path] if path else FONT_CANDIDATES
-    for candidate in candidates:
+    declared = os.path.expanduser(str(path)) if path else ""
+
+    for candidate in ([declared] if declared else []) + FONT_CANDIDATES:
         if not candidate:
             continue
-        candidate = os.path.expanduser(str(candidate))
         if os.path.exists(candidate):
             try:
                 return ImageFont.truetype(candidate, size)
             except OSError:
                 continue
-    return ImageFont.load_default()  # type: ignore[return-value]
+
+    stem = os.path.splitext(os.path.basename(declared))[0].lower()
+    for key, families in FONT_FAMILIES.items():
+        if key in stem:
+            resolved = fontconfig_lookup(families)
+            if resolved:
+                try:
+                    return ImageFont.truetype(resolved, size)
+                except OSError:
+                    break
+            break
+
+    die(
+        f"no scalable font for this layer (declared {declared or 'nothing'}, "
+        f"tried {len(FONT_CANDIDATES)} built-in candidates and fontconfig). "
+        "Set `font:` to a .ttf/.ttc path in page.layers.yaml."
+    )
 
 
 def render_text_layer(layer: dict, w: int, h: int) -> Image.Image:
