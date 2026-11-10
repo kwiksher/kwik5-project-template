@@ -31,6 +31,21 @@ scripts, all four variants side by side, and its `docs/VIDEO-HANDOFF.md` is the
 long-form account of every trap the pipeline hits. Treat it as the shape to
 copy — its cast, placements and art direction belong in your `book.yaml`.
 
+## Hosts
+
+The pipeline is one project tree that must build and run on both hosts; only the
+Simulator, the shell and the path style differ. Tags below: `[macOS]`, `[Windows]`,
+untagged = both. Timings belong to a **box**, never to an OS.
+
+| | macOS | Windows |
+|---|---|---|
+| Simulator | `/Applications/Corona/…` | `…\Program Files (x86)\Corona Labs\Corona\Corona Simulator.exe` (32-bit install, still named `Corona`, identifies as **Solar2D Simulator**) |
+| launch | `kwik run .` | `kwik run .` — from a **native** path, never `\\wsl.localhost\…` |
+| shell | `build_book.sh`, `page_sweep.sh` | Git Bash / WSL for the `.sh` scripts; `.bat` helpers exist (`create_book.bat`, `getLog.bat`) |
+| paths | POSIX, symlinks fine | native only; a copy to `C:\…` is a **snapshot** — re-sync after every change |
+| video plugin | fixed `plugin_movie.dylib`, see below | n/a |
+| python | `.venv/bin/python` | the same `.venv`, or any interpreter with `yaml`/`PIL`/`psd-tools` |
+
 ## Contracts — never guess these
 
 | contract | value |
@@ -49,7 +64,9 @@ Two scale traps that cause "blank / quarter-size" pages: layers sized from
 
 1. **Decide the variant** with the table in `docs/BOOK-VARIANTS.md`. Cost anchor:
    one page clip ≈ **110 s** on an M5 Pro MPS box (14B i2v, 512×288, 25 frames,
-   4 steps); a 3-cast cropped page ≈ 3× that.
+   4 steps); a 3-cast cropped page ≈ 3× that. Plate renders scale with the box, not
+   the OS: ~175 s for a 768×1152 cast view and ~10–11 min for a 1536×1024 plate
+   on an 8 GB ROCm card. Measure your own before promising a time.
 2. **Sources first.** Story in `Scripts/book.fountain`, moving-frame direction in
    `Scripts/book.video.yaml`, page geometry in `pages/<page>/page.layers.yaml`.
    Everything under `Solar2D/App/` is generated.
@@ -74,7 +91,7 @@ Two scale traps that cause "blank / quarter-size" pages: layers sized from
   `system.pathForFile` gives *attempt to index a nil value*.
 * `movie.newMovieRect` can return a wrapper with a nil `.texture` inside a Kwik
   layer. Build the `MovieTexture` and the `ImageRect` yourself and parent them.
-* Keep the fixed local `plugin_movie.dylib` (822,432 bytes) in
+* **[macOS]** Keep the fixed local `plugin_movie.dylib` (822,432 bytes) in
   `~/Library/Application Support/Corona/Simulator/Plugins/` and **do not declare**
   `["plugin.movie"]` in `build.settings`; declaring installs the 2022 marketplace
   build (901,136 bytes) over it, which frees the decoder on `stop()` and crashes
@@ -92,6 +109,66 @@ Two scale traps that cause "blank / quarter-size" pages: layers sized from
   `clip.mp4`. Do not skip the encode; a stale clip looks exactly like a render bug.
 * Crop for **memory/fill**, never for file size: on three layers it cut texture
   1.69 MB → 195 KB and upload 27 → 3 MB/s, while file bytes rose 10 %.
+* **`page.layers.yaml` is the source of truth once written.** `book.yaml`'s
+  `placement:` is only a bootstrap. A `placement` row for a **baked** page (characters
+  painted into the plate) creates a `_sprites/<name>.png` layer that fails the build
+  with *image not found* — comment it out. Deleting a page's YAML and re-running is
+  how you re-bootstrap it.
+* **Plate then upscale is order-dependent.** `fountain2pages` refuses to emit YAML
+  until `art/bg-large.png` exists, while `upscale_plates --all` discovers pages
+  *through* `page.layers.yaml`. So the first plate must be rendered outside that
+  pair and upscaled with **explicit page ids**: `upscale_plates.py cover p1 p2`.
+* **Run `fountain2pages.py` twice** — once to emit the YAML, again after
+  `create_layered_psd.py` so the PNG digests are recorded. Skip the second pass and
+  `--check` stays red with no visible source of drift.
+* **Assert real pixel sizes after every render.** `asset_gate` only compares layer
+  hashes, so a tree where every plate came out at 256 px still passes green:
+  ```bash
+  .venv/bin/python -c "from PIL import Image; import glob, collections; \
+    print(collections.Counter(Image.open(f).size for f in glob.glob('Photoshop/*/*/art/*.png')))"
+  ```
+  Symptom to recognise: a plate or cast view at 171×256 / 256×171, or a PSD build
+  dying on *source image … has an odd dimension*. That is a batch thumbnail, not a
+  render — `render_pages.first_image()` must prefer `images/` over `thumbnails/`.
+* **Environment/place cast tags need `subject_id` and `trigger`.** `fountain2pages`
+  reads `CAST[tag]['subject_id']` even for places, and dies with
+  `KeyError: 'subject_id'`.
+* **Never edit `lua_modules`.** `kwik update` / `kwik install` replaces it. Ship
+  overrides under `Solar2D/` (projects survive, modules do not).
+* **Fonts are resolved by *name* to a project `.ttf`.** The widget library asks for
+  `HelveticaNeue-Bold`; if there is no such file in `Solar2D/`, Solar2D warns and
+  falls back. Copy a real font in (`Solar2D/HelveticaNeue-Bold.ttf`) rather than
+  chasing the library. Related: a missing `font:` path in a caption layer must
+  **fail the build**, never fall back to PIL's bitmap face — a 132 px title then
+  renders as an 8 px speck.
+* **`kwik version`, not `kwik --version`** (exit 2), and **`kwik book`** lists books
+  and pages — there is no `kwik book show`.
+* **`-no-console` differs by host.** macOS parses `-no-console YES` as an
+  NSUserDefaults pair; Windows only checks the flag is *present*, so the `YES`
+  becomes a stray positional and resolves to a **project path**.
+
+## Windows / WSL host rules
+
+Driving the Windows Simulator from a WSL shell costs specific, repeatable traps:
+
+* **Never pipe a Windows GUI launch.** The child inherits the interop stdout handle,
+  so `… | tr -d '\r' | head` waits for an EOF a GUI never sends — minutes of hang
+  while `Start-Process` returned long ago. Redirect to a file and read the file:
+  ```bash
+  setsid powershell.exe -NoProfile -Command "…" > /tmp/launch.log 2>&1 < /dev/null &
+  sleep 15; tr -d '\r' < /tmp/launch.log | tail -5
+  ```
+* **UNC paths do not work.** `-project \\wsl.localhost\Ubuntu\…` → *Windows cannot
+  find …*. `rsync -a --exclude .git Solar2D/ Photoshop/ Scripts/` to a native path
+  first — and remember the copy is a snapshot.
+* **Check for a live instance before relaunching**, and only relaunch if the project
+  path differs:
+  `Get-CimInstance Win32_Process -Filter "Name='Corona Simulator.exe'" | % { $_.ProcessId, $_.CommandLine }`
+* **You cannot scrape a running Simulator's console.** Nothing was captured unless
+  the process was launched with stdout redirected; relaunch with a redirect, or read
+  the Corona Simulator Console window.
+* **`0 lines` in a captured log is not "clean"** — it means nothing was captured.
+  Print the line count before drawing a conclusion.
 
 ## Gates
 
@@ -105,7 +182,9 @@ Scripts/page_sweep.sh                          # per-page capture + error count
 
 A page is done when: it renders in production mode, the capture shows what it is
 supposed to show, the simulator log has 0 Lua errors, and the gates above pass.
-"Generated successfully" is not evidence; a capture is.
+"Generated successfully" is not evidence; a capture is. Neither is a green
+gate on its own — assert the pixel sizes too, and print a captured log's line
+count before reading anything into an empty one.
 
 ## Running a book
 
@@ -117,8 +196,13 @@ env.mode = "production"             -- development paints the editor guide into 
 ```
 
 ```bash
-"$HOME/workspace/kwik/kwik-visual-code-CLI/kwik5-CLI/kwik" run .   # log: .kwik/logs/simulator.log
+kwik run .                          # log: .kwik/logs/simulator.log
 ```
+
+`kwik run` detaches and prints the pid; it discovers the Simulator install on both
+hosts (`Program Files (x86)` included). `--follow` keeps it attached. On Windows,
+run it from a **native** path — see the host rules above — and pass `--solar2d` only
+when discovery fails.
 
 Known noise in that log: `Cannot create path for resource file 'assets/…'` (the
 resolver probes the bare path before `App/<book>/…`), and
