@@ -98,11 +98,27 @@ def die(msg: str, code: int = 2):
     raise SystemExit(code)
 
 
+def descriptors_of(entry: dict) -> str:
+    """The character's identity text.
+
+    ``book.yaml`` authors this as ``description`` (the key ``fountain2pages``
+    reads); biscuit-comes-home's cast carries a separate ``descriptors`` key.
+    Accept either so one book config serves both scripts.
+    """
+    text = entry.get("descriptors") or entry.get("description")
+    if not text:
+        die("cast entry has neither 'descriptors' nor 'description'")
+    text = " ".join(str(text).split())
+    # book.yaml descriptions end with an authoring note, not identity text; it
+    # would otherwise land verbatim in every prompt and every LoRA caption.
+    return text.replace("No proper nouns.", "").strip().rstrip(".").strip()
+
+
 def view_prompt(character: str, view: str, instruction: str) -> str:
     entry = CHARACTERS[character]
     return (
         f"{ART}\n\n"
-        f"Character (identical in every view): {entry['descriptors']}.\n\n"
+        f"Character (identical in every view): {descriptors_of(entry)}.\n\n"
         f"View: {instruction}. One single figure, centred, standing on a shared "
         f"baseline, the whole figure inside a 2:3 portrait frame with a little headroom."
     )
@@ -131,9 +147,15 @@ def render_view(character: str, view: str, instruction: str, server: str,
             "text, lettering, watermark, signature, logo, words, scene, landscape, "
             "multiple characters, duplicate figure, extra limbs, deformed hands"
         ),
-        "subject_ids": [entry["subject_id"]],
         "display_name": f"cast {character} {view}",
     }
+    # The backend resolves subject ids against its Cast Library, which lives in
+    # Postgres. With no subject registered yet the render is identity-free —
+    # which is exactly what the *base* images for a first LoRA have to be.
+    # Register the subject and set `subject_id` in book.yaml to have the trained
+    # triggers applied instead.
+    if entry.get("subject_id"):
+        payload["subject_ids"] = [int(entry["subject_id"])]
     response = rp.http_json(server + "/api/batch-image/generate/prompts", payload, timeout=120)
     batch = (response.get("data") or {}).get("batch_id")
     if not batch:
@@ -184,9 +206,9 @@ def sheet_yaml(character: str) -> dict[str, Any]:
     return {
         "canvas": dict(CANVAS),
         "character": character,
-        "subject_id": entry["subject_id"],
+        "subject_id": entry.get("subject_id"),
         "trigger": entry["trigger"],
-        "descriptors": entry["descriptors"],
+        "descriptors": descriptors_of(entry),
         "caption_template": "{trigger}, {descriptors}, {view}, plain background",
         "layers": layers,
     }
