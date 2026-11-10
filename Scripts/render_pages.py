@@ -162,10 +162,25 @@ def first_image(data: dict, server: str, batch: str) -> str:
                     candidates.append(value)
     out_dir = data.get("output_dir")
     if out_dir and os.path.isdir(out_dir):
+        # os.walk order is not guaranteed, and every batch writes a small
+        # thumbnails/<name>.jpg beside the real images/<name>.png. Collect both,
+        # drop the thumbnails when a full-size candidate exists, and take the
+        # largest file so a 256 px preview is never mistaken for the render.
+        found: list[str] = []
         for root, _dirs, names in os.walk(out_dir):
             for name in sorted(names):
                 if name.lower().endswith((".png", ".jpg", ".jpeg", ".webp")):
-                    candidates.append(os.path.join(root, name))
+                    found.append(os.path.join(root, name))
+        full = [f for f in found if "thumbnail" not in f.split(os.sep)]
+        # If the same stem exists as both .png and .jpg, the .png is the render.
+        png_stems = {os.path.splitext(os.path.basename(f))[0]
+                     for f in full if f.lower().endswith(".png")}
+        full = [f for f in full
+                if f.lower().endswith(".png")
+                or os.path.splitext(os.path.basename(f))[0] not in png_stems]
+        pool = full or found
+        pool.sort(key=lambda f: os.path.getsize(f), reverse=True)
+        candidates.extend(pool)
     for candidate in candidates:
         if candidate.startswith("http"):
             continue
