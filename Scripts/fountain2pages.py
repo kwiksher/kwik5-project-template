@@ -43,6 +43,7 @@ sys.path.insert(0, os.path.join(REPO_ROOT, "Scripts"))
 from paths import COMPONENTS_DIR, AUDIOS_DIR, ASSETS_DIR, PAGES_DIR, SPRITE_DIR as _SPRITE_DIR  # noqa: E402  — single source of truth for the page tree
 # repo-relative, because page.layers.yaml records paths relative to the checkout
 SPRITE_DIR = os.path.relpath(_SPRITE_DIR, REPO_ROOT)
+PAGES_REL = os.path.relpath(PAGES_DIR, REPO_ROOT)
 
 # --------------------------------------------------------------------------- #
 # The book's own data lives in Scripts/book.yaml, not here: cast, art direction,
